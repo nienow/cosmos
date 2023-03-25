@@ -1,0 +1,40 @@
+# EditorOriginal configuration, see http://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+max_line_length = 140
+trim_trailing_whitespace = true
+ij_continuation_indent_size = 2
+ij_formatter_off_tag = @formatter:off
+ij_formatter_on_tag = @formatter:on
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+
+[*.ts]
+ij_typescript_call_parameters_wrap = normal
+ij_typescript_extends_list_wrap = normal
+ij_typescript_keep_blank_lines_in_code = 1
+ij_typescript_keep_line_breaks = true
+ij_typescript_method_call_chain_wrap = normal
+ij_typescript_binary_operation_wrap = normal
+ij_typescript_for_statement_wrap = normal
+ij_typescript_array_initializer_wrap = normal
+ij_typescript_if_brace_force = always
+ij_typescript_do_while_brace_force = always
+ij_typescript_while_brace_force = always
+ij_typescript_for_brace_force = always
+ij_typescript_force_semicolon_style = true
+ij_typescript_use_double_quotes = false
+ij_typescript_force_quote_style = true
+ij_typescript_object_literal_wrap = on_every_item
+ij_typescript_imports_wrap = normal
+ij_typescript_spaces_within_imports = false
+ij_typescript_indent_chained_calls = true
+ij_typescript_enforce_trailing_comma = keep
