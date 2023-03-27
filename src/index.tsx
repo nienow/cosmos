@@ -1,45 +1,34 @@
 import React from 'react';
 
 import './stylesheets/main.scss';
-import {createRoot} from "react-dom/client";
-import {EditorProvider} from "./providers/EditorProvider";
-import ComponentRelay from "@standardnotes/component-relay";
-import {AppDataField} from "@standardnotes/models";
 import {setup} from "goober";
+import {createRoot} from "react-dom/client";
+import App from "./App";
+import {FrameMediator} from "./mediator";
 
 setup(React.createElement);
 
+// const componentRelay = new ComponentRelay({
+//   targetWindow: window,
+//   options: {
+//     coallesedSaving: true,
+//     coallesedSavingDelay: 400,
+//     debug: true
+//   }
+// });
+//
+// componentRelay.streamContextItem((note) => {
 
-let currentNote;
+const mediator = new FrameMediator();
 
-const componentRelay = new ComponentRelay({
-  targetWindow: window,
-  options: {
-    coallesedSaving: true,
-    coallesedSavingDelay: 400,
-    debug: true
-  }
-});
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App mediator={mediator}/>
+  </React.StrictMode>
+);
 
-componentRelay.streamContextItem((note) => {
-  currentNote = note;
-  // Only update UI on non-metadata updates.
-  if (note.isMetadataUpdate) {
-    return;
-  }
-  const text = note.content?.text || '';
-  const isLocked = componentRelay.getItemAppDataValue(note, AppDataField.Locked);
+// const onReady = (editorId, iframeWindow) => {
+//   mediator.setChildWindow(editorId, iframeWindow);
+// };
 
-  createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-      <EditorProvider text={text} save={save} isLocked={isLocked}/>
-    </React.StrictMode>
-  );
-});
 
-const save = (data: any) => {
-  componentRelay.saveItemWithPresave(currentNote, () => {
-    currentNote.content.text = JSON.stringify(data);
-    currentNote.content.preview_plain = data.text;
-  });
-};

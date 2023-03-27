@@ -1,6 +1,6 @@
 {
-  "identifier": "my-editor",
-  "name": "My Editor (local)",
+  "identifier": "cosmos-local",
+  "name": "Cosmos (local)",
   "content_type": "SN|Component",
   "area": "editor-editor",
   "version": "0.0.1",

@@ -9,7 +9,8 @@ module.exports = (env, argv) => ({
   mode: 'production',
   entry: {
     main: 'index.tsx',
-    demo: 'demo/demo.tsx'
+    demo: 'demo/demo.tsx',
+    plain: 'plain/plain.tsx'
   },
   output: {
     filename: "[name].[contenthash].js",
@@ -74,6 +75,11 @@ module.exports = (env, argv) => ({
       filename: "index.html",
       template: "./src/index.html",
       chunks: ["main"]
+    }),
+    new HtmlWebpackPlugin({
+      filename: "plain.html",
+      template: "./src/index.html",
+      chunks: ["plain"]
     }),
     new HtmlWebpackPlugin({
       filename: "demo.html",

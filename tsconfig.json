@@ -26,7 +26,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*"
