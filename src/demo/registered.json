@@ -1,0 +1,11 @@
+{
+  "action": "component-registered",
+  "sessionKey": "c46be650-73b9-468b-b6b2-d0a4ca1ccc84",
+  "componentData": {},
+  "data": {
+    "uuid": "f43056da-581f-4ee1-8dea-b8dd5ee949ad",
+    "environment": "web",
+    "platform": "windows-web",
+    "activeThemeUrls": []
+  }
+}

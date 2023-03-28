@@ -1,0 +1,41 @@
+{
+  "action": "reply",
+  "original": {
+    "action": "stream-context-item",
+    "data": {},
+    "messageId": "9b9e5349-c48d-4df4-b8d5-0d2ba1639108",
+    "sessionKey": "c46be650-73b9-468b-b6b2-d0a4ca1ccc84",
+    "api": "component"
+  },
+  "data": {
+    "item": {
+      "uuid": "ec677a63-5fae-440e-84cd-a62ae7c7d894",
+      "content_type": "Note",
+      "created_at": "2023-03-26T02:01:59.462Z",
+      "updated_at": "2023-03-27T00:18:36.199Z",
+      "isMetadataUpdate": false,
+      "content": {
+        "text": "Hello World",
+        "title": "Cosmos",
+        "noteType": "unknown",
+        "editorIdentifier": "cosmos-local",
+        "references": [],
+        "appData": {
+          "org.standardnotes.sn": {
+            "client_updated_at": "2023-03-27T00:18:36.483Z"
+          },
+          "org.standardnotes.sn.components": {
+            "f43056da-581f-4ee1-8dea-b8dd5ee949ad": {}
+          },
+          "dev.randombits": {
+            "editor": "plain"
+          }
+        },
+        "spellcheck": false,
+        "preview_plain": " ",
+        "preview_html": "<div> </div>"
+      },
+      "clientData": {}
+    }
+  }
+}
