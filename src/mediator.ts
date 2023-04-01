@@ -1,4 +1,4 @@
-import {EDITOR_KEY, RANDOMBITS_DOMAIN} from './definitions';
+import {Editor, EDITOR_KEY, RANDOMBITS_DOMAIN} from './definitions';
 import {ThemeManager} from './theme-manager';
 
 enum FrameState {
@@ -17,8 +17,8 @@ export class FrameMediator {
   private sessionKey;
   private item;
   private streamOriginalEvent;
-  private editorId: string;
-  private editorCallbackFn: (editor: string) => void;
+  private editor: Editor;
+  private editorCallbackFn: (editor: Editor) => void;
   private themeManager = new ThemeManager();
   private state = FrameState.START;
 
@@ -32,16 +32,16 @@ export class FrameMediator {
     this.state = FrameState.REGISTERED_CHILD;
   }
 
-  public waitForEditor(callbackFn: (editor: string) => void) {
+  public waitForEditor(callbackFn: (editor: Editor) => void) {
     this.editorCallbackFn = callbackFn;
-    if (this.editorId) {
-      callbackFn(this.editorId);
+    if (this.editor) {
+      callbackFn(this.editor);
     }
   }
 
-  public changeEditor(newEditor: string) {
+  public changeEditor(newEditor: Editor) {
     this.state = FrameState.CHANGING_EDITOR;
-    this.editorId = newEditor;
+    this.editor = newEditor;
     this.writeEditor();
     window.parent.postMessage({
       action: 'save-items',
@@ -83,9 +83,9 @@ export class FrameMediator {
         this.state = FrameState.RECEIVED_DATA;
         this.item = data.data.item;
         const domainData = this.item.content.appData[RANDOMBITS_DOMAIN];
-        this.editorId = domainData ? domainData[EDITOR_KEY] : 'plain';
+        this.editor = domainData ? domainData[EDITOR_KEY] : null;
         if (this.editorCallbackFn) {
-          this.editorCallbackFn(this.editorId);
+          this.editorCallbackFn(this.editor);
         }
       } else {
         // ignore
@@ -156,7 +156,7 @@ export class FrameMediator {
 
   private writeEditor() {
     this.item.content.appData[RANDOMBITS_DOMAIN] = {
-      [EDITOR_KEY]: this.editorId
+      [EDITOR_KEY]: this.editor
     };
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {styled} from "goober";
-import {EDITORS} from "../definitions";
+import {Editor, EDITORS} from "../definitions";
 
 const SelectBox = styled('select')`
   background-color: inherit;
@@ -19,13 +19,14 @@ const Option = styled('option')`
 
 interface Props {
   value: string;
-  changeEditor: (newValue) => void;
+  changeEditor: (newValue: Editor) => void;
   isLocked?: boolean;
 }
 
 const EditorChoice = ({value, changeEditor, isLocked = false}: Props) => {
   const onSelectEditor = (e) => {
-    changeEditor(e.target.value);
+    const editor = EDITORS.find(editor => editor.id === e.target.value);
+    changeEditor(editor);
   };
   return (
     <SelectBox value={value} onChange={onSelectEditor} disabled={isLocked}>

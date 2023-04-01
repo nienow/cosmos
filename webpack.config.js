@@ -10,11 +10,18 @@ module.exports = (env, argv) => ({
   entry: {
     main: 'index.tsx',
     demo: 'demo/demo.tsx',
-    plain: 'plain/plain.tsx'
+    plain: 'plain/plain.tsx',
+    draw: 'draw/draw.tsx',
+    sketch: 'sketch/sketch.tsx'
   },
   output: {
     filename: "[name].[contenthash].js",
     clean: true
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   externals: {
     'filesafe-js': {}
@@ -58,11 +65,11 @@ module.exports = (env, argv) => ({
     alias: {
       react: "preact/compat",
       'react-dom': "preact/compat",
-      "react/jsx-runtime": "preact/jsx-runtime"
+      "react/jsx-runtime": "preact/jsx-runtime",
+      "react-jsx-runtime": "preact/jsx-runtime"
     }
   },
   devServer: {
-    open: ['/demo.html'],
     https: false,
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -80,6 +87,16 @@ module.exports = (env, argv) => ({
       filename: "plain.html",
       template: "./src/index.html",
       chunks: ["plain"]
+    }),
+    new HtmlWebpackPlugin({
+      filename: "draw.html",
+      template: "./src/index.html",
+      chunks: ["draw"]
+    }),
+    new HtmlWebpackPlugin({
+      filename: "sketch.html",
+      template: "./src/index.html",
+      chunks: ["sketch"]
     }),
     new HtmlWebpackPlugin({
       filename: "demo.html",

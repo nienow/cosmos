@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {DATA_ONE, DATA_TWO, DATA_UNSUPPORTED} from "./test-data";
+import {DATA_EXCALIDRAW, DATA_NEW, DATA_ONE, DATA_TWO} from "./test-data";
 import {styled} from "goober";
 import {MockStandardNotes} from "./mock-notes";
 
@@ -49,12 +49,13 @@ const ChildFrame = styled('iframe', React.forwardRef)`
 `;
 
 const EXAMPLES = [
-  {title: 'One', data: DATA_ONE},
-  {title: 'Two', data: DATA_TWO},
-  {title: 'Unsupported', data: DATA_UNSUPPORTED}
+  {title: 'New', data: DATA_NEW},
+  {title: 'Plain', data: DATA_ONE},
+  {title: 'Scratch', data: DATA_TWO},
+  {title: 'Excalidraw', data: DATA_EXCALIDRAW}
 ]
 
-const mock = new MockStandardNotes(() => {
+const mock = new MockStandardNotes(DATA_NEW[0], DATA_NEW[1], () => {
   const el = document.getElementById('last-saved');
   if (el) {
     el.textContent = `Last Saved: ${new Date().toLocaleTimeString()}`;
@@ -66,8 +67,14 @@ const DemoApp = () => {
   const [selected, setSelected] = useState(0);
   const [disabled, setDisabled] = useState(false);
 
+  const changeMenuItem = (i) => {
+    setSelected(i);
+    const [data, editor] = EXAMPLES[i].data;
+    mock.changeData(data, editor);
+  };
+
   const renderMenuItem = (_, i) => {
-    return <MenuItem className={selected === i ? 'selected' : ''} onClick={() => setSelected(i)}>{EXAMPLES[i].title}</MenuItem>;
+    return <MenuItem className={selected === i ? 'selected' : ''} onClick={() => changeMenuItem(i)}>{EXAMPLES[i].title}</MenuItem>;
   };
 
   const onToggleDisabled = (e) => {
@@ -91,7 +98,7 @@ const DemoApp = () => {
             htmlFor="editingDisabled"> Editing Disabled</label></div>
           <div id="last-saved"></div>
         </ContentHeader>
-        <ChildFrame ref={iframeRef} src="index.html" onLoad={onFrameLoad}/>
+        <ChildFrame key={selected} ref={iframeRef} src="index.html" onLoad={onFrameLoad}/>
       </Content>
     </Container>
   );

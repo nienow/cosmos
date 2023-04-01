@@ -1,12 +1,14 @@
 import registeredData from './registered.json';
-import streamResponse from './stream-response.json';
-import {LOCKED_KEY, SN_DOMAIN} from '../definitions';
+import sampleStreamResponse from './stream-response.json';
+import {EDITOR_KEY, EDITORS, RANDOMBITS_DOMAIN} from '../definitions';
 
 export class MockStandardNotes {
   private childWindow;
   private streamEvent;
+  private streamData;
 
-  constructor(private onSave: () => void) {
+  constructor(text: string, editorId: string, private onSave: () => void) {
+    this.updateStream(text, editorId);
     window.addEventListener('message', this.handleMessage.bind(this));
   }
 
@@ -16,11 +18,19 @@ export class MockStandardNotes {
   }
 
   public toggleLock(isLocked: boolean) {
-    const data = JSON.parse(JSON.stringify(streamResponse.data));
-    data.item.content.appData[SN_DOMAIN][LOCKED_KEY] = isLocked;
+    this.streamData.item.content.appData['org.standardnotes.sn']['locked'] = isLocked;
     this.childWindow.postMessage({
       action: 'reply',
-      data: data,
+      data: this.streamData,
+      original: this.streamEvent
+    }, '*');
+  }
+
+  public changeData(text: string, editorId: string) {
+    this.updateStream(text, editorId);
+    this.childWindow.postMessage({
+      action: 'reply',
+      data: this.streamData,
       original: this.streamEvent
     }, '*');
   }
@@ -32,7 +42,7 @@ export class MockStandardNotes {
       this.streamEvent = data;
       this.childWindow.postMessage({
         action: 'reply',
-        data: streamResponse.data,
+        data: this.streamData,
         original: data
       }, '*');
     } else if (data.action === 'save-items') {
@@ -43,5 +53,12 @@ export class MockStandardNotes {
         original: data
       }, '*');
     }
+  }
+
+  private updateStream(text: string, editorId: string) {
+    this.streamData = JSON.parse(JSON.stringify(sampleStreamResponse.data));
+    this.streamData.item.content.text = text;
+    const editor = EDITORS.find(editor => editor.id === editorId) || null;
+    this.streamData.item.content.appData[RANDOMBITS_DOMAIN][EDITOR_KEY] = editor;
   }
 }

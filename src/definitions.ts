@@ -29,7 +29,13 @@ export const EDITORS: Editor[] = [
     id: 'plain',
     url: 'plain.html',
     name: 'Plain',
-    desc: ''
+    desc: 'A plain text editor'
+  },
+  {
+    id: 'randombits.excalidraw',
+    url: 'https://nienow.github.io/sn-excalidraw/',
+    name: 'Excalidraw',
+    desc: 'A drawing editor that uses the Excalidraw library'
   },
   {
     id: 'whiteboard',
@@ -38,16 +44,15 @@ export const EDITORS: Editor[] = [
     desc: 'Uses TLDraw Application'
   },
   {
-    id: 'template',
-    // url: 'https://nienow.github.io/sn-extension-template/',
-    url: 'http://localhost:8081/',
-    name: 'Template',
-    desc: ''
+    id: 'com.dylanonelson.sn-scratch-editor',
+    url: 'https://scratch-editor.com',
+    name: 'Scratch Editor',
+    desc: 'An editor for writing things down.'
   },
   {
-    id: 'scratch',
-    url: 'https://scratch-editor.com',
-    name: 'Scratch',
-    desc: ''
+    id: 'org.corvec.sn-kanban-editor',
+    name: 'Kanban Editor',
+    url: 'https://corvec.github.io/sn-kanban-editor/',
+    desc: 'Kanban board editor using react-trello'
   }
 ];
