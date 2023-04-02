@@ -9,7 +9,8 @@ const About = ({}) => {
   return (
     <Container>
       <HeadingText>About</HeadingText>
-      <p></p>
+      <p>Github repo is <a target="_blank"
+                           href="https://github.com/nienow/cosmos">https://github.com/nienow/cosmos</a></p>
       <p>All built-in extensions have been manually audited for security purposes, but there are no guarantees.</p>
       <p>Want to build your own editor extension? It's easy. See the <a target="_blank"
                                                                         href="https://randombits.dev/standard-notes/building-extensions">Building

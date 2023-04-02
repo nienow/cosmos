@@ -22,37 +22,6 @@ export interface Editor {
   url: string;
   name: string;
   desc: string;
+  custom?: boolean;
+  github?: string;
 }
-
-export const EDITORS: Editor[] = [
-  {
-    id: 'plain',
-    url: 'plain.html',
-    name: 'Plain',
-    desc: 'A plain text editor'
-  },
-  {
-    id: 'randombits.excalidraw',
-    url: 'https://nienow.github.io/sn-excalidraw/',
-    name: 'Excalidraw',
-    desc: 'A drawing editor that uses the Excalidraw library'
-  },
-  {
-    id: 'whiteboard',
-    url: 'https://antonheitz.github.io/sn-whiteboard/',
-    name: 'Whiteboard',
-    desc: 'Uses TLDraw Application'
-  },
-  {
-    id: 'com.dylanonelson.sn-scratch-editor',
-    url: 'https://scratch-editor.com',
-    name: 'Scratch Editor',
-    desc: 'An editor for writing things down.'
-  },
-  {
-    id: 'org.corvec.sn-kanban-editor',
-    name: 'Kanban Editor',
-    url: 'https://corvec.github.io/sn-kanban-editor/',
-    desc: 'Kanban board editor using react-trello'
-  }
-];

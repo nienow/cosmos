@@ -78,8 +78,6 @@ const App = ({mediator}: Props) => {
       } else {
         return <EntryScreen changeEditor={changeEditor}/>
       }
-    } else {
-      return <div>Loading...</div>
     }
   };
 

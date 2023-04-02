@@ -1,6 +1,7 @@
 import registeredData from './registered.json';
 import sampleStreamResponse from './stream-response.json';
-import {EDITOR_KEY, EDITORS, RANDOMBITS_DOMAIN} from '../definitions';
+import {EDITOR_KEY, RANDOMBITS_DOMAIN} from '../definitions';
+import {BUILT_IN_EDITORS} from '../built-in-editors';
 
 export class MockStandardNotes {
   private childWindow;
@@ -23,6 +24,16 @@ export class MockStandardNotes {
       action: 'reply',
       data: this.streamData,
       original: this.streamEvent
+    }, '*');
+  }
+
+  public toggleTheme(isDark: boolean) {
+    const themes = isDark ? ['dark.css'] : [];
+    this.childWindow.postMessage({
+      action: 'themes',
+      data: {
+        themes
+      }
     }, '*');
   }
 
@@ -58,7 +69,7 @@ export class MockStandardNotes {
   private updateStream(text: string, editorId: string) {
     this.streamData = JSON.parse(JSON.stringify(sampleStreamResponse.data));
     this.streamData.item.content.text = text;
-    const editor = EDITORS.find(editor => editor.id === editorId) || null;
+    const editor = BUILT_IN_EDITORS.find(editor => editor.id === editorId) || null;
     this.streamData.item.content.appData[RANDOMBITS_DOMAIN][EDITOR_KEY] = editor;
   }
 }

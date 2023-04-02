@@ -1,7 +1,6 @@
 import React, {createContext, useContext, useState} from 'react';
 import {createPortal} from "react-dom";
 import {styled} from "goober";
-import {BigActionButton} from "../components/ActionButton";
 
 const DialogBackground = styled('div')`
   position: absolute;
@@ -16,7 +15,7 @@ const DialogContainer = styled('div')`
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
-  max-width: 300px;
+  width: 300px;
   background-color: var(--sn-stylekit-background-color);
   padding: 20px 50px;
 `
@@ -38,15 +37,25 @@ const DialogActions = styled('div')`
 `
 
 const CustomDialog = styled(DialogContainer)`
-  margin-top: 50px;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
-  max-height: 60vh;
-  max-width: 80%;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  overflow-x: hidden;
 `;
 
 const CustomDialogActions = styled('div')`
   flex: 0 0 auto;
+  padding: 10px 0 0 20px;
+
+`;
+
+const BackLink = styled(`span`)`
+  font-size: 20px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--sn-stylekit-foreground-color);
 `;
 
 const CustomDialogContent = styled('div')`
@@ -114,10 +123,10 @@ export const DialogProvider = ({children}) => {
   const custom = (el: JSX.Element) => {
     const dialogWrapper = (
       <CustomDialog>
-        <CustomDialogContent>{el}</CustomDialogContent>
         <CustomDialogActions>
-          <BigActionButton onClick={closeCustom}>Close</BigActionButton>
+          <BackLink onClick={closeCustom}>&lt; Back</BackLink>
         </CustomDialogActions>
+        <CustomDialogContent>{el}</CustomDialogContent>
       </CustomDialog>
     )
     setCustomContents(dialogWrapper);

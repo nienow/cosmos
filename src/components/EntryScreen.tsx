@@ -1,11 +1,13 @@
 import React from 'react';
 import {styled} from "goober";
-import {EDITORS} from "../definitions";
-import AddEditor from "./AddEditor";
 import About from "./About";
 import {EditorCard, EditorDesc, Editors, EditorTitle} from "./EditorCard";
-import {useCustomEditors} from "../hooks/useCustomEditors";
+import {useInstalled} from "../hooks/useInstalled";
 import {HeadingText} from "./Text";
+import {Tag} from "./Tag";
+import {ActionButton} from "./ActionButton";
+import {useDialog} from "../providers/DialogProvider";
+import ManageEditors from "./ManageEditors";
 
 const Container = styled('div')`
   padding: 0 30px;
@@ -25,27 +27,35 @@ const Separator = styled('div')`
   border-top: 1px solid var(--sn-stylekit-border-color);
 `;
 
-const EntryScreen = ({changeEditor}) => {
-  const {customEditors} = useCustomEditors();
+const ManageEditorButtons = styled(ActionButton)`
+  margin-left: 30px;
+`;
 
-  const allEditors = EDITORS.concat(customEditors);
+const EntryScreen = ({changeEditor}) => {
+  const {installedEditors} = useInstalled();
+  const {custom} = useDialog();
+
+  const openManageEditors = () => {
+    custom(<ManageEditors/>);
+  };
 
   return (
     <Container>
-      <HeadingText>Choose an editor to get started</HeadingText>
+      <HeadingText>Choose an editor<ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></HeadingText>
       <Editors>
         {
-          allEditors.map(editor => {
+          installedEditors.map(editor => {
+            const tag = editor.custom ? <Tag>Custom Added</Tag> : <></>;
             return <ClickableEditorCard key={editor.id} onClick={() => changeEditor(editor)}>
-              <EditorTitle>{editor.name}</EditorTitle>
+              <EditorTitle>{editor.name} {tag}</EditorTitle>
               <EditorDesc>{editor.desc}</EditorDesc>
             </ClickableEditorCard>;
           })
         }
       </Editors>
       <Separator/>
-      <AddEditor/>
-      <Separator/>
+      {/*<AddEditor/>*/}
+      {/*<Separator/>*/}
       <About/>
 
     </Container>
