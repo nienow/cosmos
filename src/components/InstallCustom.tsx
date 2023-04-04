@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {styled} from "goober";
 import {useInstalled} from "../hooks/useInstalled";
 import {useDialog} from "../providers/DialogProvider";
-import {ActionButton} from "./ActionButton";
-import {HeadingText} from "./Text";
+import {ActionButton} from "./common/ActionButton";
+import {HeadingText} from "./common/Text";
 import {Editor} from "../definitions";
 
 const UrlInput = styled('input')`

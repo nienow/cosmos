@@ -1,11 +1,12 @@
 import React, {useRef, useState} from 'react';
 import {styled} from "goober";
-import {ActionButton} from "./ActionButton";
+import {ActionButton} from "./common/ActionButton";
 import DotsIcon from "./icons/DotsIcon";
 import {useDialog} from "../providers/DialogProvider";
 import About from "./About";
 import ManageEditors from "./ManageEditors";
-import EntryScreen from "./EntryScreen";
+import ChangeEditor from "./ChangeEditor";
+import {frameMediator} from "../mediator";
 
 const ButtonContainer = styled('div')`
   position: fixed;
@@ -72,7 +73,11 @@ const ActionPopover = () => {
     custom(<ManageEditors/>);
   };
   const changeEditor = () => {
-    custom(<EntryScreen changeEditor={eraseNote}/>)
+    const chooseEditor = (editor) => {
+      frameMediator.changeEditor(editor);
+      closeEditor();
+    };
+    const closeEditor = custom(<ChangeEditor chooseEditor={chooseEditor}/>)
   };
   const toggleOptions = () => {
     setMenuVisible(!menuVisible);

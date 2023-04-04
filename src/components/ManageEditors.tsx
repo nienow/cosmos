@@ -4,9 +4,10 @@ import {EditorCard, EditorDesc, Editors, EditorTitle} from "./EditorCard";
 import {Editor} from "../definitions";
 import {useDialog} from "../providers/DialogProvider";
 import {useInstalled} from "../hooks/useInstalled";
-import {Tag} from "./Tag";
+import {Tag} from "./common/Tag";
 import {BUILT_IN_EDITORS} from "../built-in-editors";
 import InstallCustom from "./InstallCustom";
+import {Separator} from "./common/Separator";
 
 const Container = styled('div')`
 `;
@@ -49,7 +50,8 @@ const ManageEditors = ({}) => {
           })
         }
       </Editors>
-      <h2>Available Editors</h2>
+      <Separator/>
+      <h2>Marketplace</h2>
       <Editors>
         {
           availableEditors.map(editor => {
@@ -61,6 +63,7 @@ const ManageEditors = ({}) => {
           })
         }
       </Editors>
+      <Separator/>
       <InstallCustom/>
     </Container>
   );

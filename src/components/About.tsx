@@ -1,6 +1,6 @@
 import React from 'react';
 import {styled} from "goober";
-import {HeadingText} from "./Text";
+import {HeadingText} from "./common/Text";
 
 const Container = styled('div')`
 `;

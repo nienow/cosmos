@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Editor} from "./definitions";
 import {styled} from "goober";
-import {FrameMediator} from "./mediator";
+import {frameMediator} from "./mediator";
 import ActionPopover from "./components/ActionPopover";
 import EntryScreen from "./components/EntryScreen";
 
@@ -11,6 +11,8 @@ const Container = styled('div')`
 `;
 
 const EntryScreenWrapper = styled('div')`
+  height: 100vh;
+  overflow-y: auto;
   padding: 0 30px;
 `;
 
@@ -43,40 +45,30 @@ const Frame = styled('iframe', React.forwardRef)`
 //   flex: 1 0 auto;
 // `
 
-interface Props {
-  mediator: FrameMediator;
-}
-
-const App = ({mediator}: Props) => {
+const App = () => {
   const iframeRef = useRef<HTMLIFrameElement>();
   const [editor, setEditor] = useState<Editor>(null);
   const [initialized, setInitialized] = useState(false);
   const onIframeLoad = () => {
-    mediator.setChildWindow(iframeRef.current.contentWindow);
+    frameMediator.setChildWindow(iframeRef.current.contentWindow);
   };
 
   useEffect(() => {
-    mediator.waitForEditor((editor: Editor) => {
+    frameMediator.waitForEditor((editor: Editor) => {
       setEditor(editor);
       setInitialized(true);
     });
   }, []);
 
-  const changeEditor = (newEditor: Editor) => {
-    setEditor(newEditor);
-    setInitialized(true);
-    mediator.changeEditor(newEditor);
-  };
-
   const renderContent = () => {
     if (initialized) {
       if (editor?.url) {
         return <>
-          <Frame ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
+          <Frame key={editor?.url} ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
           <ActionPopover/>
         </>;
       } else {
-        return <EntryScreenWrapper><EntryScreen changeEditor={changeEditor}/></EntryScreenWrapper>
+        return <EntryScreenWrapper><EntryScreen/></EntryScreenWrapper>
       }
     }
   };

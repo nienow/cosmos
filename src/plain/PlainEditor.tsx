@@ -11,7 +11,6 @@ import {styled} from "goober";
 // `;
 
 const SectionTextArea = styled('textarea')`
-  flex: 1 1 auto;
   background-color: inherit;
   border: none;
   outline: none;
@@ -19,7 +18,7 @@ const SectionTextArea = styled('textarea')`
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   line-height: 1.4;
   resize: none;
   color: var(--sn-stylekit-foreground-color);

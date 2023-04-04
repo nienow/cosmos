@@ -10,7 +10,7 @@ enum FrameState {
   CHANGING_EDITOR
 }
 
-export class FrameMediator {
+class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
   private childWindow;
@@ -52,6 +52,7 @@ export class FrameMediator {
       sessionKey: this.sessionKey,
       api: 'component'
     }, this.parentOrigin);
+    this.editorCallbackFn(newEditor);
   }
 
   private handleMessage(e: MessageEvent) {
@@ -160,3 +161,5 @@ export class FrameMediator {
     };
   }
 }
+
+export const frameMediator = new FrameMediator();

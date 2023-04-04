@@ -76,7 +76,7 @@ const SimpleDialog = ({children, open}) => {
 interface IDialogContext {
   confirm: (text: string, action: () => void) => void;
   alert: (text: string) => void;
-  custom: (el: JSX.Element) => void;
+  custom: (el: JSX.Element) => () => void;
 }
 
 const DialogContext = createContext<IDialogContext>({} as any);
@@ -135,6 +135,9 @@ export const DialogProvider = ({children}) => {
       </CustomDialog>
     )
     setCustomContents([...customContents, {id, el}]);
+    return () => {
+      closeCustom(id);
+    };
   }
 
   const closeDialog = () => {
