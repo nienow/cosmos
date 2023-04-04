@@ -9,7 +9,6 @@ import {BUILT_IN_EDITORS} from "../built-in-editors";
 import InstallCustom from "./InstallCustom";
 
 const Container = styled('div')`
-  padding: 0 20px;
 `;
 
 const EditorAction = styled('div')`

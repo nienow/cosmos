@@ -1,7 +1,7 @@
 import {styled} from "goober";
 
 export const ActionButton = styled('button')`
-  background-color: inherit;
+  background-color: var(--sn-stylekit-background-color);
   border: 1px solid var(--sn-stylekit-border-color);
   color: inherit;
   cursor: pointer;

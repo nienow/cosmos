@@ -1,25 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
-import EditorChoice from "./components/EditorChoice";
 import {Editor} from "./definitions";
 import {styled} from "goober";
 import {FrameMediator} from "./mediator";
+import ActionPopover from "./components/ActionPopover";
 import EntryScreen from "./components/EntryScreen";
 
 const Container = styled('div')`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const EntryScreenWrapper = styled('div')`
+  padding: 0 30px;
 `;
 
 const Frame = styled('iframe', React.forwardRef)`
-  flex: 1 1 auto;
+  height: 100%;
   width: 100%;
   border: 0;
 `;
 
-const Header = styled('div')`
-  flex: 0 0 auto;
-`;
+// const Header = styled('div')`
+//   flex: 0 0 auto;
+// `;
 
 // const GridContainer = styled('div')`
 //   display: flex;
@@ -69,14 +72,11 @@ const App = ({mediator}: Props) => {
     if (initialized) {
       if (editor?.url) {
         return <>
-          <Header>
-            <EditorChoice value={editor.id} changeEditor={changeEditor}/>
-            <button onClick={() => changeEditor(null)}>Clear</button>
-          </Header>
           <Frame ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
+          <ActionPopover/>
         </>;
       } else {
-        return <EntryScreen changeEditor={changeEditor}/>
+        return <EntryScreenWrapper><EntryScreen changeEditor={changeEditor}/></EntryScreenWrapper>
       }
     }
   };

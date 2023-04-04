@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, ReactNode, useContext, useState} from 'react';
 import {createPortal} from "react-dom";
 import {styled} from "goober";
 
@@ -36,19 +36,18 @@ const DialogActions = styled('div')`
   margin-top: 20px;
 `
 
-const CustomDialog = styled(DialogContainer)`
-  margin-top: 0;
+const CustomDialog = styled('div')`
+  background-color: var(--sn-stylekit-background-color);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-  padding: 0;
+  padding: 0 20px;
   overflow-x: hidden;
+  height: 100vh;
 `;
 
 const CustomDialogActions = styled('div')`
   flex: 0 0 auto;
-  padding: 10px 0 0 20px;
+  padding: 10px 0 0 0;
 
 `;
 
@@ -60,7 +59,7 @@ const BackLink = styled(`span`)`
 
 const CustomDialogContent = styled('div')`
   flex: 1 1 auto;
-  overflow-y: auto;
+  margin-bottom: 30px;
 `;
 
 const SimpleDialog = ({children, open}) => {
@@ -84,9 +83,14 @@ const DialogContext = createContext<IDialogContext>({} as any);
 
 export const useDialog = () => useContext(DialogContext);
 
+interface CustomDialogData {
+  id: number;
+  el: ReactNode;
+}
+
 export const DialogProvider = ({children}) => {
   const [contents, setContents] = useState(null);
-  const [customContents, setCustomContents] = useState(null);
+  const [customContents, setCustomContents] = useState<CustomDialogData[]>([]);
 
   const confirm = (text, action) => {
     const confirmContents = (
@@ -120,29 +124,44 @@ export const DialogProvider = ({children}) => {
     setContents(confirmContents);
   };
 
-  const custom = (el: JSX.Element) => {
-    const dialogWrapper = (
+  const custom = (content: JSX.Element) => {
+    const id = new Date().getTime();
+    const el = (
       <CustomDialog>
         <CustomDialogActions>
-          <BackLink onClick={closeCustom}>&lt; Back</BackLink>
+          <BackLink onClick={() => closeCustom(id)}>&lt; Back</BackLink>
         </CustomDialogActions>
-        <CustomDialogContent>{el}</CustomDialogContent>
+        <CustomDialogContent>{content}</CustomDialogContent>
       </CustomDialog>
     )
-    setCustomContents(dialogWrapper);
+    setCustomContents([...customContents, {id, el}]);
   }
 
   const closeDialog = () => {
     setContents(null);
   }
 
-  const closeCustom = () => {
-    setCustomContents(null);
+  const closeCustom = (id) => {
+
+    setCustomContents((customContents) => {
+      const index = customContents.findIndex(item => item.id === id);
+      customContents.splice(index, 1);
+      return [...customContents]
+    });
   }
 
   return (
     <DialogContext.Provider value={{confirm, alert, custom}}>
-      <SimpleDialog open={!!customContents}>{customContents}</SimpleDialog>
+      {
+        customContents.map(content => {
+          return createPortal(
+            <DialogBackground>{content.el}</DialogBackground>,
+            document.body,
+            String(content.id)
+          )
+        })
+      }
+      {/*<SimpleDialog open={customContents.length > 0}>{customContents}</SimpleDialog>*/}
       <SimpleDialog open={!!contents}>{contents}</SimpleDialog>
       {children}
     </DialogContext.Provider>
