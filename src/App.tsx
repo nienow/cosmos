@@ -64,7 +64,7 @@ const App = () => {
     if (initialized) {
       if (editor?.url) {
         return <>
-          <Frame key={editor?.url} ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
+          <Frame id="cosmos-editor" key={editor?.url} ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
           <ActionPopover/>
         </>;
       } else {

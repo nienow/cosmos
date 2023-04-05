@@ -12,14 +12,16 @@ export const BUILT_IN_EDITORS: Editor[] = [
     url: 'https://nienow.github.io/sn-excalidraw/',
     name: 'Excalidraw',
     desc: 'A drawing editor that uses the Excalidraw library',
-    github: 'https://github.com/nienow/sn-excalidraw'
+    github: 'https://github.com/nienow/sn-excalidraw',
+    clears: true
   },
   {
     id: 'whiteboard',
     url: 'https://antonheitz.github.io/sn-whiteboard/',
     name: 'Whiteboard',
     desc: 'Uses TLDraw Application',
-    github: 'https://github.com/antonheitz/sn-whiteboard'
+    github: 'https://github.com/antonheitz/sn-whiteboard',
+    clears: true
   },
   {
     id: 'com.dylanonelson.sn-scratch-editor',
@@ -27,12 +29,5 @@ export const BUILT_IN_EDITORS: Editor[] = [
     name: 'Scratch Editor',
     desc: 'An editor for writing things down.',
     github: 'https://github.com/dylanonelson/sn-scratch-editor'
-  },
-  {
-    id: 'org.corvec.sn-kanban-editor',
-    name: 'Kanban Editor',
-    url: 'https://corvec.github.io/sn-kanban-editor/',
-    desc: 'Kanban board editor using react-trello',
-    github: 'https://github.com/corvec/sn-kanban-editor'
   }
 ].sort((a, b) => a.name > b.name ? 1 : -1);

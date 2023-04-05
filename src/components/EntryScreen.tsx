@@ -1,11 +1,7 @@
 import React from 'react';
 import {styled} from "goober";
 import About from "./About";
-import {EditorCard} from "./EditorCard";
-import {HeadingText} from "./common/Text";
-import {ActionButton} from "./common/ActionButton";
-import {useDialog} from "../providers/DialogProvider";
-import ManageEditors from "./ManageEditors";
+import {EditorCard} from "./common/EditorCard";
 import AvailableEditors from "./AvailableEditors";
 import {frameMediator} from "../mediator";
 import {Separator} from "./common/Separator";
@@ -22,17 +18,7 @@ export const ClickableEditorCard = styled(EditorCard)`
   }
 `;
 
-
-const ManageEditorButtons = styled(ActionButton)`
-  margin-left: 30px;
-`;
-
 const EntryScreen = () => {
-  const {custom} = useDialog();
-
-  const openManageEditors = () => {
-    custom(<ManageEditors/>);
-  };
 
   const chooseEditor = (editor) => {
     frameMediator.changeEditor(editor);
@@ -40,7 +26,6 @@ const EntryScreen = () => {
 
   return (
     <Container>
-      <HeadingText>Choose an editor<ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></HeadingText>
       <AvailableEditors chooseEditor={chooseEditor}/>
       <Separator/>
       <About/>

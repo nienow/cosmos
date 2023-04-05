@@ -1,6 +1,6 @@
 import React from 'react';
 import {styled} from "goober";
-import {EditorCard, EditorDesc, Editors, EditorTitle} from "./EditorCard";
+import {EditorCard, EditorDesc, Editors, EditorTitle} from "./common/EditorCard";
 import {Editor} from "../definitions";
 import {useDialog} from "../providers/DialogProvider";
 import {useInstalled} from "../hooks/useInstalled";
@@ -28,7 +28,8 @@ const ManageEditors = ({}) => {
   };
 
   const install = (editor: Editor) => {
-    installEditor(editor);
+    const {id, name, url, desc} = editor;
+    installEditor({id, name, url, desc});
   };
 
   const availableEditors = BUILT_IN_EDITORS.filter(editor => {

@@ -1,19 +1,6 @@
-export const parseEditorData = (text: string) => {
-  if (text.indexOf('{') === 0) {
-    try {
-      const parsedData = JSON.parse(text);
-      if (parsedData.editor && parsedData.editor === 'my-editor') {
-        return parsedData;
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-};
+import {Editor} from './definitions';
+import {BUILT_IN_EDITORS} from './built-in-editors';
 
-export const createNewData = () => {
-  return {
-    editor: 'my-editor',
-    text: ''
-  };
+export const getBuiltInEditor = (editorId: string): Editor => {
+  return BUILT_IN_EDITORS.find(editor => editor.id === editorId);
 };

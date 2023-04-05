@@ -43,17 +43,24 @@ class FrameMediator {
     this.state = FrameState.CHANGING_EDITOR;
     this.editor = newEditor;
     this.writeEditor();
-    window.parent.postMessage({
-      action: 'save-items',
-      data: {
-        items: [this.item]
-      },
-      messageId: crypto.randomUUID(),
-      sessionKey: this.sessionKey,
-      api: 'component'
-    }, this.parentOrigin);
+    this.saveNote();
     this.editorCallbackFn(newEditor);
   }
+
+  // public eraseNote() {
+  //   this.item.content.text = '';
+  //   this.item.content.preview_plain = '';
+  //   this.item.content.preview_html = '';
+  //   this.saveNote();
+  //   console.log(this.streamOriginalEvent);
+  //   this.childWindow.postMessage({
+  //     action: 'reply',
+  //     data: {
+  //       item: this.item
+  //     },
+  //     original: this.streamOriginalEvent
+  //   }, '*');
+  // }
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
@@ -159,6 +166,18 @@ class FrameMediator {
     this.item.content.appData[RANDOMBITS_DOMAIN] = {
       [EDITOR_KEY]: this.editor
     };
+  }
+
+  private saveNote() {
+    window.parent.postMessage({
+      action: 'save-items',
+      data: {
+        items: [this.item]
+      },
+      messageId: crypto.randomUUID(),
+      sessionKey: this.sessionKey,
+      api: 'component'
+    }, this.parentOrigin);
   }
 }
 
