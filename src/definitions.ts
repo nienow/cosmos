@@ -10,3 +10,8 @@ export interface Editor {
   github?: string;
   clears?: boolean;
 }
+
+export interface RandomBitsMeta {
+  columns?: number;
+  editor?: Editor[] | Editor;
+}

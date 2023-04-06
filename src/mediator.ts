@@ -1,50 +1,65 @@
-import {Editor, EDITOR_KEY, RANDOMBITS_DOMAIN} from './definitions';
+import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
 
-enum FrameState {
+// enum FrameState {
+//   START,
+//   REGISTERED_PARENT,
+//   RECEIVED_DATA,
+//   REGISTERED_CHILD,
+//   SENT_DATA_TO_CHILD,
+//   CHANGING_EDITOR
+// }
+
+enum ChildState {
   START,
-  REGISTERED_PARENT,
-  RECEIVED_DATA,
-  REGISTERED_CHILD,
-  SENT_DATA_TO_CHILD,
+  // REGISTERED,
+  REGISTERED,
   CHANGING_EDITOR
 }
 
 class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
-  private childWindow;
+  // private childWindows = [];
+  private children: ChildMediator[] = [];
   private sessionKey;
   private item;
-  private streamOriginalEvent;
-  private editor: Editor;
-  private editorCallbackFn: (editor: Editor) => void;
+  // private streamOriginalEvent;
+  private meta: RandomBitsMeta;
+  private editorCallbackFn: (meta: RandomBitsMeta) => void;
   private themeManager = new ThemeManager();
-  private state = FrameState.START;
+
+  // private state = FrameState.START;
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
   }
 
-  public setChildWindow(childWindow: Window) {
-    this.childWindow = childWindow;
-    this.childWindow.postMessage(this.registrationEvent, '*');
-    this.state = FrameState.REGISTERED_CHILD;
+  public setChildWindow(i: number, childWindow: Window) {
+    let childData = '';
+    if (this.children.length > 1) {
+      childData = this.item.content.text[i] || '';
+    } else if (this.children.length === 1) {
+      childData = this.item.content.text || '';
+    }
+
+    this.children[i].init(childWindow, childData);
+    this.children[i].post(this.registrationEvent);
   }
 
-  public waitForEditor(callbackFn: (editor: Editor) => void) {
+  public waitForEditor(callbackFn: (meta: RandomBitsMeta) => void) {
     this.editorCallbackFn = callbackFn;
-    if (this.editor) {
-      callbackFn(this.editor);
+    if (this.meta) {
+      callbackFn(this.meta);
     }
   }
 
-  public changeEditor(newEditor: Editor) {
-    this.state = FrameState.CHANGING_EDITOR;
-    this.editor = newEditor;
-    this.writeEditor();
+  public changeEditor(newMeta: RandomBitsMeta) {
+    // this.state = FrameState.CHANGING_EDITOR;
+    this.meta = newMeta;
+    this.writeMeta();
     this.saveNote();
-    this.editorCallbackFn(newEditor);
+    this.editorCallbackFn(newMeta);
   }
 
   // public eraseNote() {
@@ -64,45 +79,40 @@ class FrameMediator {
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
-    console.log('mediator: ', data);
+    // console.log('mediator: ', data);
     if (data.action === 'component-registered') {
       this.handleParentRegistration(e);
     } else if (data.action === 'stream-context-item') {
-      this.handleChildDataRequest(data);
+      this.handleChildDataRequest(e);
     } else if (data.action === 'save-items') {
-      this.handleChildSaveRequest(data);
+      this.handleChildSaveRequest(e);
     } else if (data.action === 'request-permissions') {
-      this.handleChildRequestPermissions(data);
+      this.handleChildRequestPermissions(e);
     } else if (data.action === 'reply') {
-      this.handleReply(data);
+      this.handleReply(e);
     } else if (data.action === 'themes') {
       this.handleParentThemeChange(data);
     }
   }
 
-  private handleReply(data: any) {
-    if (data.original?.action === 'stream-context-item') {
-      if (this.state === FrameState.SENT_DATA_TO_CHILD) {
-        this.childWindow.postMessage({
-          ...data,
-          original: this.streamOriginalEvent
-        }, '*');
-      } else if (this.state === FrameState.REGISTERED_PARENT) {
-        this.state = FrameState.RECEIVED_DATA;
-        this.item = data.data.item;
-        const domainData = this.item.content.appData[RANDOMBITS_DOMAIN];
-        this.editor = domainData ? domainData[EDITOR_KEY] : null;
-        if (this.editorCallbackFn) {
-          this.editorCallbackFn(this.editor);
-        }
+  private handleReply(e: MessageEvent) {
+    if (e.data.original?.action === 'stream-context-item') {
+      if (this.meta) {
+        this.children.forEach(child => {
+          child.handleDataUpdate(e.data);
+        });
       } else {
-        // ignore
-      }
-    } else if (data.original?.action === 'save-items') {
-      if (this.state === FrameState.SENT_DATA_TO_CHILD) {
-        this.childWindow.postMessage(data, '*');
+        this.item = e.data.data.item;
+        this.meta = this.item.content.appData[RANDOMBITS_DOMAIN];
+        this.createChildMediators();
+        if (this.editorCallbackFn) {
+          this.editorCallbackFn(this.meta);
+        }
       }
     }
+    // } else if (e.data.original?.action === 'save-items') {
+    //   this.getChild(e.source)?.handleSaveReply(e.data);
+    // }
   }
 
   private handleParentRegistration(e: MessageEvent) {
@@ -117,55 +127,57 @@ class FrameMediator {
       sessionKey: this.sessionKey,
       api: 'component'
     }, this.parentOrigin);
-    this.state = FrameState.REGISTERED_PARENT;
   }
 
   private handleParentThemeChange(data: any) {
     this.themeManager.activateThemes(data.data.themes);
-    if (this.childWindow) {
-      this.childWindow.postMessage(data, '*');
-    }
+    this.children.forEach(child => {
+      child.post(data);
+    });
   }
 
-  private handleChildDataRequest(data: any) {
-    this.streamOriginalEvent = data;
-    this.item.isMetadataUpdate = false;
-    this.childWindow.postMessage({
-      action: 'reply',
-      data: {
-        item: this.item
-      },
-      original: data
-    }, '*');
+  private handleChildDataRequest(e: MessageEvent) {
+    const child = this.getChild(e.source);
+    if (child) {
+      child.handleChildDataRequest(e.data);
+    }
     if (this.themeManager.activeThemes.length > 0) {
-      this.childWindow.postMessage({
+      child.post({
         action: 'themes',
         data: {
           themes: this.themeManager.activeThemes
         }
-      }, '*');
+      });
     }
-    this.state = FrameState.SENT_DATA_TO_CHILD;
   }
 
-  private handleChildSaveRequest(data: any) {
-    this.item = data.data.items[0];
-    this.writeEditor();
+  private handleChildSaveRequest(e: MessageEvent) {
+    const i = this.getChildIndex(e.source);
+    this.children[i].post({
+      action: 'reply',
+      data: {},
+      original: e.data
+    });
+    const data = e.data;
+    if (this.children.length > 1) {
+      this.item.content.text[i] = data.data.items[0].content.text;
+    } else {
+      this.item.content.text = data.data.items[0].content.text;
+    }
+    data.data.items[0] = this.item;
     window.parent.postMessage(data, this.parentOrigin);
   }
 
-  private handleChildRequestPermissions(data: any) {
-    this.childWindow.postMessage({
+  private handleChildRequestPermissions(e: MessageEvent) {
+    this.getChild(e.source)?.post({
       action: 'reply',
       data: {},
-      original: data
+      original: e.data
     });
   }
 
-  private writeEditor() {
-    this.item.content.appData[RANDOMBITS_DOMAIN] = {
-      [EDITOR_KEY]: this.editor
-    };
+  private writeMeta() {
+    this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
   }
 
   private saveNote() {
@@ -179,6 +191,77 @@ class FrameMediator {
       api: 'component'
     }, this.parentOrigin);
   }
+
+  private createChildMediators() {
+    if (this.meta.editor) {
+      const editors = Array.isArray(this.meta.editor) ? this.meta.editor : [this.meta.editor];
+      editors.forEach(editor => {
+        this.children.push(new ChildMediator(editor));
+      });
+    }
+  }
+
+  private getChild(childWindow) {
+    return this.children.find(child => child.equals(childWindow));
+  }
+
+  private getChildIndex(childWindow) {
+    return this.children.findIndex(child => child.equals(childWindow));
+  }
 }
 
 export const frameMediator = new FrameMediator();
+
+export class ChildMediator {
+  private childWindow: Window;
+  private state: ChildState = ChildState.START;
+  private dataRequestEvent: any;
+  private item: any;
+
+  constructor(public editor: Editor) {
+  }
+
+  public init(window: Window, data: any) {
+    this.childWindow = window;
+    this.item = {
+      isMetadataUpdate: false,
+      content: {
+        text: data
+      }
+    };
+  }
+
+  public post(event: any) {
+    this.childWindow.postMessage(event, '*');
+  }
+
+  public handleChildDataRequest(data: any) {
+    this.dataRequestEvent = data;
+    this.item.isMetadataUpdate = false;
+    this.post({
+      action: 'reply',
+      data: {
+        item: this.item
+      },
+      original: data
+    });
+    this.state = ChildState.REGISTERED;
+  }
+
+  public handleDataUpdate(data: any) {
+    this.post({
+      ...data,
+      original: this.dataRequestEvent
+    });
+  }
+
+  public handleSaveReply(data: any) {
+    if (this.state === ChildState.REGISTERED) {
+      this.post(data);
+    }
+  }
+
+  public equals(window: Window) {
+    return this.childWindow === window;
+  }
+}

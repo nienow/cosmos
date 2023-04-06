@@ -26,6 +26,7 @@ window.addEventListener('message', (e: MessageEvent) => {
 });
 
 componentRelay.streamContextItem((note) => {
+  console.log('plain', note);
   currentNote = note;
   // Only update UI on non-metadata updates.
   if (note.isMetadataUpdate) {

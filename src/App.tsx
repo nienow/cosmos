@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Editor} from "./definitions";
+import React, {useEffect, useState} from 'react';
+import {RandomBitsMeta} from "./definitions";
 import {styled} from "goober";
 import {frameMediator} from "./mediator";
-import ActionPopover from "./components/ActionPopover";
 import EntryScreen from "./components/EntryScreen";
 
 const Container = styled('div')`
@@ -18,8 +17,14 @@ const EntryScreenWrapper = styled('div')`
 
 const Frame = styled('iframe', React.forwardRef)`
   height: 100%;
-  width: 100%;
   border: 0;
+  flex: 1 0 auto;
+  border-right: 1px solid var(--sn-stylekit-border-color);
+`;
+
+const FramesWrapper = styled('div')`
+  display: flex;
+  height: 100%;
 `;
 
 // const Header = styled('div')`
@@ -46,27 +51,29 @@ const Frame = styled('iframe', React.forwardRef)`
 // `
 
 const App = () => {
-  const iframeRef = useRef<HTMLIFrameElement>();
-  const [editor, setEditor] = useState<Editor>(null);
+  const [meta, setMeta] = useState<RandomBitsMeta>(null);
   const [initialized, setInitialized] = useState(false);
-  const onIframeLoad = () => {
-    frameMediator.setChildWindow(iframeRef.current.contentWindow);
+  const onIframeLoad = (i: number, e: any) => {
+    frameMediator.setChildWindow(i, e.target.contentWindow);
   };
 
   useEffect(() => {
-    frameMediator.waitForEditor((editor: Editor) => {
-      setEditor(editor);
+    frameMediator.waitForEditor((meta: RandomBitsMeta) => {
+      setMeta(meta);
       setInitialized(true);
     });
   }, []);
 
   const renderContent = () => {
     if (initialized) {
-      if (editor?.url) {
-        return <>
-          <Frame id="cosmos-editor" key={editor?.url} ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
-          <ActionPopover/>
-        </>;
+      if (meta.editor) {
+        const editors = Array.isArray(meta.editor) ? meta.editor : [meta.editor];
+        return <FramesWrapper>
+          {editors.map((editor, i) => <>
+            <Frame name={`cosmos-frame-${i}`} key={editor.url} onLoad={(e) => onIframeLoad(i, e)} src={editor.url}/>
+            {/*<ActionPopover/>*/}
+          </>)}
+        </FramesWrapper>;
       } else {
         return <EntryScreenWrapper><EntryScreen/></EntryScreenWrapper>
       }

@@ -28,7 +28,8 @@
             "f43056da-581f-4ee1-8dea-b8dd5ee949ad": {}
           },
           "dev.randombits": {
-            "editor": "plain"
+            "editor": "plain",
+            "columns": 1
           }
         },
         "spellcheck": false,
