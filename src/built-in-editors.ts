@@ -1,12 +1,14 @@
 import {Editor} from './definitions';
 
+export const PLAIN_EDITOR = {
+  id: 'plain',
+  url: 'plain.html',
+  name: 'Plain',
+  desc: 'A plain text editor'
+};
+
 export const BUILT_IN_EDITORS: Editor[] = [
-  {
-    id: 'plain',
-    url: 'plain.html',
-    name: 'Plain',
-    desc: 'A plain text editor'
-  },
+  PLAIN_EDITOR,
   {
     id: 'randombits.excalidraw',
     url: 'https://nienow.github.io/sn-excalidraw/',

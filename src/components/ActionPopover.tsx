@@ -4,9 +4,10 @@ import DotsIcon from "./icons/DotsIcon";
 import {useDialog} from "../providers/DialogProvider";
 import About from "./About";
 import ChangeEditor from "./ChangeEditor";
-import {frameMediator} from "../mediator";
 import {Editor} from "../definitions";
 import {getBuiltInEditor} from "../utils";
+import Options from "./Options";
+import {frameMediator} from "../mediator";
 
 const ButtonContainer = styled('div')`
   position: fixed;
@@ -104,15 +105,21 @@ const ActionPopover = () => {
     const chooseEditor = (editor: Editor) => {
       if (needToWarnUserAboutClearing(editor)) {
         confirm('Changing to this editor will erase any existing note content. Continue?', () => {
-          frameMediator.changeEditor(editor);
+          // frameMediator.changeEditor(editor);
           closeEditor();
         });
       } else {
-        frameMediator.changeEditor(editor);
+        // frameMediator.changeEditor(editor);
         closeEditor();
       }
     };
     const closeEditor = custom(<ChangeEditor chooseEditor={chooseEditor}/>)
+  };
+  const openOptions = () => {
+    custom(<Options/>)
+  };
+  const toggleTitle = () => {
+    frameMediator.setTitle(!frameMediator.getTitle());
   };
   const toggleOptions = () => {
     setMenuVisible(!menuVisible);
@@ -128,8 +135,10 @@ const ActionPopover = () => {
       <PopoverContainer ref={popoverRef} className={menuVisible ? 'visible' : ''}>
         <Menu>
           <MenuItem onClick={openAbout}>About</MenuItem>
+          <MenuItem onClick={toggleTitle}>Toggle Title</MenuItem>
           <MenuItem onClick={eraseNote}>Erase Note</MenuItem>
           <MenuItem onClick={changeEditor}>Change Editor</MenuItem>
+          <MenuItem onClick={openOptions}>Options</MenuItem>
           <MenuItem onClick={cancel}>Cancel</MenuItem>
         </Menu>
       </PopoverContainer>

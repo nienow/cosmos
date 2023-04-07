@@ -14,4 +14,5 @@ export interface Editor {
 export interface RandomBitsMeta {
   columns?: number;
   editor?: Editor[] | Editor;
+  title?: boolean;
 }

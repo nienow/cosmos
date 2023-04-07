@@ -3,6 +3,7 @@ import {RandomBitsMeta} from "./definitions";
 import {styled} from "goober";
 import {frameMediator} from "./mediator";
 import EntryScreen from "./components/EntryScreen";
+import ActionPopover from "./components/ActionPopover";
 
 const Container = styled('div')`
   height: 100vh;
@@ -15,17 +16,38 @@ const EntryScreenWrapper = styled('div')`
   padding: 0 30px;
 `;
 
-const Frame = styled('iframe', React.forwardRef)`
-  height: 100%;
-  border: 0;
+const FrameWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
   flex: 1 0 auto;
+`;
+
+const FrameTitle = styled('input')`
+  border: none;
+  background-color: var(--sn-stylekit-secondary-background-color);
+  outline: none;
+  color: var(--sn-stylekit-foreground-color);
+  line-height: 1.4;
+  padding: 10px;
+`;
+
+const Frame = styled('iframe', React.forwardRef)`
+  border: 0;
+  flex: 1 1 auto;
   border-right: 1px solid var(--sn-stylekit-border-color);
 `;
 
 const FramesWrapper = styled('div')`
   display: flex;
+  flex-direction: column;
   height: 100%;
 `;
+
+const Row = styled('div')`
+  border-bottom: 1px solid var(--sn-stylekit-border-color);
+  display: flex;
+  flex: 1 0 auto;
+`
 
 // const Header = styled('div')`
 //   flex: 0 0 auto;
@@ -59,20 +81,39 @@ const App = () => {
 
   useEffect(() => {
     frameMediator.waitForEditor((meta: RandomBitsMeta) => {
-      setMeta(meta);
+      setMeta({...meta});
       setInitialized(true);
     });
   }, []);
 
   const renderContent = () => {
+
+
     if (initialized) {
       if (meta.editor) {
+        const columns = meta.columns || 1;
+        const rows = Array.isArray(meta.editor) ? Math.ceil(meta.editor.length / columns) : 1;
+
         const editors = Array.isArray(meta.editor) ? meta.editor : [meta.editor];
         return <FramesWrapper>
-          {editors.map((editor, i) => <>
-            <Frame name={`cosmos-frame-${i}`} key={editor.url} onLoad={(e) => onIframeLoad(i, e)} src={editor.url}/>
-            {/*<ActionPopover/>*/}
-          </>)}
+          {
+            [...Array(rows)].map((_, i) => {
+              return <Row key={i}>
+                {
+                  [...Array(columns)].map((_, j) => {
+                    const index = i * columns + j;
+                    const editor = editors[index];
+                    return <FrameWrapper>
+                      <FrameTitle value="blah"/>
+                      <Frame name={`cosmos-frame-${i}`} key={Math.random()} onLoad={(e) => onIframeLoad(index, e)} src={editor.url}/>
+                    </FrameWrapper>
+                  })
+                }
+              </Row>
+            })
+          }
+          <ActionPopover/>
+
         </FramesWrapper>;
       } else {
         return <EntryScreenWrapper><EntryScreen/></EntryScreenWrapper>

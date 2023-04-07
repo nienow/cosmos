@@ -1,5 +1,6 @@
 import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
+import {PLAIN_EDITOR} from './built-in-editors';
 
 // enum FrameState {
 //   START,
@@ -60,6 +61,37 @@ class FrameMediator {
     this.writeMeta();
     this.saveNote();
     this.editorCallbackFn(newMeta);
+  }
+
+  public setColumns(col: number) {
+    this.meta.columns = col;
+    this.makeEditorsFillRows();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public getColumns() {
+    return this.meta.columns || 1;
+  }
+
+  public getEditors() {
+    if (this.meta.editor) {
+      if (Array.isArray(this.meta.editor)) {
+        return this.meta.editor;
+      } else {
+        return [this.meta.editor];
+      }
+    } else {
+      return [];
+    }
+  }
+
+  public setTitle(visible: boolean) {
+    this.meta.title = visible;
+    this.editorCallbackFn(this.meta);
+  }
+
+  public getTitle() {
+    return this.meta.title || false;
   }
 
   // public eraseNote() {
@@ -207,6 +239,22 @@ class FrameMediator {
 
   private getChildIndex(childWindow) {
     return this.children.findIndex(child => child.equals(childWindow));
+  }
+
+  private makeEditorsFillRows() {
+    const editors = this.getEditors();
+    let lonelySections = editors.length % this.getColumns();
+    if (lonelySections) {
+      const fillCount = this.getColumns() - lonelySections;
+      for (let i = 0; i < fillCount; i++) {
+        editors.push(PLAIN_EDITOR);
+        if (!Array.isArray(this.item.text)) {
+          this.item.text = [this.item.text];
+        }
+        this.item.text.push('');
+        this.children.push(new ChildMediator(PLAIN_EDITOR));
+      }
+    }
   }
 }
 
