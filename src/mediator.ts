@@ -2,35 +2,21 @@ import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
 import {PLAIN_EDITOR} from './built-in-editors';
 
-// enum FrameState {
+// enum ChildState {
 //   START,
-//   REGISTERED_PARENT,
-//   RECEIVED_DATA,
-//   REGISTERED_CHILD,
-//   SENT_DATA_TO_CHILD,
+//   REGISTERED,
 //   CHANGING_EDITOR
 // }
-
-enum ChildState {
-  START,
-  // REGISTERED,
-  REGISTERED,
-  CHANGING_EDITOR
-}
 
 class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
-  // private childWindows = [];
   private children: ChildMediator[] = [];
   private sessionKey;
   private item;
-  // private streamOriginalEvent;
   private meta: RandomBitsMeta;
   private editorCallbackFn: (meta: RandomBitsMeta) => void;
   private themeManager = new ThemeManager();
-
-  // private state = FrameState.START;
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
@@ -87,7 +73,7 @@ class FrameMediator {
 
   public setTitle(visible: boolean) {
     this.meta.title = visible;
-    this.editorCallbackFn(this.meta);
+    // this.editorCallbackFn(this.meta);
   }
 
   public getTitle() {
@@ -142,9 +128,6 @@ class FrameMediator {
         }
       }
     }
-    // } else if (e.data.original?.action === 'save-items') {
-    //   this.getChild(e.source)?.handleSaveReply(e.data);
-    // }
   }
 
   private handleParentRegistration(e: MessageEvent) {
@@ -262,7 +245,7 @@ export const frameMediator = new FrameMediator();
 
 export class ChildMediator {
   private childWindow: Window;
-  private state: ChildState = ChildState.START;
+  // private state: ChildState = ChildState.START;
   private dataRequestEvent: any;
   private item: any;
 
@@ -293,7 +276,7 @@ export class ChildMediator {
       },
       original: data
     });
-    this.state = ChildState.REGISTERED;
+    // this.state = ChildState.REGISTERED;
   }
 
   public handleDataUpdate(data: any) {
@@ -303,11 +286,11 @@ export class ChildMediator {
     });
   }
 
-  public handleSaveReply(data: any) {
-    if (this.state === ChildState.REGISTERED) {
-      this.post(data);
-    }
-  }
+  // public handleSaveReply(data: any) {
+  //   if (this.state === ChildState.REGISTERED) {
+  //     this.post(data);
+  //   }
+  // }
 
   public equals(window: Window) {
     return this.childWindow === window;
