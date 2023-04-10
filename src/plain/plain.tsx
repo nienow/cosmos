@@ -2,7 +2,6 @@ import React from 'react';
 
 import {createRoot} from "react-dom/client";
 import ComponentRelay from "@standardnotes/component-relay";
-import {AppDataField} from "@standardnotes/models";
 import PlainEditor from "./PlainEditor";
 import {setup} from "goober";
 import '../stylesheets/main.scss';
@@ -33,11 +32,11 @@ componentRelay.streamContextItem((note) => {
     return;
   }
   const text = note.content?.text || '';
-  const isLocked = componentRelay.getItemAppDataValue(note, AppDataField.Locked);
+  // const isLocked = componentRelay.getItemAppDataValue(note, AppDataField.Locked);
 
   createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <PlainEditor initialText={text} save={save} isLocked={isLocked}/>
+      <PlainEditor initialText={text} save={save}/>
     </React.StrictMode>
   );
 });

@@ -83,29 +83,30 @@ export const DATA_EXCALIDRAW = JSON.stringify({
 export class TestData {
   private data = [];
   private editor = [];
+  private titles = [];
 
-  constructor(public name: string, private columns = 1) {
+  constructor(public name: string, private options: { columns?: number, title?: boolean } = {}) {
   }
 
-  public section(editorId: string, text: string) {
+  public section(editorId: string, text: string, title = '') {
     this.editor.push(editorId);
     this.data.push(text);
+    this.titles.push(title);
     return this;
   }
 
   public getMetadata(): RandomBitsMeta {
+    const meta: RandomBitsMeta = {
+      title: this.options.title || false
+    };
     if (this.editor.length > 1) {
-      return {
-        editor: this.editor.map(editorId => this.getFullEditorData(editorId)),
-        columns: this.columns
-      };
+      meta.editor = this.editor.map(editorId => this.getFullEditorData(editorId));
+      meta.columns = this.options.columns;
+      meta.titles = this.titles;
     } else if (this.editor.length === 1) {
-      return {
-        editor: this.getFullEditorData(this.editor[0])
-      };
-    } else {
-      return {};
+      meta.editor = this.getFullEditorData(this.editor[0]);
     }
+    return meta;
   }
 
   public getText() {
@@ -125,12 +126,15 @@ export class TestData {
 
 const DATA_NEW = new TestData('New');
 
-const SPLIT_PLAIN = new TestData('Split One', 2).section('plain', 'Hello Plain')
+const SPLIT_PLAIN = new TestData('Split One', {columns: 2}).section('plain', 'Hello Plain')
   .section('com.dylanonelson.sn-scratch-editor', 'Hello Scratch');
 
 const EXCALIDRAW_TEST_DATA = new TestData('Excalidraw').section('randombits.excalidraw', DATA_EXCALIDRAW);
 
-const SPLIT_FOUR = new TestData('Split 4', 2).section('plain', 'One').section('plain', 'Two').section('plain', 'Three')
+const SPLIT_FOUR = new TestData('Split 4', {columns: 2, title: true})
+  .section('plain', 'One', 'Title One')
+  .section('plain', 'Two')
+  .section('plain', 'Three')
   .section('plain', 'Four');
 
 export const TEST_DATA = [

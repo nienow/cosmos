@@ -1,6 +1,8 @@
 import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
 import {PLAIN_EDITOR} from './built-in-editors';
+import {useTitle} from './hooks/useTitle';
+import {useLocked} from './hooks/useLocked';
 
 // enum ChildState {
 //   START,
@@ -20,18 +22,44 @@ class FrameMediator {
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
+    useTitle.subscribe(({title, titles}) => {
+      let needsSave = false;
+      if (this.meta.title !== title) {
+        this.meta.title = title;
+        needsSave = true;
+      }
+      if (this.meta.titles !== titles) {
+        this.meta.titles = titles;
+        needsSave = true;
+      }
+      if (needsSave) {
+        this.saveNote();
+      }
+    });
   }
 
   public setChildWindow(i: number, childWindow: Window) {
-    let childData = '';
-    if (this.children.length > 1) {
-      childData = this.item.content.text[i] || '';
-    } else if (this.children.length === 1) {
-      childData = this.item.content.text || '';
-    }
-
-    this.children[i].init(childWindow, childData);
+    this.children[i].init(childWindow, this.getChildData(i));
     this.children[i].post(this.registrationEvent);
+  }
+
+  public getChildData(i: number) {
+    if (this.children.length > 1) {
+      return this.item.content.text[i] || '';
+    } else if (this.children.length === 1) {
+      return this.item.content.text || '';
+    } else {
+      return '';
+    }
+  }
+
+  public saveChild(i: number, text: string) {
+    if (this.children.length > 1) {
+      this.item.content.text[i] = text;
+    } else {
+      this.item.content.text = text;
+    }
+    this.saveNote();
   }
 
   public waitForEditor(callbackFn: (meta: RandomBitsMeta) => void) {
@@ -44,7 +72,6 @@ class FrameMediator {
   public changeEditor(newMeta: RandomBitsMeta) {
     // this.state = FrameState.CHANGING_EDITOR;
     this.meta = newMeta;
-    this.writeMeta();
     this.saveNote();
     this.editorCallbackFn(newMeta);
   }
@@ -71,14 +98,9 @@ class FrameMediator {
     }
   }
 
-  public setTitle(visible: boolean) {
-    this.meta.title = visible;
-    // this.editorCallbackFn(this.meta);
-  }
-
-  public getTitle() {
-    return this.meta.title || false;
-  }
+  // public getTitle() {
+  //   return this.meta.title || false;
+  // }
 
   // public eraseNote() {
   //   this.item.content.text = '';
@@ -115,13 +137,16 @@ class FrameMediator {
 
   private handleReply(e: MessageEvent) {
     if (e.data.original?.action === 'stream-context-item') {
+      this.item = e.data.data.item;
+      const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
+      useLocked.setState({locked});
       if (this.meta) {
         this.children.forEach(child => {
           child.handleDataUpdate(e.data);
         });
       } else {
-        this.item = e.data.data.item;
         this.meta = this.item.content.appData[RANDOMBITS_DOMAIN];
+        useTitle.setState({title: this.meta.title || false, titles: this.meta.titles || []});
         this.createChildMediators();
         if (this.editorCallbackFn) {
           this.editorCallbackFn(this.meta);
@@ -179,8 +204,9 @@ class FrameMediator {
     } else {
       this.item.content.text = data.data.items[0].content.text;
     }
-    data.data.items[0] = this.item;
-    window.parent.postMessage(data, this.parentOrigin);
+    this.saveNote();
+    // data.data.items[0] = this.item;
+    // window.parent.postMessage(data, this.parentOrigin);
   }
 
   private handleChildRequestPermissions(e: MessageEvent) {
@@ -191,11 +217,9 @@ class FrameMediator {
     });
   }
 
-  private writeMeta() {
-    this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
-  }
-
   private saveNote() {
+    console.log('save note');
+    this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
     window.parent.postMessage({
       action: 'save-items',
       data: {
@@ -226,8 +250,23 @@ class FrameMediator {
 
   private makeEditorsFillRows() {
     const editors = this.getEditors();
+    //
+    // // delete empty plain editors
+    // const startIndexOfLonely = editors.length - lonelySections - 1;
+    // // check if all editors in bottom row are empty
+    // for (let i = editors.length - 1; i >= startIndexOfLonely; i--) {
+    //   if (editors[i].id === 'plain' && !this.getChildData(i)) {
+    //     this.removeEditor(i);
+    //     lonelySections--;
+    //   } else {
+    //     break;
+    //   }
+    // }
+
     let lonelySections = editors.length % this.getColumns();
     if (lonelySections) {
+
+      // otherwise fill remaining slots in bottom row
       const fillCount = this.getColumns() - lonelySections;
       for (let i = 0; i < fillCount; i++) {
         editors.push(PLAIN_EDITOR);
@@ -239,6 +278,21 @@ class FrameMediator {
       }
     }
   }
+
+  // private removeEditor(i: number) {
+  //   if (Array.isArray(this.meta.editor)) {
+  //     this.meta.editor.splice(i, 1);
+  //     this.item.content.text.splice(i, 1);
+  //     if (this.meta.editor.length === 1) {
+  //       this.meta.editor = this.meta.editor[0];
+  //       this.item.content.text = this.item.content.text[0];
+  //     }
+  //   } else {
+  //     delete this.meta.editor;
+  //     this.item.content.text = '';
+  //   }
+  //   this.children.splice(i, 1);
+  // }
 }
 
 export const frameMediator = new FrameMediator();
@@ -263,7 +317,9 @@ export class ChildMediator {
   }
 
   public post(event: any) {
-    this.childWindow.postMessage(event, '*');
+    if (this.childWindow) {
+      this.childWindow.postMessage(event, '*');
+    }
   }
 
   public handleChildDataRequest(data: any) {
@@ -280,10 +336,13 @@ export class ChildMediator {
   }
 
   public handleDataUpdate(data: any) {
-    this.post({
-      ...data,
-      original: this.dataRequestEvent
-    });
+    if (this.childWindow) {
+      this.post({
+        ...data,
+        original: this.dataRequestEvent
+      });
+    }
+
   }
 
   // public handleSaveReply(data: any) {

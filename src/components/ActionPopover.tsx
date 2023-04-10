@@ -7,7 +7,8 @@ import ChangeEditor from "./ChangeEditor";
 import {Editor} from "../definitions";
 import {getBuiltInEditor} from "../utils";
 import Options from "./Options";
-import {frameMediator} from "../mediator";
+import {useTitle} from "../hooks/useTitle";
+
 
 const ButtonContainer = styled('div')`
   position: fixed;
@@ -79,6 +80,7 @@ const ActionPopover = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>();
   const {custom, confirm} = useDialog();
+  const {toggleTitle} = useTitle();
 
   const openAbout = () => {
     setMenuVisible(false);
@@ -117,9 +119,6 @@ const ActionPopover = () => {
   };
   const openOptions = () => {
     custom(<Options/>)
-  };
-  const toggleTitle = () => {
-    frameMediator.setTitle(!frameMediator.getTitle());
   };
   const toggleOptions = () => {
     setMenuVisible(!menuVisible);

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {styled} from "goober";
+import {useLocked} from "../hooks/useLocked";
 
 // const SectionTitle = styled.input`
 //   border: none;
@@ -17,8 +18,7 @@ const SectionTextArea = styled('textarea')`
   padding: 10px;
   display: block;
   box-sizing: border-box;
-  width: 100%;
-  height: 100vh;
+  flex: 1 1 auto;
   line-height: 1.4;
   resize: none;
   color: var(--sn-stylekit-foreground-color);
@@ -27,10 +27,10 @@ const SectionTextArea = styled('textarea')`
 interface Props {
   initialText: string;
   save: (text: string) => void;
-  isLocked: boolean;
 }
 
-const PlainEditor = ({initialText, save, isLocked}: Props) => {
+const PlainEditor = ({initialText, save}: Props) => {
+  const {locked} = useLocked();
   const [text, setText] = useState(initialText);
   const onChange = (e) => {
     setText(e.target.value);
@@ -38,7 +38,7 @@ const PlainEditor = ({initialText, save, isLocked}: Props) => {
   };
   return (
     <>
-      <SectionTextArea disabled={isLocked} value={text} onChange={onChange}/>
+      <SectionTextArea disabled={locked} value={text} onChange={onChange}/>
     </>
   );
 };
