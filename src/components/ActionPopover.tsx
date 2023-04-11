@@ -3,11 +3,11 @@ import {styled} from "goober";
 import DotsIcon from "./icons/DotsIcon";
 import {useDialog} from "../providers/DialogProvider";
 import About from "./About";
-import ChangeEditor from "./ChangeEditor";
 import {Editor} from "../definitions";
 import {getBuiltInEditor} from "../utils";
 import Options from "./Options";
 import {useTitle} from "../hooks/useTitle";
+import {useLayoutMode} from "../hooks/useLayoutMode";
 
 
 const ButtonContainer = styled('div')`
@@ -102,20 +102,8 @@ const ActionPopover = () => {
   //   });
   // }, []);
 
-  const changeEditor = () => {
-    setMenuVisible(false);
-    const chooseEditor = (editor: Editor) => {
-      if (needToWarnUserAboutClearing(editor)) {
-        confirm('Changing to this editor will erase any existing note content. Continue?', () => {
-          // frameMediator.changeEditor(editor);
-          closeEditor();
-        });
-      } else {
-        // frameMediator.changeEditor(editor);
-        closeEditor();
-      }
-    };
-    const closeEditor = custom(<ChangeEditor chooseEditor={chooseEditor}/>)
+  const changeLayout = () => {
+    useLayoutMode.setState({layoutMode: true});
   };
   const openOptions = () => {
     custom(<Options/>)
@@ -136,7 +124,7 @@ const ActionPopover = () => {
           <MenuItem onClick={openAbout}>About</MenuItem>
           <MenuItem onClick={toggleTitle}>Toggle Title</MenuItem>
           <MenuItem onClick={eraseNote}>Erase Note</MenuItem>
-          <MenuItem onClick={changeEditor}>Change Editor</MenuItem>
+          <MenuItem onClick={changeLayout}>Change Layout</MenuItem>
           <MenuItem onClick={openOptions}>Options</MenuItem>
           <MenuItem onClick={cancel}>Cancel</MenuItem>
         </Menu>

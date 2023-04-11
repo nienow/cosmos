@@ -21,7 +21,7 @@ export const ClickableEditorCard = styled(EditorCard)`
 const EntryScreen = () => {
 
   const chooseEditor = (editor) => {
-    frameMediator.changeEditor({editor});
+    frameMediator.changeEditor(0, editor);
   };
 
   return (

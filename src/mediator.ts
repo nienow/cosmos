@@ -69,11 +69,14 @@ class FrameMediator {
     }
   }
 
-  public changeEditor(newMeta: RandomBitsMeta) {
-    // this.state = FrameState.CHANGING_EDITOR;
-    this.meta = newMeta;
+  public changeEditor(index: number, editor: Editor) {
+    if (Array.isArray(this.meta.editor)) {
+      this.meta.editor[index] = editor;
+    } else {
+      this.meta.editor = editor;
+    }
     this.saveNote();
-    this.editorCallbackFn(newMeta);
+    this.editorCallbackFn(this.meta);
   }
 
   public setColumns(col: number) {

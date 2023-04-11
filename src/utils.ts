@@ -4,3 +4,13 @@ import {BUILT_IN_EDITORS} from './built-in-editors';
 export const getBuiltInEditor = (editorId: string): Editor => {
   return BUILT_IN_EDITORS.find(editor => editor.id === editorId);
 };
+
+export const getFrameIndex = (el: Element) => {
+  if (el) {
+    if (el.hasAttribute('data-frame-index')) {
+      return el.getAttribute('data-frame-index');
+    } else {
+      return getFrameIndex(el.parentElement);
+    }
+  }
+};
