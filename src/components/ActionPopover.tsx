@@ -86,28 +86,10 @@ const ActionPopover = () => {
     setMenuVisible(false);
     custom(<About/>);
   };
-  const eraseNote = () => {
-    setMenuVisible(false);
-    confirm('Are you sure you want erase this note?', () => {
-      // frameMediator.eraseNote();
-    })
-  };
-
-  // useEffect(() => {
-  //   const iframe = document.getElementById('cosmos-editor') as HTMLIFrameElement;
-  //   iframe.contentWindow.document.addEventListener('click', () => {
-  //     console.log('click');
-  //     setMenuVisible(false);
-  //
-  //   });
-  // }, []);
 
   const changeLayout = () => {
     setMenuVisible(false);
     useLayoutMode.setState({layoutMode: true});
-  };
-  const openOptions = () => {
-    custom(<Options/>)
   };
   const toggleOptions = () => {
     setMenuVisible(!menuVisible);

@@ -71,5 +71,6 @@ export class MockStandardNotes {
     this.streamData = JSON.parse(JSON.stringify(sampleStreamResponse.data));
     this.streamData.item.content.text = data.getText();
     this.streamData.item.content.appData[RANDOMBITS_DOMAIN] = data.getMetadata();
+    this.streamData.item.content.appData['org.standardnotes.sn']['locked'] = data.isLocked();
   }
 }

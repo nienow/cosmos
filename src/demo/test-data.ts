@@ -85,7 +85,7 @@ export class TestData {
   private editor = [];
   private titles = [];
 
-  constructor(public name: string, private options: { columns?: number, title?: boolean } = {}) {
+  constructor(public name: string, private options: { columns?: number, title?: boolean, locked?: boolean } = {}) {
   }
 
   public section(editorId: string, text: string, title = '') {
@@ -119,6 +119,10 @@ export class TestData {
     }
   }
 
+  public isLocked() {
+    return this.options.locked || false;
+  }
+
   private getFullEditorData(editorId: string) {
     return BUILT_IN_EDITORS.find(item => item.id === editorId);
   }
@@ -137,9 +141,14 @@ const SPLIT_FOUR = new TestData('Split 4', {columns: 2, title: true})
   .section('plain', 'Three')
   .section('plain', 'Four');
 
+const LOCKED = new TestData('Locked', {columns: 2, title: true, locked: true})
+  .section('plain', 'One', 'Title One')
+  .section('plain', 'Two');
+
 export const TEST_DATA = [
   DATA_NEW,
   SPLIT_PLAIN,
   EXCALIDRAW_TEST_DATA,
-  SPLIT_FOUR
+  SPLIT_FOUR,
+  LOCKED
 ];

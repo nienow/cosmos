@@ -3,8 +3,9 @@ import {RandomBitsMeta} from "./definitions";
 import {styled} from "goober";
 import {frameMediator} from "./mediator";
 import EntryScreen from "./components/EntryScreen";
-import ActionPopover from "./components/ActionPopover";
 import Frame from "./components/Frame";
+import CornerButton from "./components/CornerButton";
+import Options from "./components/Options";
 
 const Container = styled('div')`
   height: 100vh;
@@ -110,7 +111,8 @@ const App = () => {
               </Row>
             })
           }
-          <ActionPopover/>
+          <Options/>
+          <CornerButton/>
 
         </FramesWrapper>;
       } else {

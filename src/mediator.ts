@@ -101,8 +101,28 @@ class FrameMediator {
     this.editorCallbackFn(this.meta);
   }
 
-  public deleteRow(index: number) {
-    // index is editor index
+  public deleteRow() {
+    const startIndex = this.getSize() - this.getColumns();
+    (this.meta.editor as Editor[]).splice(startIndex, this.getColumns());
+    this.meta.titles.splice(startIndex, this.getColumns());
+    this.item.content.text.splice(startIndex, this.getColumns());
+    this.editorCallbackFn(this.meta);
+  }
+
+  public addRow() {
+    const columns = this.meta.columns || 1;
+    if (!Array.isArray(this.meta.editor)) {
+      this.meta.editor = [this.meta.editor];
+      this.item.content.text = [this.item.content.text];
+    }
+
+    for (let i = 0; i < columns; i++) {
+      this.meta.editor.push({...PLAIN_EDITOR});
+      this.meta.titles.push('');
+      this.item.content.text.push('');
+    }
+
+    this.editorCallbackFn(this.meta);
   }
 
   public swapPositions(index1: number, index2: number) {
@@ -122,6 +142,10 @@ class FrameMediator {
     return this.meta.columns || 1;
   }
 
+  public getRows() {
+    return this.getSize() / this.getColumns();
+  }
+
   public getEditors() {
     if (this.meta.editor) {
       if (Array.isArray(this.meta.editor)) {
@@ -132,6 +156,17 @@ class FrameMediator {
     } else {
       return [];
     }
+  }
+
+  public getSize() {
+    if (this.meta.editor) {
+      if (Array.isArray(this.meta.editor)) {
+        return this.meta.editor.length;
+      } else {
+        return 1;
+      }
+    }
+    return 0;
   }
 
   // public getTitle() {
@@ -254,7 +289,6 @@ class FrameMediator {
   }
 
   private saveNote() {
-    console.log('save note');
     this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
     window.parent.postMessage({
       action: 'save-items',
