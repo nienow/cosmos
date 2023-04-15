@@ -145,10 +145,14 @@ const LOCKED = new TestData('Locked', {columns: 2, title: true, locked: true})
   .section('plain', 'One', 'Title One')
   .section('plain', 'Two');
 
+const SINGLE_PLAIN = new TestData('Single', {})
+  .section('plain', 'One');
+
 export const TEST_DATA = [
   DATA_NEW,
   SPLIT_PLAIN,
   EXCALIDRAW_TEST_DATA,
   SPLIT_FOUR,
-  LOCKED
+  LOCKED,
+  SINGLE_PLAIN
 ];

@@ -6,18 +6,20 @@ import {useTitle} from "../hooks/useTitle";
 import {useDialog} from "../providers/DialogProvider";
 import {useLocked} from "../hooks/useLocked";
 import {useOptions} from "../hooks/useOptions";
+import {ActionButton} from "./common/ActionButton";
+import About from "./About";
 
 const HeaderContainer = styled('div')`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--sn-stylekit-border-color);
+  height: 35px;
 `
 
 const Options = () => {
   const {showOptions} = useOptions();
   const {title, toggleTitle} = useTitle();
   const {locked} = useLocked();
-  const {confirm} = useDialog();
+  const {confirm, custom} = useDialog();
   const increaseColumns = () => {
     frameMediator.setColumns(frameMediator.getColumns() + 1);
   };
@@ -50,6 +52,10 @@ const Options = () => {
     }
   };
 
+  const showAbout = () => {
+    custom(<About/>)
+  };
+
   const columns = frameMediator.getColumns();
   const rows = frameMediator.getRows();
 
@@ -58,6 +64,7 @@ const Options = () => {
       <NumberControl increase={increaseColumns} decrease={decreaseColumns} display={columns + " column(s)"}/>
       <NumberControl increase={addRow} decrease={checkLastRow} display={rows + ' row(s)'}></NumberControl>
       <ToggleButton label="Always Show Title" initialValue={title} onToggle={toggleTitle}/>
+      <ActionButton onClick={showAbout}>About</ActionButton>
     </HeaderContainer>
   }
 };

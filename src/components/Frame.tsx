@@ -6,8 +6,6 @@ import PlainEditor from "../plain/PlainEditor";
 import {useLocked} from "../hooks/useLocked";
 import ArrangeOverlay from "./ArrangeOverlay";
 import {useRearrange} from "../hooks/useRearrange";
-import GroupIcon from "./icons/GroupIcon";
-import GearIcon from "./icons/GearIcon";
 import ChangeEditor from "./ChangeEditor";
 import {useDialog} from "../providers/DialogProvider";
 import {useOptions} from "../hooks/useOptions";
@@ -45,11 +43,15 @@ const FrameContent = styled('iframe', React.forwardRef)`
 
 const TitleButton = styled('div')`
   flex: 0 0 auto;
-  width: 15px;
   padding: 0 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-left: 1px solid var(--sn-stylekit-border-color);
+
+  &:hover {
+    background-color: var(--sn-stylekit-background-color);
+  }
 `;
 
 const RenderEditor = ({index, editor}) => {
@@ -92,8 +94,8 @@ const RenderTitle = ({index, editor}) => {
   const renderButtons = () => {
     if (showOptions && !locked) {
       return <>
-        <TitleButton onClick={startRearrange} title="Move panel"><GroupIcon/></TitleButton>
-        <TitleButton onClick={changeEditor} title="Change Editor"><GearIcon/></TitleButton>
+        <TitleButton onClick={startRearrange}>Move</TitleButton>
+        <TitleButton onClick={changeEditor}>Change</TitleButton>
       </>;
     }
   };

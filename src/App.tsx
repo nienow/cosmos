@@ -93,10 +93,9 @@ const App = () => {
 
     if (initialized) {
       if (meta.editor) {
-        const columns = meta.columns || 1;
-        const rows = Array.isArray(meta.editor) ? Math.ceil(meta.editor.length / columns) : 1;
-
-        const editors = Array.isArray(meta.editor) ? meta.editor : [meta.editor];
+        const columns = frameMediator.getColumns();
+        const rows = frameMediator.getRows();
+        const editors = frameMediator.getEditors();
         return <FramesWrapper>
           {
             [...Array(rows)].map((_, i) => {

@@ -45,9 +45,9 @@ class FrameMediator {
   }
 
   public getChildData(i: number) {
-    if (this.children.length > 1) {
+    if (this.getSize() > 1) {
       return this.item.content.text[i] || '';
-    } else if (this.children.length === 1) {
+    } else if (this.getSize() === 1) {
       return this.item.content.text || '';
     } else {
       return '';
@@ -319,50 +319,46 @@ class FrameMediator {
   }
 
   private makeEditorsFillRows() {
-    const editors = this.getEditors();
-    //
-    // // delete empty plain editors
-    // const startIndexOfLonely = editors.length - lonelySections - 1;
-    // // check if all editors in bottom row are empty
-    // for (let i = editors.length - 1; i >= startIndexOfLonely; i--) {
-    //   if (editors[i].id === 'plain' && !this.getChildData(i)) {
-    //     this.removeEditor(i);
-    //     lonelySections--;
-    //   } else {
-    //     break;
-    //   }
-    // }
-
-    let lonelySections = editors.length % this.getColumns();
+    let lonelySections = this.getSize() % this.getColumns();
     if (lonelySections) {
-
-      // otherwise fill remaining slots in bottom row
       const fillCount = this.getColumns() - lonelySections;
       for (let i = 0; i < fillCount; i++) {
-        editors.push(PLAIN_EDITOR);
-        if (!Array.isArray(this.item.text)) {
-          this.item.text = [this.item.text];
+        if (!Array.isArray(this.meta.editor)) {
+          this.meta.editor = [this.meta.editor];
+          this.item.content.text = [this.item.content.text];
         }
-        this.item.text.push('');
+        this.meta.editor.push(PLAIN_EDITOR);
+        this.item.content.text.push('');
         this.children.push(new ChildMediator(PLAIN_EDITOR));
       }
     }
+    return this.clearEmptyRows() || lonelySections;
   }
 
-  // private removeEditor(i: number) {
-  //   if (Array.isArray(this.meta.editor)) {
-  //     this.meta.editor.splice(i, 1);
-  //     this.item.content.text.splice(i, 1);
-  //     if (this.meta.editor.length === 1) {
-  //       this.meta.editor = this.meta.editor[0];
-  //       this.item.content.text = this.item.content.text[0];
-  //     }
-  //   } else {
-  //     delete this.meta.editor;
-  //     this.item.content.text = '';
-  //   }
-  //   this.children.splice(i, 1);
-  // }
+  private clearEmptyRows() {
+    let cleared = false;
+    const rows = Math.ceil(this.getSize() / this.getColumns());
+    for (let row = rows - 1; row >= 0; row--) {
+      let rowIsEmpty = true;
+      for (let col = 0; col < this.getColumns(); col++) {
+        const index = row * this.getColumns() + col;
+        const sectionToCheck = this.getChildData(index);
+        if (sectionToCheck) {
+          rowIsEmpty = false;
+          break;
+        }
+      }
+      if (rowIsEmpty) {
+        (this.meta.editor as Editor[]).splice(row * this.getColumns(), this.getColumns());
+        this.meta.titles.splice(row * this.getColumns(), this.getColumns());
+        this.item.content.text.splice(row * this.getColumns(), this.getColumns());
+        cleared = true;
+      } else {
+        break;
+      }
+    }
+    return cleared;
+  }
 }
 
 export const frameMediator = new FrameMediator();

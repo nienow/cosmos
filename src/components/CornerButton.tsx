@@ -1,40 +1,40 @@
 import React from 'react';
 import {styled} from "goober";
-import DotsIcon from "./icons/DotsIcon";
 import {useOptions} from "../hooks/useOptions";
 import {useLocked} from "../hooks/useLocked";
+import LeftIcon from "./icons/LeftIcon";
+import RightIcon from "./icons/RightIcon";
 
 
 const ButtonContainer = styled('div')`
   position: fixed;
-  bottom: -10px;
-  right: -20px;
-  width: 70px;
-  height: 30px;
-  border-top: 1px solid var(--sn-stylekit-border-color);
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 34px;
+  border: 1px solid var(--sn-stylekit-border-color);
   background-color: var(--sn-stylekit-contrast-background-color);
-  transform: rotate(-45deg);
   text-align: center;
-
+  display: flex;
+  align-items: center;
 `;
 
 const CircleButton = styled('div')`
-  position: relative;
   cursor: pointer;
-  transform: rotate(0deg);
-  width: 30px;
-  margin-top: -5px;
-  margin-left: 25px;
+  flex: 1;
+  padding: 2px;
 `;
 
 const CornerButton = () => {
-  const {toggleOptions} = useOptions();
+  const {showOptions, toggleOptions} = useOptions();
   const {locked} = useLocked();
+
+  const icon = showOptions ? <RightIcon/> : <LeftIcon/>;
 
   if (!locked) {
     return (
-      <ButtonContainer>
-        <CircleButton onClick={toggleOptions}><DotsIcon/></CircleButton>
+      <ButtonContainer title="Show Options">
+        <CircleButton onClick={toggleOptions}>{icon}</CircleButton>
       </ButtonContainer>
     );
   }
