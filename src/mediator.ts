@@ -3,6 +3,7 @@ import {ThemeManager} from './theme-manager';
 import {PLAIN_EDITOR} from './built-in-editors';
 import {useTitle} from './hooks/useTitle';
 import {useLocked} from './hooks/useLocked';
+import {swapArrayIndexes} from './utils';
 
 // enum ChildState {
 //   START,
@@ -76,6 +77,38 @@ class FrameMediator {
       this.meta.editor = editor;
     }
     this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public deleteSection(index: number) {
+    this.meta.editor[index] = PLAIN_EDITOR;
+    this.meta.titles[index] = '';
+    this.item.content.text[index] = '';
+    this.makeEditorsFillRows();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public deleteColumn(index: number) {
+    // index is editor index
+    const columnIndex = this.meta.columns - this.meta.columns % index;
+    const editors = this.meta.editor as Editor[];
+    for (let i = editors.length - columnIndex; i >= 0; i -= this.meta.columns) {
+      editors.splice(i, 1);
+      this.meta.titles.splice(i, 1);
+      this.item.content.text.splice(i, 1);
+    }
+    this.meta.columns--;
+    this.editorCallbackFn(this.meta);
+  }
+
+  public deleteRow(index: number) {
+    // index is editor index
+  }
+
+  public swapPositions(index1: number, index2: number) {
+    swapArrayIndexes(this.meta.editor as Editor[], index1, index2);
+    swapArrayIndexes(this.meta.titles, index1, index2);
+    swapArrayIndexes(this.item.content.text, index1, index2);
     this.editorCallbackFn(this.meta);
   }
 

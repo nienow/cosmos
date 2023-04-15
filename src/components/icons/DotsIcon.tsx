@@ -5,10 +5,11 @@ const Svg = styled('svg')`
 `;
 
 const DotsIcon = () => {
-  return <Svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+  return <Svg xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 448 512">
     <path
-      d="M13.333 10a1.666 1.666 0 1 1 3.333 0 1.666 1.666 0 0 1-3.333 0Zm-5 0a1.667 1.667 0 1 1 3.334 0 1.667 1.667 0 0 1-3.334 0Zm-5 0a1.667 1.667 0 1 1 3.334 0 1.666 1.667 0 0 1-3.334 0Z"></path>
-  </Svg>;
+      d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"/>
+  </Svg>
 };
 
 export default DotsIcon;

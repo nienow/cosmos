@@ -4,7 +4,6 @@ import {styled} from "goober";
 import {useTitle} from "../hooks/useTitle";
 import {useDialog} from "./DialogProvider";
 import ChangeEditor from "../components/ChangeEditor";
-import {getFrameIndex} from "../utils";
 import {frameMediator} from "../mediator";
 
 const Overlay = styled('div')`
@@ -37,7 +36,7 @@ const MenuItem = styled('div')`
 `;
 
 interface IPopoverContext {
-  popover: (e: any) => void;
+  popover: (index: number, e: any) => void;
 }
 
 const RightClickContext = createContext<IPopoverContext>({
@@ -55,19 +54,11 @@ export const RightClickProvider = ({children}) => {
     setOpen(false);
   };
 
-  const popover = (e: any) => {
+  const popover = (index, e: any) => {
     currentEvent = e;
-    currentIndex = getFrameIndex(e.target);
+    console.log(e);
+    currentIndex = index;
     setOpen(true);
-  };
-
-  const onRightClick = (e) => {
-    e.preventDefault();
-    closePopover();
-    setTimeout(() => {
-      popover(e);
-    }, 0);
-
   };
   const renderPopover = () => {
     const {toggleTitle} = useTitle();
@@ -83,8 +74,8 @@ export const RightClickProvider = ({children}) => {
     if (open) {
 
       return createPortal(
-        <Overlay onClick={closePopover} onContextMenu={onRightClick}>
-          <PopoverContainer style={{'top': currentEvent.y + 'px', 'left': currentEvent.x + 'px'}}>
+        <Overlay onClick={closePopover}>
+          <PopoverContainer style={{'top': currentEvent.y + 'px', 'right': currentEvent.x + 'px'}}>
             <Menu>
               <MenuItem onClick={changeEditor}>Change Editor</MenuItem>
               <MenuItem onClick={toggleTitle}>Toggle Title</MenuItem>

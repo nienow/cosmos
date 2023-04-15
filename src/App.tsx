@@ -47,7 +47,7 @@ const FramesWrapper = styled('div')`
 const Row = styled('div')`
   border-bottom: 1px solid var(--sn-stylekit-border-color);
   display: flex;
-  flex: 1 0 auto;
+  flex: 1;
 `
 
 // const Header = styled('div')`

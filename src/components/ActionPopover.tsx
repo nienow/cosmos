@@ -103,6 +103,7 @@ const ActionPopover = () => {
   // }, []);
 
   const changeLayout = () => {
+    setMenuVisible(false);
     useLayoutMode.setState({layoutMode: true});
   };
   const openOptions = () => {
@@ -123,9 +124,9 @@ const ActionPopover = () => {
         <Menu>
           <MenuItem onClick={openAbout}>About</MenuItem>
           <MenuItem onClick={toggleTitle}>Toggle Title</MenuItem>
-          <MenuItem onClick={eraseNote}>Erase Note</MenuItem>
+          {/*<MenuItem onClick={eraseNote}>Erase Note</MenuItem>*/}
           <MenuItem onClick={changeLayout}>Change Layout</MenuItem>
-          <MenuItem onClick={openOptions}>Options</MenuItem>
+          {/*<MenuItem onClick={openOptions}>Options</MenuItem>*/}
           <MenuItem onClick={cancel}>Cancel</MenuItem>
         </Menu>
       </PopoverContainer>

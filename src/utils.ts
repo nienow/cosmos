@@ -14,3 +14,7 @@ export const getFrameIndex = (el: Element) => {
     }
   }
 };
+
+export const swapArrayIndexes = (arr: any[], a: any, b: any) => {
+  arr[a] = arr.splice(b, 1, arr[a])[0];
+};
