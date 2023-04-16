@@ -22,7 +22,7 @@ const ButtonContainer = styled('div')`
 const CircleButton = styled('div')`
   cursor: pointer;
   flex: 1;
-  padding: 2px;
+  padding: 5px;
 `;
 
 const CornerButton = () => {

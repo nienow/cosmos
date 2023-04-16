@@ -63,7 +63,7 @@ const RenderEditor = ({index, editor}) => {
     return <PlainEditor initialText={data} save={save}/>
   } else {
     const onIframeLoad = (i: number, e: any) => {
-      frameMediator.setChildWindow(i, e.target.contentWindow);
+      frameMediator.setChildWindow(i, editor, e.target.contentWindow);
     };
     return <FrameContent name={`cosmos-frame-${index}`} key={editor.id + '_' + index} onLoad={(e) => onIframeLoad(index, e)}
                          src={editor.url}/>

@@ -39,9 +39,11 @@ class FrameMediator {
     });
   }
 
-  public setChildWindow(i: number, childWindow: Window) {
-    this.children[i].init(childWindow, this.getChildData(i));
-    this.children[i].post(this.registrationEvent);
+  public setChildWindow(i: number, editor: Editor, childWindow: Window) {
+    const child = new ChildMediator(editor, childWindow, this.getChildData(i));
+    // child.init(childWindow, this.getChildData(i));
+    child.post(this.registrationEvent);
+    this.children.push(child);
   }
 
   public getChildData(i: number) {
@@ -55,7 +57,7 @@ class FrameMediator {
   }
 
   public saveChild(i: number, text: string) {
-    if (this.children.length > 1) {
+    if (this.getSize() > 1) {
       this.item.content.text[i] = text;
     } else {
       this.item.content.text = text;
@@ -88,24 +90,25 @@ class FrameMediator {
     this.editorCallbackFn(this.meta);
   }
 
-  public deleteColumn(index: number) {
-    // index is editor index
-    const columnIndex = this.meta.columns - this.meta.columns % index;
-    const editors = this.meta.editor as Editor[];
-    for (let i = editors.length - columnIndex; i >= 0; i -= this.meta.columns) {
-      editors.splice(i, 1);
-      this.meta.titles.splice(i, 1);
-      this.item.content.text.splice(i, 1);
-    }
-    this.meta.columns--;
-    this.editorCallbackFn(this.meta);
-  }
+  // public deleteColumn(index: number) {
+  //   // index is editor index
+  //   const columnIndex = this.meta.columns - this.meta.columns % index;
+  //   const editors = this.meta.editor as Editor[];
+  //   for (let i = editors.length - columnIndex; i >= 0; i -= this.meta.columns) {
+  //     editors.splice(i, 1);
+  //     this.meta.titles.splice(i, 1);
+  //     this.item.content.text.splice(i, 1);
+  //   }
+  //   this.meta.columns--;
+  //   this.editorCallbackFn(this.meta);
+  // }
 
   public deleteRow() {
     const startIndex = this.getSize() - this.getColumns();
     (this.meta.editor as Editor[]).splice(startIndex, this.getColumns());
     this.meta.titles.splice(startIndex, this.getColumns());
     this.item.content.text.splice(startIndex, this.getColumns());
+    this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
@@ -116,25 +119,29 @@ class FrameMediator {
       this.item.content.text = [this.item.content.text];
     }
 
+    console.log(this.item.content);
     for (let i = 0; i < columns; i++) {
       this.meta.editor.push({...PLAIN_EDITOR});
       this.meta.titles.push('');
       this.item.content.text.push('');
     }
-
+    this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
   public swapPositions(index1: number, index2: number) {
+    console.log(index1, index2);
     swapArrayIndexes(this.meta.editor as Editor[], index1, index2);
     swapArrayIndexes(this.meta.titles, index1, index2);
     swapArrayIndexes(this.item.content.text, index1, index2);
+    this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
   public setColumns(col: number) {
     this.meta.columns = col;
     this.makeEditorsFillRows();
+    this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
@@ -218,7 +225,7 @@ class FrameMediator {
       } else {
         this.meta = this.item.content.appData[RANDOMBITS_DOMAIN];
         useTitle.setState({title: this.meta.title || false, titles: this.meta.titles || []});
-        this.createChildMediators();
+        // this.createChildMediators();
         if (this.editorCallbackFn) {
           this.editorCallbackFn(this.meta);
         }
@@ -270,14 +277,12 @@ class FrameMediator {
       original: e.data
     });
     const data = e.data;
-    if (this.children.length > 1) {
+    if (this.getSize() > 1) {
       this.item.content.text[i] = data.data.items[0].content.text;
     } else {
       this.item.content.text = data.data.items[0].content.text;
     }
     this.saveNote();
-    // data.data.items[0] = this.item;
-    // window.parent.postMessage(data, this.parentOrigin);
   }
 
   private handleChildRequestPermissions(e: MessageEvent) {
@@ -301,14 +306,14 @@ class FrameMediator {
     }, this.parentOrigin);
   }
 
-  private createChildMediators() {
-    if (this.meta.editor) {
-      const editors = Array.isArray(this.meta.editor) ? this.meta.editor : [this.meta.editor];
-      editors.forEach(editor => {
-        this.children.push(new ChildMediator(editor));
-      });
-    }
-  }
+  // private createChildMediators() {
+  //   if (this.meta.editor) {
+  //     const editors = Array.isArray(this.meta.editor) ? this.meta.editor : [this.meta.editor];
+  //     editors.forEach(editor => {
+  //       this.children.push(new ChildMediator(editor));
+  //     });
+  //   }
+  // }
 
   private getChild(childWindow) {
     return this.children.find(child => child.equals(childWindow));
@@ -329,7 +334,6 @@ class FrameMediator {
         }
         this.meta.editor.push(PLAIN_EDITOR);
         this.item.content.text.push('');
-        this.children.push(new ChildMediator(PLAIN_EDITOR));
       }
     }
     return this.clearEmptyRows() || lonelySections;
@@ -364,16 +368,12 @@ class FrameMediator {
 export const frameMediator = new FrameMediator();
 
 export class ChildMediator {
-  private childWindow: Window;
+  // private childWindow: Window;
   // private state: ChildState = ChildState.START;
   private dataRequestEvent: any;
   private item: any;
 
-  constructor(public editor: Editor) {
-  }
-
-  public init(window: Window, data: any) {
-    this.childWindow = window;
+  constructor(public editor: Editor, private childWindow: Window, data: any) {
     this.item = {
       isMetadataUpdate: false,
       content: {
@@ -381,6 +381,16 @@ export class ChildMediator {
       }
     };
   }
+
+  // public init(window: Window, data: any) {
+  //   this.childWindow = window;
+  //   this.item = {
+  //     isMetadataUpdate: false,
+  //     content: {
+  //       text: data
+  //     }
+  //   };
+  // }
 
   public post(event: any) {
     if (this.childWindow) {

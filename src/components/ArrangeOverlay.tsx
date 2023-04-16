@@ -34,7 +34,7 @@ const ArrangeOverlay = ({index}: Props) => {
   const onChoose = () => {
     useRearrange.setState({rearranging: false});
     if (index !== startIndex) {
-      frameMediator.swapPositions(index, startIndex);
+      frameMediator.swapPositions(startIndex, index);
     }
   };
 
