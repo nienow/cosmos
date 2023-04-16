@@ -74,21 +74,21 @@ class FrameMediator {
 
   public changeEditor(index: number, editor: Editor) {
     if (Array.isArray(this.meta.editor)) {
-      this.meta.editor[index] = editor;
+      this.meta.editor[index] = {...editor};
     } else {
-      this.meta.editor = editor;
+      this.meta.editor = {...editor};
     }
     this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
-  public deleteSection(index: number) {
-    this.meta.editor[index] = PLAIN_EDITOR;
-    this.meta.titles[index] = '';
-    this.item.content.text[index] = '';
-    this.makeEditorsFillRows();
-    this.editorCallbackFn(this.meta);
-  }
+  // public deleteSection(index: number) {
+  //   this.meta.editor[index] = PLAIN_EDITOR;
+  //   this.meta.titles[index] = '';
+  //   this.item.content.text[index] = '';
+  //   this.makeEditorsFillRows();
+  //   this.editorCallbackFn(this.meta);
+  // }
 
   // public deleteColumn(index: number) {
   //   // index is editor index
@@ -113,14 +113,13 @@ class FrameMediator {
   }
 
   public addRow() {
-    const columns = this.meta.columns || 1;
     if (!Array.isArray(this.meta.editor)) {
       this.meta.editor = [this.meta.editor];
       this.item.content.text = [this.item.content.text];
     }
 
     console.log(this.item.content);
-    for (let i = 0; i < columns; i++) {
+    for (let i = 0; i < this.getColumns(); i++) {
       this.meta.editor.push({...PLAIN_EDITOR});
       this.meta.titles.push('');
       this.item.content.text.push('');
@@ -332,7 +331,7 @@ class FrameMediator {
           this.meta.editor = [this.meta.editor];
           this.item.content.text = [this.item.content.text];
         }
-        this.meta.editor.push(PLAIN_EDITOR);
+        this.meta.editor.push({...PLAIN_EDITOR});
         this.item.content.text.push('');
       }
     }

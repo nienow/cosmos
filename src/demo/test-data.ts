@@ -100,11 +100,13 @@ export class TestData {
       title: this.options.title || false
     };
     if (this.editor.length > 1) {
-      meta.editor = this.editor.map(editorId => this.getFullEditorData(editorId));
+      meta.editor = this.editor.map(editorId => {
+        return {...this.getFullEditorData(editorId)};
+      });
       meta.columns = this.options.columns;
       meta.titles = this.titles;
     } else if (this.editor.length === 1) {
-      meta.editor = this.getFullEditorData(this.editor[0]);
+      meta.editor = {...this.getFullEditorData(this.editor[0])};
     }
     return meta;
   }

@@ -15,6 +15,7 @@ const FrameWrapper = styled('div')`
   flex-direction: column;
   flex: 1;
   border-right: 1px solid var(--sn-stylekit-border-color);
+  border-bottom: 1px solid var(--sn-stylekit-border-color);
   position: relative;
 `;
 
@@ -65,7 +66,7 @@ const RenderEditor = ({index, editor}) => {
     const onIframeLoad = (i: number, e: any) => {
       frameMediator.setChildWindow(i, editor, e.target.contentWindow);
     };
-    return <FrameContent name={`cosmos-frame-${index}`} key={editor.id + '_' + index} onLoad={(e) => onIframeLoad(index, e)}
+    return <FrameContent name={`cosmos-frame-${index}`} onLoad={(e) => onIframeLoad(index, e)}
                          src={editor.url}/>
   }
 

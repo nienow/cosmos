@@ -9,6 +9,7 @@ export interface Editor {
   custom?: boolean;
   github?: string;
   clears?: boolean;
+  key?: string;
 }
 
 export interface RandomBitsMeta {
