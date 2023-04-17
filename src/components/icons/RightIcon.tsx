@@ -1,8 +1,4 @@
-import {styled} from "goober";
-
-const Svg = styled('svg')`
-  fill: var(--sn-stylekit-foreground-color);
-`;
+import {Svg} from "./Svg";
 
 const RightIcon = () => {
   return <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

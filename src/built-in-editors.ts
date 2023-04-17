@@ -11,7 +11,7 @@ export const BUILT_IN_EDITORS: Editor[] = [
   PLAIN_EDITOR,
   {
     id: 'randombits.excalidraw',
-    url: 'https://nienow.github.io/sn-excalidraw/',
+    url: 'http://localhost:8085/',
     name: 'Excalidraw',
     desc: 'A drawing editor that uses the Excalidraw library',
     github: 'https://github.com/nienow/sn-excalidraw',

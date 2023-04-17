@@ -11,9 +11,4 @@ export const ActionButton = styled('button')`
   &:hover {
     background-color: var(--sn-stylekit-secondary-background-color);
   }
-`
-
-export const BigActionButton = styled(ActionButton)`
-  padding: 10px 20px;
-  width: 100%;
 `;

@@ -7,6 +7,7 @@ const version = PACKAGE.version;
 
 module.exports = (env, argv) => ({
   mode: 'production',
+  devtool: 'source-map',
   entry: {
     main: 'index.tsx',
     demo: 'demo/demo.tsx',
@@ -70,12 +71,13 @@ module.exports = (env, argv) => ({
     }
   },
   devServer: {
+    hot: false,
     https: false,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    }
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

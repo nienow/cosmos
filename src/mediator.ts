@@ -8,12 +8,13 @@ import {swapArrayIndexes} from './utils';
 class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
-  private children: ChildMediator[] = [];
+  private children: { [key: string]: ChildMediator } = {};
   private sessionKey;
   private item;
   private meta: RandomBitsMeta;
   private editorCallbackFn: (meta: RandomBitsMeta) => void;
   private themeManager = new ThemeManager();
+  private saveTimeout;
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
@@ -23,10 +24,6 @@ class FrameMediator {
         this.meta.showTitle = showTitle;
         needsSave = true;
       }
-      // if (this.meta.titles !== titles) {
-      //   this.meta.titles = titles;
-      //   needsSave = true;
-      // }
       if (needsSave) {
         this.saveNote();
       }
@@ -36,15 +33,20 @@ class FrameMediator {
   public setChildWindow(i: number, editor: Editor, childWindow: Window) {
     const child = new ChildMediator(editor, childWindow, this.getChildData(i));
     child.post(this.registrationEvent);
-    this.children[i] = child;
-    // childWindow.addEventListener('unload', () => {
-    //   console.log('unload', i);
-    //   this.children[i] = null;
-    // });
+    this.children[editor.key] = child;
   }
 
   public getAppData() {
     return this.item.content.appData;
+  }
+
+  public getChildDataByEditor(editor: Editor) {
+    const i = this.getChildIndexByEditor(editor);
+    return this.getChildData(i);
+  }
+
+  public getChildIndexByEditor(editor: Editor) {
+    return this.meta.editors.findIndex(item => item.key === editor.key);
   }
 
   public getChildData(i: number) {
@@ -74,6 +76,7 @@ class FrameMediator {
   }
 
   public changeEditor(index: number, editor: Editor) {
+    delete this.children[this.meta.editors[index].key];
     this.meta.editors[index] = {...editor};
     this.saveNote();
     this.editorCallbackFn(this.meta);
@@ -108,7 +111,6 @@ class FrameMediator {
   public swapPositions(index1: number, index2: number) {
     swapArrayIndexes(this.meta.editors, index1, index2);
     swapArrayIndexes(this.item.content.text, index1, index2);
-    swapArrayIndexes(this.children, index1, index2);
     this.saveNote();
     this.editorCallbackFn(this.meta);
   }
@@ -160,9 +162,8 @@ class FrameMediator {
       const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
       useLocked.setState({locked});
       if (this.meta) {
-        this.children.forEach((child, i) => {
-          console.log('update', i, child);
-          child.handleDataUpdate(this.getChildData(i));
+        Object.values(this.children).forEach((child) => {
+          child.handleDataUpdate(this.getChildDataByEditor(child.editor));
         });
       } else {
         this.meta = this.item.content.appData[RANDOMBITS_DOMAIN] || {
@@ -194,7 +195,7 @@ class FrameMediator {
 
   private handleParentThemeChange(data: any) {
     this.themeManager.activateThemes(data.data.themes);
-    this.children.forEach(child => {
+    Object.values(this.children).forEach(child => {
       child.post(data);
     });
   }
@@ -215,14 +216,15 @@ class FrameMediator {
   }
 
   private handleChildSaveRequest(e: MessageEvent) {
-    const i = this.getChildIndex(e.source);
-    this.children[i].post({
+    const child = this.getChild(e.source);
+    child.post({
       action: 'reply',
       data: {},
       original: e.data
     });
     const data = e.data;
     if (this.getSize() > 1) {
+      const i = this.getChildIndexByEditor(child.editor);
       this.item.content.text[i] = data.data.items[0].content.text;
     } else {
       this.item.content.text = data.data.items[0].content.text;
@@ -240,23 +242,22 @@ class FrameMediator {
 
   private saveNote() {
     this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
-    window.parent.postMessage({
-      action: 'save-items',
-      data: {
-        items: [this.item]
-      },
-      messageId: crypto.randomUUID(),
-      sessionKey: this.sessionKey,
-      api: 'component'
-    }, this.parentOrigin);
+    clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(() => {
+      window.parent.postMessage({
+        action: 'save-items',
+        data: {
+          items: [this.item]
+        },
+        messageId: crypto.randomUUID(),
+        sessionKey: this.sessionKey,
+        api: 'component'
+      }, this.parentOrigin);
+    }, 300);
   }
 
   private getChild(childWindow) {
-    return this.children.find(child => child.equals(childWindow));
-  }
-
-  private getChildIndex(childWindow) {
-    return this.children.findIndex(child => child.equals(childWindow));
+    return Object.values(this.children).find(child => child.equals(childWindow));
   }
 
   private makeEditorsFillRows() {
@@ -281,7 +282,7 @@ class FrameMediator {
       let rowIsEmpty = true;
       for (let col = 0; col < this.getColumns(); col++) {
         const index = row * this.getColumns() + col;
-        const sectionToCheck = this.getChildData(index);
+        const sectionToCheck = this.meta.editors[index].id === 'plain' && this.getChildData(index);
         if (sectionToCheck) {
           rowIsEmpty = false;
           break;
@@ -329,7 +330,6 @@ export class ChildMediator {
 
   public handleDataUpdate(data: any) {
     this.setItem(data);
-    console.log('sending to child', this.item);
     this.post({
       action: 'reply',
       data: {

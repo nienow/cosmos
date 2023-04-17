@@ -80,6 +80,45 @@ export const DATA_EXCALIDRAW = JSON.stringify({
   ]
 });
 
+export const DATA_EXCALIDRAW_2 = JSON.stringify({
+  elements: [{
+    id: '6sVDp9mCGQTomD9Cg5w1b',
+    type: 'rectangle',
+    x: 202.04296875,
+    y: -672.6953125,
+    width: 163,
+    height: 185,
+    angle: 0,
+    strokeColor: '#000000',
+    backgroundColor: '#00ff00',
+    fillStyle: 'solid',
+    strokeWidth: 1,
+    strokeStyle: 'solid',
+    roughness: 1,
+    opacity: 100,
+    groupIds: [],
+    strokeSharpness: 'sharp',
+    seed: 1640006454,
+    version: 74,
+    versionNonce: 1054194038,
+    isDeleted: false,
+    boundElements: [
+      {
+        type: 'text',
+        id: 'MB9CSH621UIKH8MEgOhaM'
+      }
+    ],
+    updated: 1639729535736,
+    customData: {
+      id: 'rect-1',
+      version: '1'
+    }
+  }],
+  appState: {},
+  scrollToContent: true,
+  libraryItems: []
+});
+
 export class TestData {
   private data = [];
   private editor = [];
@@ -132,7 +171,7 @@ const SPLIT_PLAIN = new TestData('Split One', {columns: 2}).section('plain', 'He
 
 const EXCALIDRAW_TEST_DATA = new TestData('Excalidraw').section('randombits.excalidraw', DATA_EXCALIDRAW);
 const EXCALIDRAW_TEST_DATA2 = new TestData('Excalidraw 2').section('randombits.excalidraw', DATA_EXCALIDRAW)
-  .section('randombits.excalidraw', DATA_EXCALIDRAW);
+  .section('randombits.excalidraw', DATA_EXCALIDRAW_2);
 
 const SPLIT_FOUR = new TestData('Split 4', {columns: 2, title: true})
   .section('plain', 'One', 'Title One')
