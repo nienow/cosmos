@@ -17,7 +17,7 @@ const HeaderContainer = styled('div')`
 
 const Options = () => {
   const {showOptions} = useOptions();
-  const {title, toggleTitle} = useTitle();
+  const {showTitle, toggleTitle} = useTitle();
   const {locked} = useLocked();
   const {confirm, custom} = useDialog();
   const increaseColumns = () => {
@@ -63,7 +63,7 @@ const Options = () => {
     return <HeaderContainer>
       <NumberControl increase={increaseColumns} decrease={decreaseColumns} display={columns + " column(s)"}/>
       <NumberControl increase={addRow} decrease={checkLastRow} display={rows + ' row(s)'}></NumberControl>
-      <ToggleButton label="Always Show Title" initialValue={title} onToggle={toggleTitle}/>
+      <ToggleButton label="Always Show Title" initialValue={showTitle} onToggle={toggleTitle}/>
       <ActionButton onClick={showAbout}>About</ActionButton>
     </HeaderContainer>
   }

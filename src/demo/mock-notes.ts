@@ -39,7 +39,6 @@ export class MockStandardNotes {
 
   public changeData(data: TestData) {
     this.updateStream(data);
-    console.log(this.streamData);
     this.childWindow.postMessage({
       action: 'reply',
       data: this.streamData,
@@ -59,6 +58,7 @@ export class MockStandardNotes {
       }, '*');
     } else if (data.action === 'save-items') {
       this.onSave();
+      this.streamData.item = e.data.data.items[0];
       this.childWindow.postMessage({
         action: 'reply',
         data: {},

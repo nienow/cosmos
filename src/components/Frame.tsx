@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {styled} from "goober";
 import {frameMediator} from "../mediator";
 import {useTitle} from "../hooks/useTitle";
@@ -75,11 +75,13 @@ const RenderEditor = ({index, editor}) => {
 // let draggingIndex;
 const RenderTitle = ({index, editor}) => {
   const {custom} = useDialog();
-  const {title, titles, updateTitles} = useTitle();
+  const {showTitle} = useTitle();
   const {locked} = useLocked();
   const {showOptions} = useOptions();
+  const [title, setTitle] = useState(editor.title);
   const updateTitle = (e) => {
-    updateTitles(index, e.target.value as string);
+    setTitle(e.target.value);
+    frameMediator.updateTitle(index, e.target.value as string);
   };
   const startRearrange = () => {
     useRearrange.setState({rearranging: true, startIndex: index});
@@ -101,9 +103,9 @@ const RenderTitle = ({index, editor}) => {
     }
   };
 
-  if (title || showOptions) {
+  if (showTitle || showOptions) {
     return <FrameTitleWrapper>
-      <FrameTitle disabled={locked} value={titles[index] || editor.name} onChange={updateTitle}/>
+      <FrameTitle disabled={locked} value={title || editor.name} onChange={updateTitle}/>
       {renderButtons()}
       {/*<OptionPopover index={index}/>*/}
       {/*<FrameTitleOptions onClick={openMenu}><DotsIcon/></FrameTitleOptions>*/}

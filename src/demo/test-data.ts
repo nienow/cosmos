@@ -97,17 +97,12 @@ export class TestData {
 
   public getMetadata(): RandomBitsMeta {
     const meta: RandomBitsMeta = {
-      title: this.options.title || false
+      showTitle: this.options.title || false
     };
-    if (this.editor.length > 1) {
-      meta.editor = this.editor.map(editorId => {
-        return {...this.getFullEditorData(editorId)};
-      });
-      meta.columns = this.options.columns;
-      meta.titles = this.titles;
-    } else if (this.editor.length === 1) {
-      meta.editor = {...this.getFullEditorData(this.editor[0])};
-    }
+    meta.editors = this.editor.map(editorId => {
+      return {...this.getFullEditorData(editorId)};
+    });
+    meta.columns = this.options.columns;
     return meta;
   }
 
@@ -136,6 +131,8 @@ const SPLIT_PLAIN = new TestData('Split One', {columns: 2}).section('plain', 'He
   .section('com.dylanonelson.sn-scratch-editor', 'Hello Scratch');
 
 const EXCALIDRAW_TEST_DATA = new TestData('Excalidraw').section('randombits.excalidraw', DATA_EXCALIDRAW);
+const EXCALIDRAW_TEST_DATA2 = new TestData('Excalidraw 2').section('randombits.excalidraw', DATA_EXCALIDRAW)
+  .section('randombits.excalidraw', DATA_EXCALIDRAW);
 
 const SPLIT_FOUR = new TestData('Split 4', {columns: 2, title: true})
   .section('plain', 'One', 'Title One')
@@ -154,6 +151,7 @@ export const TEST_DATA = [
   DATA_NEW,
   SPLIT_PLAIN,
   EXCALIDRAW_TEST_DATA,
+  EXCALIDRAW_TEST_DATA2,
   SPLIT_FOUR,
   LOCKED,
   SINGLE_PLAIN

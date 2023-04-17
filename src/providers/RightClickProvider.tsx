@@ -56,7 +56,6 @@ export const RightClickProvider = ({children}) => {
 
   const popover = (index, e: any) => {
     currentEvent = e;
-    console.log(e);
     currentIndex = index;
     setOpen(true);
   };

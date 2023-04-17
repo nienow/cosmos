@@ -5,12 +5,6 @@ import {useTitle} from './hooks/useTitle';
 import {useLocked} from './hooks/useLocked';
 import {swapArrayIndexes} from './utils';
 
-// enum ChildState {
-//   START,
-//   REGISTERED,
-//   CHANGING_EDITOR
-// }
-
 class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
@@ -23,16 +17,16 @@ class FrameMediator {
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
-    useTitle.subscribe(({title, titles}) => {
+    useTitle.subscribe(({showTitle}) => {
       let needsSave = false;
-      if (this.meta.title !== title) {
-        this.meta.title = title;
+      if (this.meta.showTitle !== showTitle) {
+        this.meta.showTitle = showTitle;
         needsSave = true;
       }
-      if (this.meta.titles !== titles) {
-        this.meta.titles = titles;
-        needsSave = true;
-      }
+      // if (this.meta.titles !== titles) {
+      //   this.meta.titles = titles;
+      //   needsSave = true;
+      // }
       if (needsSave) {
         this.saveNote();
       }
@@ -41,9 +35,16 @@ class FrameMediator {
 
   public setChildWindow(i: number, editor: Editor, childWindow: Window) {
     const child = new ChildMediator(editor, childWindow, this.getChildData(i));
-    // child.init(childWindow, this.getChildData(i));
     child.post(this.registrationEvent);
-    this.children.push(child);
+    this.children[i] = child;
+    // childWindow.addEventListener('unload', () => {
+    //   console.log('unload', i);
+    //   this.children[i] = null;
+    // });
+  }
+
+  public getAppData() {
+    return this.item.content.appData;
   }
 
   public getChildData(i: number) {
@@ -73,55 +74,31 @@ class FrameMediator {
   }
 
   public changeEditor(index: number, editor: Editor) {
-    if (Array.isArray(this.meta.editor)) {
-      this.meta.editor[index] = {...editor};
-    } else {
-      this.meta.editor = {...editor};
-    }
+    this.meta.editors[index] = {...editor};
     this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
-  // public deleteSection(index: number) {
-  //   this.meta.editor[index] = PLAIN_EDITOR;
-  //   this.meta.titles[index] = '';
-  //   this.item.content.text[index] = '';
-  //   this.makeEditorsFillRows();
-  //   this.editorCallbackFn(this.meta);
-  // }
-
-  // public deleteColumn(index: number) {
-  //   // index is editor index
-  //   const columnIndex = this.meta.columns - this.meta.columns % index;
-  //   const editors = this.meta.editor as Editor[];
-  //   for (let i = editors.length - columnIndex; i >= 0; i -= this.meta.columns) {
-  //     editors.splice(i, 1);
-  //     this.meta.titles.splice(i, 1);
-  //     this.item.content.text.splice(i, 1);
-  //   }
-  //   this.meta.columns--;
-  //   this.editorCallbackFn(this.meta);
-  // }
+  public updateTitle(i: number, title: string) {
+    this.meta.editors[i].title = title;
+    this.saveNote();
+  }
 
   public deleteRow() {
     const startIndex = this.getSize() - this.getColumns();
-    (this.meta.editor as Editor[]).splice(startIndex, this.getColumns());
-    this.meta.titles.splice(startIndex, this.getColumns());
+    this.meta.editors.splice(startIndex, this.getColumns());
     this.item.content.text.splice(startIndex, this.getColumns());
     this.saveNote();
     this.editorCallbackFn(this.meta);
   }
 
   public addRow() {
-    if (!Array.isArray(this.meta.editor)) {
-      this.meta.editor = [this.meta.editor];
+    if (this.getSize() === 1) {
       this.item.content.text = [this.item.content.text];
     }
 
-    console.log(this.item.content);
     for (let i = 0; i < this.getColumns(); i++) {
-      this.meta.editor.push({...PLAIN_EDITOR});
-      this.meta.titles.push('');
+      this.meta.editors.push({...PLAIN_EDITOR});
       this.item.content.text.push('');
     }
     this.saveNote();
@@ -129,10 +106,9 @@ class FrameMediator {
   }
 
   public swapPositions(index1: number, index2: number) {
-    console.log(index1, index2);
-    swapArrayIndexes(this.meta.editor as Editor[], index1, index2);
-    swapArrayIndexes(this.meta.titles, index1, index2);
+    swapArrayIndexes(this.meta.editors, index1, index2);
     swapArrayIndexes(this.item.content.text, index1, index2);
+    swapArrayIndexes(this.children, index1, index2);
     this.saveNote();
     this.editorCallbackFn(this.meta);
   }
@@ -153,46 +129,12 @@ class FrameMediator {
   }
 
   public getEditors() {
-    if (this.meta.editor) {
-      if (Array.isArray(this.meta.editor)) {
-        return this.meta.editor;
-      } else {
-        return [this.meta.editor];
-      }
-    } else {
-      return [];
-    }
+    return this.meta.editors;
   }
 
   public getSize() {
-    if (this.meta.editor) {
-      if (Array.isArray(this.meta.editor)) {
-        return this.meta.editor.length;
-      } else {
-        return 1;
-      }
-    }
-    return 0;
+    return this.meta.editors.length;
   }
-
-  // public getTitle() {
-  //   return this.meta.title || false;
-  // }
-
-  // public eraseNote() {
-  //   this.item.content.text = '';
-  //   this.item.content.preview_plain = '';
-  //   this.item.content.preview_html = '';
-  //   this.saveNote();
-  //   console.log(this.streamOriginalEvent);
-  //   this.childWindow.postMessage({
-  //     action: 'reply',
-  //     data: {
-  //       item: this.item
-  //     },
-  //     original: this.streamOriginalEvent
-  //   }, '*');
-  // }
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
@@ -218,13 +160,17 @@ class FrameMediator {
       const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
       useLocked.setState({locked});
       if (this.meta) {
-        this.children.forEach(child => {
-          child.handleDataUpdate(e.data);
+        this.children.forEach((child, i) => {
+          console.log('update', i, child);
+          child.handleDataUpdate(this.getChildData(i));
         });
       } else {
-        this.meta = this.item.content.appData[RANDOMBITS_DOMAIN];
-        useTitle.setState({title: this.meta.title || false, titles: this.meta.titles || []});
-        // this.createChildMediators();
+        this.meta = this.item.content.appData[RANDOMBITS_DOMAIN] || {
+          editors: [],
+          showTitle: false,
+          columns: 1
+        };
+        useTitle.setState({showTitle: this.meta.showTitle || false});
         if (this.editorCallbackFn) {
           this.editorCallbackFn(this.meta);
         }
@@ -305,15 +251,6 @@ class FrameMediator {
     }, this.parentOrigin);
   }
 
-  // private createChildMediators() {
-  //   if (this.meta.editor) {
-  //     const editors = Array.isArray(this.meta.editor) ? this.meta.editor : [this.meta.editor];
-  //     editors.forEach(editor => {
-  //       this.children.push(new ChildMediator(editor));
-  //     });
-  //   }
-  // }
-
   private getChild(childWindow) {
     return this.children.find(child => child.equals(childWindow));
   }
@@ -327,11 +264,10 @@ class FrameMediator {
     if (lonelySections) {
       const fillCount = this.getColumns() - lonelySections;
       for (let i = 0; i < fillCount; i++) {
-        if (!Array.isArray(this.meta.editor)) {
-          this.meta.editor = [this.meta.editor];
+        if (this.getSize() === 1) {
           this.item.content.text = [this.item.content.text];
         }
-        this.meta.editor.push({...PLAIN_EDITOR});
+        this.meta.editors.push({...PLAIN_EDITOR});
         this.item.content.text.push('');
       }
     }
@@ -352,8 +288,7 @@ class FrameMediator {
         }
       }
       if (rowIsEmpty) {
-        (this.meta.editor as Editor[]).splice(row * this.getColumns(), this.getColumns());
-        this.meta.titles.splice(row * this.getColumns(), this.getColumns());
+        this.meta.editors.splice(row * this.getColumns(), this.getColumns());
         this.item.content.text.splice(row * this.getColumns(), this.getColumns());
         cleared = true;
       } else {
@@ -367,29 +302,12 @@ class FrameMediator {
 export const frameMediator = new FrameMediator();
 
 export class ChildMediator {
-  // private childWindow: Window;
-  // private state: ChildState = ChildState.START;
   private dataRequestEvent: any;
   private item: any;
 
   constructor(public editor: Editor, private childWindow: Window, data: any) {
-    this.item = {
-      isMetadataUpdate: false,
-      content: {
-        text: data
-      }
-    };
+    this.setItem(data);
   }
-
-  // public init(window: Window, data: any) {
-  //   this.childWindow = window;
-  //   this.item = {
-  //     isMetadataUpdate: false,
-  //     content: {
-  //       text: data
-  //     }
-  //   };
-  // }
 
   public post(event: any) {
     if (this.childWindow) {
@@ -407,26 +325,31 @@ export class ChildMediator {
       },
       original: data
     });
-    // this.state = ChildState.REGISTERED;
   }
 
   public handleDataUpdate(data: any) {
-    if (this.childWindow) {
-      this.post({
-        ...data,
-        original: this.dataRequestEvent
-      });
-    }
-
+    this.setItem(data);
+    console.log('sending to child', this.item);
+    this.post({
+      action: 'reply',
+      data: {
+        item: this.item
+      },
+      original: this.dataRequestEvent
+    });
   }
-
-  // public handleSaveReply(data: any) {
-  //   if (this.state === ChildState.REGISTERED) {
-  //     this.post(data);
-  //   }
-  // }
 
   public equals(window: Window) {
     return this.childWindow === window;
+  }
+
+  private setItem(data: any) {
+    this.item = {
+      isMetadataUpdate: false,
+      content: {
+        appData: frameMediator.getAppData(),
+        text: data
+      }
+    };
   }
 }

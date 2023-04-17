@@ -30,7 +30,6 @@ componentRelay.streamContextItem((note) => {
   const text = note.content?.text || '';
   const isLocked = componentRelay.getItemAppDataValue(note, AppDataField.Locked);
 
-  console.log('rendering');
   try {
     createRoot(document.getElementById('root')).render(
       <React.StrictMode>

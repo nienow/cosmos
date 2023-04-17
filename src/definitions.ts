@@ -10,11 +10,12 @@ export interface Editor {
   github?: string;
   clears?: boolean;
   key?: string;
+  title?: string;
 }
 
 export interface RandomBitsMeta {
   columns?: number;
-  editor?: Editor[] | Editor;
-  title?: boolean;
-  titles?: string[];
+  editors?: Editor[];
+  showTitle?: boolean;
+  // titles?: string[];
 }
