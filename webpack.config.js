@@ -7,12 +7,11 @@ const version = PACKAGE.version;
 
 module.exports = (env, argv) => ({
   mode: 'production',
+  devtool: 'source-map',
   entry: {
     main: 'index.tsx',
     demo: 'demo/demo.tsx',
-    plain: 'plain/plain.tsx',
-    draw: 'draw/draw.tsx',
-    sketch: 'sketch/sketch.tsx'
+    lucky: 'luckysheet/luckysheet.ts'
   },
   output: {
     filename: "[name].[contenthash].js",
@@ -29,7 +28,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.(ts|tsx|js|jsx)$/,
+        test: /\.(ts|tsx|js|jsx|mjs|cjs)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -70,12 +69,13 @@ module.exports = (env, argv) => ({
     }
   },
   devServer: {
+    hot: false,
     https: false,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    }
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -84,24 +84,14 @@ module.exports = (env, argv) => ({
       chunks: ["main"]
     }),
     new HtmlWebpackPlugin({
-      filename: "plain.html",
-      template: "./src/index.html",
-      chunks: ["plain"]
-    }),
-    new HtmlWebpackPlugin({
-      filename: "draw.html",
-      template: "./src/index.html",
-      chunks: ["draw"]
-    }),
-    new HtmlWebpackPlugin({
-      filename: "sketch.html",
-      template: "./src/index.html",
-      chunks: ["sketch"]
-    }),
-    new HtmlWebpackPlugin({
       filename: "demo.html",
       template: "./src/index.html",
       chunks: ["demo"]
+    }),
+    new HtmlWebpackPlugin({
+      filename: "luckysheet.html",
+      template: "./src/luckysheet/luckysheet.html",
+      chunks: ["lucky"]
     }),
     new CopyPlugin({
       patterns: [

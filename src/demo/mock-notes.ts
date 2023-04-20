@@ -1,15 +1,15 @@
 import registeredData from './registered.json';
 import sampleStreamResponse from './stream-response.json';
-import {EDITOR_KEY, RANDOMBITS_DOMAIN} from '../definitions';
-import {BUILT_IN_EDITORS} from '../built-in-editors';
+import {RANDOMBITS_DOMAIN} from '../definitions';
+import {TestData} from './test-data';
 
 export class MockStandardNotes {
   private childWindow;
   private streamEvent;
   private streamData;
 
-  constructor(text: string, editorId: string, private onSave: () => void) {
-    this.updateStream(text, editorId);
+  constructor(data: TestData, private onSave: () => void) {
+    this.updateStream(data);
     window.addEventListener('message', this.handleMessage.bind(this));
   }
 
@@ -37,8 +37,8 @@ export class MockStandardNotes {
     }, '*');
   }
 
-  public changeData(text: string, editorId: string) {
-    this.updateStream(text, editorId);
+  public changeData(data: TestData) {
+    this.updateStream(data);
     this.childWindow.postMessage({
       action: 'reply',
       data: this.streamData,
@@ -48,7 +48,7 @@ export class MockStandardNotes {
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
-    console.log('mock: ', data);
+    // console.log('mock: ', data);
     if (data.action === 'stream-context-item') {
       this.streamEvent = data;
       this.childWindow.postMessage({
@@ -58,6 +58,7 @@ export class MockStandardNotes {
       }, '*');
     } else if (data.action === 'save-items') {
       this.onSave();
+      this.streamData.item = e.data.data.items[0];
       this.childWindow.postMessage({
         action: 'reply',
         data: {},
@@ -66,10 +67,10 @@ export class MockStandardNotes {
     }
   }
 
-  private updateStream(text: string, editorId: string) {
+  private updateStream(data: TestData) {
     this.streamData = JSON.parse(JSON.stringify(sampleStreamResponse.data));
-    this.streamData.item.content.text = text;
-    const editor = BUILT_IN_EDITORS.find(editor => editor.id === editorId) || null;
-    this.streamData.item.content.appData[RANDOMBITS_DOMAIN][EDITOR_KEY] = editor;
+    this.streamData.item.content.text = data.getText();
+    this.streamData.item.content.appData[RANDOMBITS_DOMAIN] = data.getMetadata();
+    this.streamData.item.content.appData['org.standardnotes.sn']['locked'] = data.isLocked();
   }
 }

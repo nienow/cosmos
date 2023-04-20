@@ -1,106 +1,183 @@
-import {Editor, EDITOR_KEY, RANDOMBITS_DOMAIN} from './definitions';
+import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
-
-enum FrameState {
-  START,
-  REGISTERED_PARENT,
-  RECEIVED_DATA,
-  REGISTERED_CHILD,
-  SENT_DATA_TO_CHILD,
-  CHANGING_EDITOR
-}
+import {PLAIN_EDITOR} from './built-in-editors';
+import {useTitle} from './hooks/useTitle';
+import {useLocked} from './hooks/useLocked';
+import {swapArrayIndexes} from './utils';
 
 class FrameMediator {
   private registrationEvent;
   private parentOrigin: string;
-  private childWindow;
+  private children: { [key: string]: ChildMediator } = {};
   private sessionKey;
   private item;
-  private streamOriginalEvent;
-  private editor: Editor;
-  private editorCallbackFn: (editor: Editor) => void;
+  private meta: RandomBitsMeta;
+  private editorCallbackFn: (meta: RandomBitsMeta) => void;
   private themeManager = new ThemeManager();
-  private state = FrameState.START;
+  private saveTimeout;
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
+    useTitle.subscribe(({showTitle}) => {
+      let needsSave = false;
+      if (this.meta.showTitle !== showTitle) {
+        this.meta.showTitle = showTitle;
+        needsSave = true;
+      }
+      if (needsSave) {
+        this.saveNote();
+      }
+    });
   }
 
-  public setChildWindow(childWindow: Window) {
-    this.childWindow = childWindow;
-    this.childWindow.postMessage(this.registrationEvent, '*');
-    this.state = FrameState.REGISTERED_CHILD;
+  public setChildWindow(i: number, editor: Editor, childWindow: Window) {
+    const child = new ChildMediator(editor, childWindow, this.getChildData(i));
+    child.post(this.registrationEvent);
+    this.children[editor.key] = child;
   }
 
-  public waitForEditor(callbackFn: (editor: Editor) => void) {
-    this.editorCallbackFn = callbackFn;
-    if (this.editor) {
-      callbackFn(this.editor);
+  public getAppData() {
+    return this.item.content.appData;
+  }
+
+  public getChildDataByEditor(editor: Editor) {
+    const i = this.getChildIndexByEditor(editor);
+    return this.getChildData(i);
+  }
+
+  public getChildIndexByEditor(editor: Editor) {
+    return this.meta.editors.findIndex(item => item.key === editor.key);
+  }
+
+  public getChildData(i: number) {
+    if (this.getSize() > 1) {
+      return this.item.content.text[i] || '';
+    } else if (this.getSize() === 1) {
+      return this.item.content.text || '';
+    } else {
+      return '';
     }
   }
 
-  public changeEditor(newEditor: Editor) {
-    this.state = FrameState.CHANGING_EDITOR;
-    this.editor = newEditor;
-    this.writeEditor();
+  public saveChild(i: number, text: string) {
+    if (this.getSize() > 1) {
+      this.item.content.text[i] = text;
+    } else {
+      this.item.content.text = text;
+    }
     this.saveNote();
-    this.editorCallbackFn(newEditor);
   }
 
-  // public eraseNote() {
-  //   this.item.content.text = '';
-  //   this.item.content.preview_plain = '';
-  //   this.item.content.preview_html = '';
-  //   this.saveNote();
-  //   console.log(this.streamOriginalEvent);
-  //   this.childWindow.postMessage({
-  //     action: 'reply',
-  //     data: {
-  //       item: this.item
-  //     },
-  //     original: this.streamOriginalEvent
-  //   }, '*');
-  // }
+  public waitForEditor(callbackFn: (meta: RandomBitsMeta) => void) {
+    this.editorCallbackFn = callbackFn;
+    if (this.meta) {
+      callbackFn(this.meta);
+    }
+  }
+
+  public changeEditor(index: number, editor: Editor) {
+    if (this.meta.editors[index]) {
+      delete this.children[this.meta.editors[index].key];
+    }
+
+    this.meta.editors[index] = {...editor};
+    this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public updateTitle(i: number, title: string) {
+    this.meta.editors[i].title = title;
+    this.saveNote();
+  }
+
+  public deleteRow() {
+    const startIndex = this.getSize() - this.getColumns();
+    this.meta.editors.splice(startIndex, this.getColumns());
+    this.item.content.text.splice(startIndex, this.getColumns());
+    this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public addRow() {
+    if (this.getSize() === 1) {
+      this.item.content.text = [this.item.content.text];
+    }
+
+    for (let i = 0; i < this.getColumns(); i++) {
+      this.meta.editors.push({...PLAIN_EDITOR});
+      this.item.content.text.push('');
+    }
+    this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public swapPositions(index1: number, index2: number) {
+    swapArrayIndexes(this.meta.editors, index1, index2);
+    swapArrayIndexes(this.item.content.text, index1, index2);
+    this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public setColumns(col: number) {
+    this.meta.columns = col;
+    this.makeEditorsFillRows();
+    this.saveNote();
+    this.editorCallbackFn(this.meta);
+  }
+
+  public getColumns() {
+    return this.meta.columns || 1;
+  }
+
+  public getRows() {
+    return this.getSize() / this.getColumns();
+  }
+
+  public getEditors() {
+    return this.meta.editors;
+  }
+
+  public getSize() {
+    return this.meta.editors.length;
+  }
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
-    console.log('mediator: ', data);
+    // console.log('mediator: ', data);
     if (data.action === 'component-registered') {
       this.handleParentRegistration(e);
     } else if (data.action === 'stream-context-item') {
-      this.handleChildDataRequest(data);
+      this.handleChildDataRequest(e);
     } else if (data.action === 'save-items') {
-      this.handleChildSaveRequest(data);
+      this.handleChildSaveRequest(e);
     } else if (data.action === 'request-permissions') {
-      this.handleChildRequestPermissions(data);
+      this.handleChildRequestPermissions(e);
     } else if (data.action === 'reply') {
-      this.handleReply(data);
+      this.handleReply(e);
     } else if (data.action === 'themes') {
       this.handleParentThemeChange(data);
     }
   }
 
-  private handleReply(data: any) {
-    if (data.original?.action === 'stream-context-item') {
-      if (this.state === FrameState.SENT_DATA_TO_CHILD) {
-        this.childWindow.postMessage({
-          ...data,
-          original: this.streamOriginalEvent
-        }, '*');
-      } else if (this.state === FrameState.REGISTERED_PARENT) {
-        this.state = FrameState.RECEIVED_DATA;
-        this.item = data.data.item;
-        const domainData = this.item.content.appData[RANDOMBITS_DOMAIN];
-        this.editor = domainData ? domainData[EDITOR_KEY] : null;
-        if (this.editorCallbackFn) {
-          this.editorCallbackFn(this.editor);
-        }
+  private handleReply(e: MessageEvent) {
+    if (e.data.original?.action === 'stream-context-item') {
+      this.item = e.data.data.item;
+      const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
+      useLocked.setState({locked});
+      if (this.meta) {
+        Object.values(this.children).forEach((child) => {
+          child.handleDataUpdate(this.getChildDataByEditor(child.editor));
+        });
       } else {
-        // ignore
-      }
-    } else if (data.original?.action === 'save-items') {
-      if (this.state === FrameState.SENT_DATA_TO_CHILD) {
-        this.childWindow.postMessage(data, '*');
+        this.meta = this.item.content.appData[RANDOMBITS_DOMAIN] || {
+          editors: [],
+          showTitle: false,
+          columns: 1
+        };
+        useTitle.setState({showTitle: this.meta.showTitle || false});
+        if (this.editorCallbackFn) {
+          this.editorCallbackFn(this.meta);
+        }
       }
     }
   }
@@ -117,68 +194,165 @@ class FrameMediator {
       sessionKey: this.sessionKey,
       api: 'component'
     }, this.parentOrigin);
-    this.state = FrameState.REGISTERED_PARENT;
   }
 
   private handleParentThemeChange(data: any) {
     this.themeManager.activateThemes(data.data.themes);
-    if (this.childWindow) {
-      this.childWindow.postMessage(data, '*');
+    Object.values(this.children).forEach(child => {
+      child.post(data);
+    });
+  }
+
+  private handleChildDataRequest(e: MessageEvent) {
+    const child = this.getChild(e.source);
+    if (child) {
+      child.handleChildDataRequest(e.data);
+    }
+    if (this.themeManager.activeThemes.length > 0) {
+      child.post({
+        action: 'themes',
+        data: {
+          themes: this.themeManager.activeThemes
+        }
+      });
     }
   }
 
-  private handleChildDataRequest(data: any) {
-    this.streamOriginalEvent = data;
+  private handleChildSaveRequest(e: MessageEvent) {
+    const child = this.getChild(e.source);
+    child.post({
+      action: 'reply',
+      data: {},
+      original: e.data
+    });
+    const data = e.data;
+    if (this.getSize() > 1) {
+      const i = this.getChildIndexByEditor(child.editor);
+      this.item.content.text[i] = data.data.items[0].content.text;
+    } else {
+      this.item.content.text = data.data.items[0].content.text;
+    }
+    this.saveNote();
+  }
+
+  private handleChildRequestPermissions(e: MessageEvent) {
+    this.getChild(e.source)?.post({
+      action: 'reply',
+      data: {},
+      original: e.data
+    });
+  }
+
+  private saveNote() {
+    this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
+    clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(() => {
+      window.parent.postMessage({
+        action: 'save-items',
+        data: {
+          items: [this.item]
+        },
+        messageId: crypto.randomUUID(),
+        sessionKey: this.sessionKey,
+        api: 'component'
+      }, this.parentOrigin);
+    }, 300);
+  }
+
+  private getChild(childWindow) {
+    return Object.values(this.children).find(child => child.equals(childWindow));
+  }
+
+  private makeEditorsFillRows() {
+    let lonelySections = this.getSize() % this.getColumns();
+    if (lonelySections) {
+      const fillCount = this.getColumns() - lonelySections;
+      for (let i = 0; i < fillCount; i++) {
+        if (this.getSize() === 1) {
+          this.item.content.text = [this.item.content.text];
+        }
+        this.meta.editors.push({...PLAIN_EDITOR});
+        this.item.content.text.push('');
+      }
+    }
+    return this.clearEmptyRows() || lonelySections;
+  }
+
+  private clearEmptyRows() {
+    let cleared = false;
+    const rows = Math.ceil(this.getSize() / this.getColumns());
+    for (let row = rows - 1; row >= 0; row--) {
+      let rowIsEmpty = true;
+      for (let col = 0; col < this.getColumns(); col++) {
+        const index = row * this.getColumns() + col;
+        const sectionToCheck = this.meta.editors[index].id === 'plain' && this.getChildData(index);
+        if (sectionToCheck) {
+          rowIsEmpty = false;
+          break;
+        }
+      }
+      if (rowIsEmpty) {
+        this.meta.editors.splice(row * this.getColumns(), this.getColumns());
+        this.item.content.text.splice(row * this.getColumns(), this.getColumns());
+        cleared = true;
+      } else {
+        break;
+      }
+    }
+    return cleared;
+  }
+}
+
+export const frameMediator = new FrameMediator();
+
+export class ChildMediator {
+  private dataRequestEvent: any;
+  private item: any;
+
+  constructor(public editor: Editor, private childWindow: Window, data: any) {
+    this.setItem(data);
+  }
+
+  public post(event: any) {
+    if (this.childWindow) {
+      this.childWindow.postMessage(event, '*');
+    }
+  }
+
+  public handleChildDataRequest(data: any) {
+    this.dataRequestEvent = data;
     this.item.isMetadataUpdate = false;
-    this.childWindow.postMessage({
+    this.post({
       action: 'reply',
       data: {
         item: this.item
       },
       original: data
-    }, '*');
-    if (this.themeManager.activeThemes.length > 0) {
-      this.childWindow.postMessage({
-        action: 'themes',
-        data: {
-          themes: this.themeManager.activeThemes
-        }
-      }, '*');
-    }
-    this.state = FrameState.SENT_DATA_TO_CHILD;
-  }
-
-  private handleChildSaveRequest(data: any) {
-    this.item = data.data.items[0];
-    this.writeEditor();
-    window.parent.postMessage(data, this.parentOrigin);
-  }
-
-  private handleChildRequestPermissions(data: any) {
-    this.childWindow.postMessage({
-      action: 'reply',
-      data: {},
-      original: data
     });
   }
 
-  private writeEditor() {
-    this.item.content.appData[RANDOMBITS_DOMAIN] = {
-      [EDITOR_KEY]: this.editor
+  public handleDataUpdate(data: any) {
+    this.setItem(data);
+    this.post({
+      action: 'reply',
+      data: {
+        item: this.item
+      },
+      original: this.dataRequestEvent
+    });
+  }
+
+  public equals(window: Window) {
+    return this.childWindow === window;
+  }
+
+  private setItem(data: any) {
+    this.item = {
+      isMetadataUpdate: false,
+      content: {
+        appData: frameMediator.getAppData(),
+        text: data
+      }
     };
   }
-
-  private saveNote() {
-    window.parent.postMessage({
-      action: 'save-items',
-      data: {
-        items: [this.item]
-      },
-      messageId: crypto.randomUUID(),
-      sessionKey: this.sessionKey,
-      api: 'component'
-    }, this.parentOrigin);
-  }
 }
-
-export const frameMediator = new FrameMediator();

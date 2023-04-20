@@ -1,13 +1,17 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Editor} from "./definitions";
+import React, {useEffect, useState} from 'react';
+import {RandomBitsMeta} from "./definitions";
 import {styled} from "goober";
 import {frameMediator} from "./mediator";
-import ActionPopover from "./components/ActionPopover";
 import EntryScreen from "./components/EntryScreen";
+import Frame from "./components/Frame";
+import CornerButton from "./components/CornerButton";
+import Options from "./components/Options";
 
 const Container = styled('div')`
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const EntryScreenWrapper = styled('div')`
@@ -16,56 +20,43 @@ const EntryScreenWrapper = styled('div')`
   padding: 0 30px;
 `;
 
-const Frame = styled('iframe', React.forwardRef)`
+const GridLayout = styled('div')`
+  display: grid;
   height: 100%;
-  width: 100%;
-  border: 0;
 `;
 
-// const Header = styled('div')`
-//   flex: 0 0 auto;
-// `;
-
-// const GridContainer = styled('div')`
-//   display: flex;
-//   flex-direction: column;
-//   flex: 1 1 auto;
-// `
-//
-// const GridRow = styled('div')`
-//   border-bottom: 1px solid var(--sn-stylekit-border-color);
-//   display: flex;
-//   flex: 1 0 auto;
-// `
-//
-// const GridSection = styled('div')`
-//   border-right: 1px solid var(--sn-stylekit-border-color);
-//   display: flex;
-//   flex-direction: column;
-//   flex: 1 0 auto;
-// `
-
 const App = () => {
-  const iframeRef = useRef<HTMLIFrameElement>();
-  const [editor, setEditor] = useState<Editor>(null);
+  const [meta, setMeta] = useState<RandomBitsMeta>(null);
   const [initialized, setInitialized] = useState(false);
-  const onIframeLoad = () => {
-    frameMediator.setChildWindow(iframeRef.current.contentWindow);
-  };
 
   useEffect(() => {
-    frameMediator.waitForEditor((editor: Editor) => {
-      setEditor(editor);
+    frameMediator.waitForEditor((meta: RandomBitsMeta) => {
+      setMeta({...meta});
       setInitialized(true);
     });
   }, []);
 
   const renderContent = () => {
+
+
     if (initialized) {
-      if (editor?.url) {
+      if (frameMediator.getSize() > 0) {
+        const columns = frameMediator.getColumns();
+        const editors = frameMediator.getEditors();
+        const style = {
+          'grid-template-columns': `repeat(${columns}, 1fr)`
+        };
         return <>
-          <Frame id="cosmos-editor" key={editor?.url} ref={iframeRef} onLoad={onIframeLoad} src={editor.url}/>
-          <ActionPopover/>
+          <GridLayout style={style}>
+            {
+              editors.map((editor, index) => {
+                editor.key = editor.key || crypto.randomUUID();
+                return <Frame key={editor.key} index={index} editor={editor}/>
+              })
+            }
+          </GridLayout>
+          <Options/>
+          <CornerButton/>
         </>;
       } else {
         return <EntryScreenWrapper><EntryScreen/></EntryScreenWrapper>
