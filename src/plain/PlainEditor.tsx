@@ -2,15 +2,6 @@ import React, {useState} from 'react';
 import {styled} from "goober";
 import {useLocked} from "../hooks/useLocked";
 
-// const SectionTitle = styled.input`
-//   border: none;
-//   background-color: var(--sn-stylekit-secondary-background-color);
-//   outline: none;
-//   color: var(--sn-stylekit-foreground-color);
-//   line-height: 1.4;
-//   padding: 10px;
-// `;
-
 const SectionTextArea = styled('textarea')`
   background-color: inherit;
   border: none;

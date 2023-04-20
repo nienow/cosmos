@@ -16,6 +16,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": false,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "allowJs": false,
     "jsx": "preserve",

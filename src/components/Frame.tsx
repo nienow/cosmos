@@ -9,6 +9,8 @@ import {useRearrange} from "../hooks/useRearrange";
 import ChangeEditor from "./ChangeEditor";
 import {useDialog} from "../providers/DialogProvider";
 import {useOptions} from "../hooks/useOptions";
+import QuillEditor from "../quill/QuillEditor";
+import SpreadsheetEditor from "../spreadsheet/SpreadsheetEditor";
 
 const FrameWrapper = styled('div')`
   display: flex;
@@ -55,21 +57,28 @@ const TitleButton = styled('div')`
   }
 `;
 
+const EDITOR_COMPONENTS = {
+  plain: PlainEditor,
+  quill: QuillEditor,
+  spreadsheet: SpreadsheetEditor
+};
+
 const RenderEditor = ({index, editor}) => {
-  if (editor.id === 'plain') {
-    const save = (text: string) => {
-      frameMediator.saveChild(index, text);
-    };
-    const data = frameMediator.getChildData(index);
-    return <PlainEditor initialText={data} save={save}/>
-  } else {
+  if (editor.url) {
     const onIframeLoad = (i: number, e: any) => {
       frameMediator.setChildWindow(i, editor, e.target.contentWindow);
     };
     return <FrameContent name={`cosmos-frame-${index}`} onLoad={(e) => onIframeLoad(index, e)}
                          src={editor.url}/>
-  }
 
+  } else {
+    const Editor = EDITOR_COMPONENTS[editor.id];
+    const save = (text: string) => {
+      frameMediator.saveChild(index, text);
+    };
+    const data = frameMediator.getChildData(index);
+    return <Editor initialText={data} save={save}/>
+  }
 };
 
 // let draggingIndex;

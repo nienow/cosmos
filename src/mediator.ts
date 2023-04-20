@@ -76,7 +76,10 @@ class FrameMediator {
   }
 
   public changeEditor(index: number, editor: Editor) {
-    delete this.children[this.meta.editors[index].key];
+    if (this.meta.editors[index]) {
+      delete this.children[this.meta.editors[index].key];
+    }
+
     this.meta.editors[index] = {...editor};
     this.saveNote();
     this.editorCallbackFn(this.meta);

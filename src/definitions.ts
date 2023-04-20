@@ -3,7 +3,7 @@ export const EDITOR_KEY = 'editor';
 
 export interface Editor {
   id: string;
-  url: string;
+  url?: string;
   name: string;
   desc: string;
   custom?: boolean;

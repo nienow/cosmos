@@ -2,13 +2,34 @@ import {Editor} from './definitions';
 
 export const PLAIN_EDITOR = {
   id: 'plain',
-  url: 'plain.html',
   name: 'Plain',
   desc: 'A plain text editor'
 };
 
 export const BUILT_IN_EDITORS: Editor[] = [
   PLAIN_EDITOR,
+  {
+    id: 'block',
+    url: 'http://localhost:5173/',
+    name: 'BlockSuite',
+    desc: ''
+  },
+  {
+    id: 'spreadsheet',
+    name: 'Spreadsheet',
+    desc: 'Spreadsheet'
+  },
+  {
+    id: 'quill',
+    name: 'Rich Text',
+    desc: 'Rich Text Editor using Quill'
+  },
+  {
+    id: 'lucky',
+    url: 'luckysheet.html',
+    name: 'Luckysheet',
+    desc: ''
+  },
   {
     id: 'randombits.excalidraw',
     url: 'http://localhost:8085/',
