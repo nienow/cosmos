@@ -5,7 +5,7 @@ export interface Editor {
   id: string;
   url?: string;
   name: string;
-  desc: string;
+  desc?: string;
   custom?: boolean;
   github?: string;
   clears?: boolean;

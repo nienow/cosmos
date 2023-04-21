@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
-import {TEST_DATA} from "./test-data";
 import {styled} from "goober";
 import {MockStandardNotes} from "./mock-notes";
+import {TEST_DATA} from "./data/demo-data";
 
 
 const Container = styled('div')`

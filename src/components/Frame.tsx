@@ -57,7 +57,7 @@ const TitleButton = styled('div')`
 `;
 
 const EDITOR_COMPONENTS = {
-  plain: PlainEditor,
+  'plain': PlainEditor,
   'randombits.quill': QuillEditor
   // spreadsheet: SpreadsheetEditor
 };
@@ -70,6 +70,9 @@ const RenderEditor = ({index, editor}) => {
     return <FrameContent name={`cosmos-frame-${index}`} onLoad={onIframeLoad} src={editor.url}/>
   } else {
     const Editor = EDITOR_COMPONENTS[editor.id];
+    if (!Editor) {
+      console.error(editor);
+    }
     let timeout;
     const save = (text: string) => {
       clearTimeout(timeout);

@@ -7,7 +7,6 @@ import {useInstalled} from "../hooks/useInstalled";
 import {BUILT_IN_EDITORS} from "../editor-list";
 import InstallCustom from "./InstallCustom";
 import {HeadingText} from "./common/Text";
-import CustomAddedTag from "./CustomAddedTag";
 import {Card, CardTitle} from "./common/Card";
 
 const Container = styled('div')`
@@ -18,6 +17,14 @@ const ListAction = styled(ListCell)`
   cursor: pointer;
   padding-left: 20px;
 `;
+
+const EditorCat = ({editor}) => {
+  if (editor.custom) {
+    return 'Custom';
+  } else {
+    return editor.cat || '';
+  }
+};
 
 const ManageEditors = ({}) => {
   const {confirm} = useDialog();
@@ -34,8 +41,8 @@ const ManageEditors = ({}) => {
   };
 
   const install = (editor: Editor) => {
-    const {id, name, url, desc} = editor;
-    installEditor({id, name, url, desc});
+    const {id, name, url} = editor;
+    installEditor({id, name, url});
   };
 
   const availableEditors = BUILT_IN_EDITORS.filter(editor => {
@@ -47,13 +54,11 @@ const ManageEditors = ({}) => {
       return <TableList>
         {
           installedEditors.map(editor => {
-            const tag = editor.custom ? <CustomAddedTag/> : <></>;
             return <ListRow key={editor.id}>
               <ListAction onClick={() => remove(editor)}>Uninstall</ListAction>
               <ListTitle>{editor.name}</ListTitle>
-              <ListCell>{editor.cat}</ListCell>
-
-              <ListCell>{tag}{editor.desc}</ListCell>
+              <ListCell><EditorCat editor={editor}/></ListCell>
+              <ListCell>{editor.desc}</ListCell>
             </ListRow>;
           })
         }

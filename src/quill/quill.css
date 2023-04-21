@@ -553,7 +553,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-  color: var(--sn-stylekit-contrast-foreground-color);
+  background-color: var(--sn-stylekit-contrast-background-color);
 }
 
 .ql-snow.ql-toolbar button:hover .ql-fill,
@@ -584,7 +584,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
-  color: var(--sn-stylekit-contrast-foreground-color);
+  background-color: var(--sn-stylekit-contrast-background-color);
 }
 
 .ql-snow.ql-toolbar button:hover .ql-stroke,
@@ -615,7 +615,7 @@
 .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
 .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
 .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
-  color: var(--sn-stylekit-contrast-foreground-color);
+  background-color: var(--sn-stylekit-contrast-background-color);
 }
 
 @media (pointer: coarse) {

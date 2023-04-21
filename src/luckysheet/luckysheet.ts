@@ -96,7 +96,6 @@ componentRelay.streamContextItem((note) => {
     data,
     hook: {
       updated: () => {
-        console.log(luckysheet.getAllSheets());
         componentRelay.saveItemWithPresave(currentNote, () => {
           currentNote.content.text = JSON.stringify(luckysheet.getAllSheets());
           currentNote.content.preview_plain = '';

@@ -1,19 +1,26 @@
 import {Editor} from './definitions';
 
-export const PLAIN_EDITOR = {
+export const PLAIN_EDITOR: Editor = {
   id: 'plain',
   name: 'Plain',
-  desc: 'A plain text editor'
+  desc: '',
+  preinstalled: true
 };
 
 export const BUILT_IN_EDITORS: Editor[] = [
-  PLAIN_EDITOR,
   {
     id: 'org.standardnotes.standard-sheets',
     url: 'https://app.standardnotes.com/components/assets/org.standardnotes.standard-sheets/dist/index.html',
     name: 'Spreadsheet',
     cat: 'Table',
     desc: 'An excel-like editor. Uses the Kendo library.',
+    preinstalled: true
+  },
+  {
+    id: 'randombits.quill',
+    name: 'Quill',
+    cat: 'Rich Text',
+    desc: 'Allows markdown shortcuts. Uses the Quill library.',
     preinstalled: true
   },
   {
@@ -31,10 +38,11 @@ export const BUILT_IN_EDITORS: Editor[] = [
     desc: 'Uses the summernote library.',
   },
   {
-    id: 'randombits.quill',
-    name: 'Quill',
-    cat: 'Rich Text',
-    desc: 'Allows markdown shortcuts. Uses the Quill library.',
+    id: 'org.standardnotes.advanced-markdown-editor',
+    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.advanced-markdown-editor/dist/index.html',
+    name: 'EasyMDE',
+    cat: 'Markdown',
+    desc: 'Uses the EasyMDE library.',
     preinstalled: true
   },
   {
@@ -44,14 +52,6 @@ export const BUILT_IN_EDITORS: Editor[] = [
     cat: 'Markdown',
     desc: 'Editor/viewer split. Uses the markdown-it library.',
     preinstalled: false
-  },
-  {
-    id: 'org.standardnotes.advanced-markdown-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.advanced-markdown-editor/dist/index.html',
-    name: 'EasyMDE',
-    cat: 'Markdown',
-    desc: 'Toolbar controls. Uses the EasyMDE library.',
-    preinstalled: true
   },
   {
     id: 'org.standardnotes.minimal-markdown-editor',
@@ -65,7 +65,7 @@ export const BUILT_IN_EDITORS: Editor[] = [
     url: 'https://nienow.github.io/sn-excalidraw/',
     name: 'Excalidraw',
     cat: 'Drawing',
-    desc: 'A drawing editor. Uses the Excalidraw library.',
+    desc: 'Uses the Excalidraw library.',
     github: 'https://github.com/nienow/sn-excalidraw',
     clears: true,
     preinstalled: true
@@ -75,11 +75,13 @@ export const BUILT_IN_EDITORS: Editor[] = [
     url: 'https://antonheitz.github.io/sn-whiteboard/',
     name: 'Whiteboard',
     cat: 'Drawing',
-    desc: 'A drawing editor. Uses the TLDraw library.',
+    desc: 'Uses the TLDraw library.',
     github: 'https://github.com/antonheitz/sn-whiteboard',
     clears: true
   }
-];
+].sort((a: Editor, b: Editor) => {
+  return a.name > b.name ? 1 : -1;
+});
 
 //   .sort((a: Editor, b: Editor) => {
 //   if (a.cat === b.cat) {

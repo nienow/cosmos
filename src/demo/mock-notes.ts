@@ -1,7 +1,7 @@
 import registeredData from './registered.json';
 import sampleStreamResponse from './stream-response.json';
 import {RANDOMBITS_DOMAIN} from '../definitions';
-import {TestData} from './test-data';
+import {TestData} from './data/test-data';
 
 export class MockStandardNotes {
   private childWindow;

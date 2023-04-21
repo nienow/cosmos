@@ -144,7 +144,7 @@ class FrameMediator {
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
-    console.log('mediator: ', data);
+    // console.log('mediator: ', data);
     if (data.action === 'component-registered') {
       this.handleParentRegistration(e);
     } else if (data.action === 'stream-context-item') {
@@ -315,7 +315,6 @@ export class ChildMediator {
 
   public post(event: any) {
     if (this.childWindow) {
-      console.log('send to child', event);
       this.childWindow.postMessage(event, '*');
     }
   }

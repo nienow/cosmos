@@ -29,7 +29,7 @@ const EditorCat = ({editor}) => {
 };
 
 const AvailableEditors = ({chooseEditor}) => {
-  const {installedEditors} = useInstalled();
+  const {availableEditors} = useInstalled();
   const {custom} = useDialog();
 
   const openManageEditors = () => {
@@ -41,7 +41,7 @@ const AvailableEditors = ({chooseEditor}) => {
       <CardTitle>Choose an editor <ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></CardTitle>
       <TableList>
         {
-          installedEditors.map(editor => {
+          availableEditors().map(editor => {
             return <ClickableEditorCard key={editor.id} onClick={() => chooseEditor(editor)}>
               <ListTitle>{editor.name}</ListTitle>
               <ListCell><EditorCat editor={editor}/></ListCell>
