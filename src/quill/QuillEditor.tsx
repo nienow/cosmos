@@ -8,11 +8,11 @@ const Container = styled('div')`
   height: 100%;
 `;
 
-const QuillEditor = ({initialText, save}) => {
+const QuillEditor = ({editor, initialText, save}) => {
   useEffect(() => {
     import('quill').then(({default: Quill}) => {
       Quill.register('modules/markdown', MarkdownShortcuts);
-      const quill = new Quill("#quill-editor", {
+      const quill = new Quill(`#quill-${editor.key}`, {
         modules: {
           toolbar: [
             [{'header': '1'}, {'header': '2'}, 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code', 'link', {'list': 'ordered'}, {'list': 'bullet'}, 'clean'],
@@ -40,7 +40,7 @@ const QuillEditor = ({initialText, save}) => {
   }, []);
 
   return (
-    <Container id="quill-editor">
+    <Container id={'quill-' + editor.key}>
     </Container>
   );
 };

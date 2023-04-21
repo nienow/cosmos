@@ -8,12 +8,12 @@ export const PLAIN_EDITOR = {
 
 export const BUILT_IN_EDITORS: Editor[] = [
   PLAIN_EDITOR,
-  {
-    id: 'block',
-    url: 'http://localhost:5173/',
-    name: 'BlockSuite',
-    desc: ''
-  },
+  // {
+  //   id: 'block',
+  //   url: 'http://localhost:5173/',
+  //   name: 'BlockSuite',
+  //   desc: ''
+  // },
   {
     id: 'simple-markdown',
     url: 'https://app.standardnotes.com/components/assets/org.standardnotes.simple-markdown-editor/dist/index.html',
@@ -24,12 +24,6 @@ export const BUILT_IN_EDITORS: Editor[] = [
     id: 'advanced-markdown',
     url: 'https://app.standardnotes.com/components/assets/org.standardnotes.advanced-markdown-editor/dist/index.html',
     name: 'Advanced markdown',
-    desc: ''
-  },
-  {
-    id: 'visual-markdown',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.markdown-visual-editor/build/index.html',
-    name: 'Alternative Markdown',
     desc: ''
   },
   {
@@ -74,25 +68,25 @@ export const BUILT_IN_EDITORS: Editor[] = [
     name: 'Rich Text Plus',
     desc: ''
   },
-  {
-    id: 'spreadsheet',
-    name: 'Spreadsheet',
-    desc: 'Spreadsheet'
-  },
+  // {
+  //   id: 'spreadsheet',
+  //   name: 'Spreadsheet',
+  //   desc: 'Spreadsheet'
+  // },
   {
     id: 'quill',
     name: 'Rich Text',
     desc: 'Rich Text Editor using Quill'
   },
-  {
-    id: 'lucky',
-    url: 'luckysheet.html',
-    name: 'Luckysheet',
-    desc: ''
-  },
+  // {
+  //   id: 'lucky',
+  //   url: 'luckysheet.html',
+  //   name: 'Luckysheet',
+  //   desc: ''
+  // },
   {
     id: 'randombits.excalidraw',
-    url: 'http://localhost:8085/',
+    url: 'https://nienow.github.io/sn-excalidraw/',
     name: 'Excalidraw',
     desc: 'A drawing editor that uses the Excalidraw library',
     github: 'https://github.com/nienow/sn-excalidraw',
@@ -106,11 +100,11 @@ export const BUILT_IN_EDITORS: Editor[] = [
     github: 'https://github.com/antonheitz/sn-whiteboard',
     clears: true
   },
-  {
-    id: 'com.dylanonelson.sn-scratch-editor',
-    url: 'https://scratch-editor.com',
-    name: 'Scratch Editor',
-    desc: 'An editor for writing things down.',
-    github: 'https://github.com/dylanonelson/sn-scratch-editor'
-  }
+  // {
+  //   id: 'com.dylanonelson.sn-scratch-editor',
+  //   url: 'https://scratch-editor.com',
+  //   name: 'Scratch Editor',
+  //   desc: 'An editor for writing things down.',
+  //   github: 'https://github.com/dylanonelson/sn-scratch-editor'
+  // }
 ].sort((a, b) => a.name > b.name ? 1 : -1);

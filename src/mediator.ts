@@ -14,7 +14,8 @@ class FrameMediator {
   private meta: RandomBitsMeta;
   private editorCallbackFn: (meta: RandomBitsMeta) => void;
   private themeManager = new ThemeManager();
-  private saveTimeout;
+
+  // private saveTimeout;
 
   constructor() {
     window.addEventListener('message', this.handleMessage.bind(this));
@@ -143,7 +144,7 @@ class FrameMediator {
 
   private handleMessage(e: MessageEvent) {
     const data = e.data;
-    // console.log('mediator: ', data);
+    console.log('mediator: ', data);
     if (data.action === 'component-registered') {
       this.handleParentRegistration(e);
     } else if (data.action === 'stream-context-item') {
@@ -165,9 +166,11 @@ class FrameMediator {
       const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
       useLocked.setState({locked});
       if (this.meta) {
-        Object.values(this.children).forEach((child) => {
-          child.handleDataUpdate(this.getChildDataByEditor(child.editor));
-        });
+        if (!this.item.isMetadataUpdate) {
+          Object.values(this.children).forEach((child) => {
+            child.handleDataUpdate(this.getChildDataByEditor(child.editor));
+          });
+        }
       } else {
         this.meta = this.item.content.appData[RANDOMBITS_DOMAIN] || {
           editors: [],
@@ -245,18 +248,15 @@ class FrameMediator {
 
   private saveNote() {
     this.item.content.appData[RANDOMBITS_DOMAIN] = this.meta;
-    clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => {
-      window.parent.postMessage({
-        action: 'save-items',
-        data: {
-          items: [this.item]
-        },
-        messageId: crypto.randomUUID(),
-        sessionKey: this.sessionKey,
-        api: 'component'
-      }, this.parentOrigin);
-    }, 300);
+    window.parent.postMessage({
+      action: 'save-items',
+      data: {
+        items: [this.item]
+      },
+      messageId: crypto.randomUUID(),
+      sessionKey: this.sessionKey,
+      api: 'component'
+    }, this.parentOrigin);
   }
 
   private getChild(childWindow) {
@@ -281,7 +281,7 @@ class FrameMediator {
   private clearEmptyRows() {
     let cleared = false;
     const rows = Math.ceil(this.getSize() / this.getColumns());
-    for (let row = rows - 1; row >= 0; row--) {
+    for (let row = rows - 1; row >= 1; row--) {
       let rowIsEmpty = true;
       for (let col = 0; col < this.getColumns(); col++) {
         const index = row * this.getColumns() + col;
@@ -315,6 +315,7 @@ export class ChildMediator {
 
   public post(event: any) {
     if (this.childWindow) {
+      console.log('send to child', event);
       this.childWindow.postMessage(event, '*');
     }
   }
@@ -352,7 +353,8 @@ export class ChildMediator {
       content: {
         appData: frameMediator.getAppData(),
         text: data
-      }
+      },
+      clientData: {}
     };
   }
 }

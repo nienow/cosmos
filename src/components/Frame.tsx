@@ -65,19 +65,21 @@ const EDITOR_COMPONENTS = {
 
 const RenderEditor = ({index, editor}) => {
   if (editor.url) {
-    const onIframeLoad = (i: number, e: any) => {
-      frameMediator.setChildWindow(i, editor, e.target.contentWindow);
+    const onIframeLoad = (e: any) => {
+      frameMediator.setChildWindow(index, editor, e.target.contentWindow);
     };
-    return <FrameContent name={`cosmos-frame-${index}`} onLoad={(e) => onIframeLoad(index, e)}
-                         src={editor.url}/>
-
+    return <FrameContent name={`cosmos-frame-${index}`} onLoad={onIframeLoad} src={editor.url}/>
   } else {
     const Editor = EDITOR_COMPONENTS[editor.id];
+    let timeout;
     const save = (text: string) => {
-      frameMediator.saveChild(index, text);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        frameMediator.saveChild(index, text);
+      }, 300);
     };
     const data = frameMediator.getChildData(index);
-    return <Editor initialText={data} save={save}/>
+    return <Editor initialText={data} save={save} editor={editor}/>
   }
 };
 
