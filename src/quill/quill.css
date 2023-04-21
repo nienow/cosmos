@@ -1,8 +1,10 @@
 
 .ql-container {
   box-sizing: border-box;
-  font-family: var(--sn-stylekit-sans-serif-font);
+  color: var(--sn-stylekit-editor-foreground-color);
   font-size: var(--sn-stylekit-font-size-editor);
+  font-family: var(--sn-stylekit-editor-font-family);
+  background-color: var(--sn-stylekit-editor-background-color);
   height: 100%;
   margin: 0px;
   position: relative;

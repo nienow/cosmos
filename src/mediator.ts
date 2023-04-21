@@ -1,6 +1,6 @@
 import {Editor, RANDOMBITS_DOMAIN, RandomBitsMeta} from './definitions';
 import {ThemeManager} from './theme-manager';
-import {PLAIN_EDITOR} from './built-in-editors';
+import {PLAIN_EDITOR} from './editor-list';
 import {useTitle} from './hooks/useTitle';
 import {useLocked} from './hooks/useLocked';
 import {swapArrayIndexes} from './utils';

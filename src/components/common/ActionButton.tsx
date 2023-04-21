@@ -6,7 +6,9 @@ export const ActionButton = styled('button')`
   color: inherit;
   cursor: pointer;
   margin: 0 5px;
-  padding: 5px 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 15px;
 
   &:hover {
     background-color: var(--sn-stylekit-secondary-background-color);

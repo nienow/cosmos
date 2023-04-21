@@ -1,5 +1,5 @@
 import {Editor} from './definitions';
-import {BUILT_IN_EDITORS} from './built-in-editors';
+import {BUILT_IN_EDITORS} from './editor-list';
 
 export const getBuiltInEditor = (editorId: string): Editor => {
   return BUILT_IN_EDITORS.find(editor => editor.id === editorId);

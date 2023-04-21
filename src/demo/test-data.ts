@@ -1,4 +1,4 @@
-import {BUILT_IN_EDITORS} from '../built-in-editors';
+import {BUILT_IN_EDITORS} from '../editor-list';
 import {RandomBitsMeta} from '../definitions';
 
 export const DATA_EXCALIDRAW = JSON.stringify({

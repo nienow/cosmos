@@ -3,11 +3,15 @@ import {styled} from "goober";
 import About from "./About";
 import AvailableEditors from "./AvailableEditors";
 import {frameMediator} from "../mediator";
-import {Separator} from "./common/Separator";
 import {useOptions} from "../hooks/useOptions";
+import {Card} from "./common/Card";
 
 const Container = styled('div')`
+  background-color: var(--sn-stylekit-contrast-background-color);
 
+  height: 100vh;
+  overflow-y: auto;
+  padding: 0 30px;
 `;
 
 const EntryScreen = () => {
@@ -19,9 +23,12 @@ const EntryScreen = () => {
 
   return (
     <Container>
-      <AvailableEditors chooseEditor={chooseEditor}/>
-      <Separator/>
-      <About/>
+      <Card>
+        <AvailableEditors chooseEditor={chooseEditor}/>
+      </Card>
+      <Card>
+        <About/>
+      </Card>
 
     </Container>
   );

@@ -37,7 +37,7 @@ const DialogActions = styled('div')`
 `
 
 const CustomDialog = styled('div')`
-  background-color: var(--sn-stylekit-background-color);
+  background-color: var(--sn-stylekit-contrast-background-color);
   display: flex;
   flex-direction: column;
   padding: 0 20px;
@@ -52,9 +52,9 @@ const CustomDialogActions = styled('div')`
 `;
 
 const BackLink = styled(`span`)`
-  font-size: 20px;
+  font-size: 16px;
   cursor: pointer;
-  border-bottom: 1px solid var(--sn-stylekit-foreground-color);
+  text-decoration: underline;
 `;
 
 const CustomDialogContent = styled('div')`

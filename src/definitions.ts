@@ -11,6 +11,8 @@ export interface Editor {
   clears?: boolean;
   key?: string;
   title?: string;
+  cat?: string;
+  preinstalled?: boolean;
 }
 
 export interface RandomBitsMeta {

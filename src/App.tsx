@@ -14,14 +14,10 @@ const Container = styled('div')`
   flex-direction: column;
 `;
 
-const EntryScreenWrapper = styled('div')`
-  height: 100vh;
-  overflow-y: auto;
-  padding: 0 30px;
-`;
 
 const GridLayout = styled('div')`
   display: grid;
+  grid-auto-rows: 1fr;
   height: 100%;
 `;
 
@@ -59,7 +55,7 @@ const App = () => {
           <CornerButton/>
         </>;
       } else {
-        return <EntryScreenWrapper><EntryScreen/></EntryScreenWrapper>
+        return <EntryScreen/>
       }
     }
   };

@@ -1,6 +1,7 @@
 import React from 'react';
 import {styled} from "goober";
 import AvailableEditors from "./AvailableEditors";
+import {Card} from "./common/Card";
 
 const Container = styled('div')`
 `;
@@ -8,7 +9,9 @@ const Container = styled('div')`
 const ChangeEditor = ({chooseEditor}) => {
   return (
     <Container>
-      <AvailableEditors chooseEditor={chooseEditor}/>
+      <Card>
+        <AvailableEditors chooseEditor={chooseEditor}/>
+      </Card>
     </Container>
   );
 }

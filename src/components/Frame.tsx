@@ -10,7 +10,6 @@ import ChangeEditor from "./ChangeEditor";
 import {useDialog} from "../providers/DialogProvider";
 import {useOptions} from "../hooks/useOptions";
 import QuillEditor from "../quill/QuillEditor";
-import SpreadsheetEditor from "../spreadsheet/SpreadsheetEditor";
 
 const FrameWrapper = styled('div')`
   display: flex;
@@ -59,8 +58,8 @@ const TitleButton = styled('div')`
 
 const EDITOR_COMPONENTS = {
   plain: PlainEditor,
-  quill: QuillEditor,
-  spreadsheet: SpreadsheetEditor
+  'randombits.quill': QuillEditor
+  // spreadsheet: SpreadsheetEditor
 };
 
 const RenderEditor = ({index, editor}) => {

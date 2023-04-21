@@ -1,14 +1,13 @@
 import React from 'react';
 import {styled} from "goober";
-import {EditorCard, EditorDesc, Editors, EditorTitle} from "./common/EditorCard";
-import {useInstalled} from "../hooks/useInstalled";
-import {Tag} from "./common/Tag";
-import {HeadingText} from "./common/Text";
+import {ListCell, ListRow, ListTitle, TableList} from "./common/EditorList";
 import {ActionButton} from "./common/ActionButton";
 import {useDialog} from "../providers/DialogProvider";
 import ManageEditors from "./ManageEditors";
+import {CardTitle} from "./common/Card";
+import {useInstalled} from "../hooks/useInstalled";
 
-export const ClickableEditorCard = styled(EditorCard)`
+export const ClickableEditorCard = styled(ListRow)`
   cursor: pointer;
 
   &:hover {
@@ -18,7 +17,16 @@ export const ClickableEditorCard = styled(EditorCard)`
 
 const ManageEditorButtons = styled(ActionButton)`
   margin-left: 30px;
+  color: var(--sn-stylekit-foreground-color);
 `;
+
+const EditorCat = ({editor}) => {
+  if (editor.custom) {
+    return 'Custom';
+  } else {
+    return editor.cat || '';
+  }
+};
 
 const AvailableEditors = ({chooseEditor}) => {
   const {installedEditors} = useInstalled();
@@ -30,18 +38,18 @@ const AvailableEditors = ({chooseEditor}) => {
 
   return (
     <>
-      <HeadingText>Choose an editor <ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></HeadingText>
-      <Editors>
+      <CardTitle>Choose an editor <ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></CardTitle>
+      <TableList>
         {
           installedEditors.map(editor => {
-            const tag = editor.custom ? <Tag>Custom Added</Tag> : <></>;
             return <ClickableEditorCard key={editor.id} onClick={() => chooseEditor(editor)}>
-              <EditorTitle>{editor.name} {tag}</EditorTitle>
-              <EditorDesc>{editor.desc}</EditorDesc>
+              <ListTitle>{editor.name}</ListTitle>
+              <ListCell><EditorCat editor={editor}/></ListCell>
+              <ListCell>{editor.desc}</ListCell>
             </ClickableEditorCard>;
           })
         }
-      </Editors>
+      </TableList>
     </>
   );
 }

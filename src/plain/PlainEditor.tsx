@@ -3,7 +3,6 @@ import {styled} from "goober";
 import {useLocked} from "../hooks/useLocked";
 
 const SectionTextArea = styled('textarea')`
-  background-color: inherit;
   border: none;
   outline: none;
   padding: 10px;
@@ -12,7 +11,10 @@ const SectionTextArea = styled('textarea')`
   flex: 1 1 auto;
   line-height: 1.4;
   resize: none;
-  color: var(--sn-stylekit-foreground-color);
+  color: var(--sn-stylekit-editor-foreground-color);
+  font-size: var(--sn-stylekit-font-size-editor);
+  font-family: var(--sn-stylekit-editor-font-family);
+  background-color: var(--sn-stylekit-editor-background-color);
 `;
 
 interface Props {

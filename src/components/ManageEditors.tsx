@@ -1,30 +1,36 @@
 import React from 'react';
 import {styled} from "goober";
-import {EditorCard, EditorDesc, Editors, EditorTitle} from "./common/EditorCard";
+import {ListCell, ListRow, ListTitle, TableList} from "./common/EditorList";
 import {Editor} from "../definitions";
 import {useDialog} from "../providers/DialogProvider";
 import {useInstalled} from "../hooks/useInstalled";
-import {Tag} from "./common/Tag";
-import {BUILT_IN_EDITORS} from "../built-in-editors";
+import {BUILT_IN_EDITORS} from "../editor-list";
 import InstallCustom from "./InstallCustom";
-import {Separator} from "./common/Separator";
+import {HeadingText} from "./common/Text";
+import CustomAddedTag from "./CustomAddedTag";
+import {Card, CardTitle} from "./common/Card";
 
 const Container = styled('div')`
 `;
 
-const EditorAction = styled('div')`
-  margin-top: 10px;
+const ListAction = styled(ListCell)`
   text-decoration: underline;
   cursor: pointer;
+  padding-left: 20px;
 `;
 
 const ManageEditors = ({}) => {
   const {confirm} = useDialog();
   const {installedEditors, installEditor, uninstallEditor} = useInstalled();
   const remove = (editor: Editor) => {
-    confirm(`Uninstall the editor: ${editor.name}?`, () => {
+    if (editor.custom) {
+      confirm(`Uninstall the editor: ${editor.name}?`, () => {
+        uninstallEditor(editor);
+      });
+    } else {
       uninstallEditor(editor);
-    });
+    }
+
   };
 
   const install = (editor: Editor) => {
@@ -36,36 +42,61 @@ const ManageEditors = ({}) => {
     return !installedEditors.find(installedEditor => installedEditor.id === editor.id);
   });
 
-  return (
-    <Container>
-      <h2>Installed Editors</h2>
-      <Editors>
+  const renderInstalled = () => {
+    if (installedEditors.length > 0) {
+      return <TableList>
         {
           installedEditors.map(editor => {
-            const tag = editor.custom ? <Tag>Custom Added</Tag> : <></>;
-            return <EditorCard key={editor.id}>
-              <EditorTitle>{editor.name} {tag}</EditorTitle>
-              <EditorDesc>{editor.desc}</EditorDesc>
-              <EditorAction onClick={() => remove(editor)}>Uninstall</EditorAction>
-            </EditorCard>;
+            const tag = editor.custom ? <CustomAddedTag/> : <></>;
+            return <ListRow key={editor.id}>
+              <ListAction onClick={() => remove(editor)}>Uninstall</ListAction>
+              <ListTitle>{editor.name}</ListTitle>
+              <ListCell>{editor.cat}</ListCell>
+
+              <ListCell>{tag}{editor.desc}</ListCell>
+            </ListRow>;
           })
         }
-      </Editors>
-      <Separator/>
-      <h2>Marketplace</h2>
-      <Editors>
+      </TableList>;
+    } else {
+      return <div>No installed editors</div>;
+    }
+  };
+
+  const renderMarketplace = () => {
+    if (availableEditors.length > 0) {
+      return <TableList>
         {
           availableEditors.map(editor => {
-            return <EditorCard key={editor.id}>
-              <EditorTitle>{editor.name}</EditorTitle>
-              <EditorDesc>{editor.desc}</EditorDesc>
-              <EditorAction onClick={() => install(editor)}>Install</EditorAction>
-            </EditorCard>;
+            return <ListRow key={editor.id}>
+              <ListAction onClick={() => install(editor)}>Install</ListAction>
+              <ListTitle>{editor.name}</ListTitle>
+              <ListCell>{editor.cat}</ListCell>
+
+              <ListCell>{editor.desc}</ListCell>
+            </ListRow>;
           })
         }
-      </Editors>
-      <Separator/>
-      <InstallCustom/>
+      </TableList>;
+    } else {
+      return <div>All editors are already installed</div>;
+    }
+  };
+
+  return (
+    <Container>
+      <Card>
+        <CardTitle>Installed Editors</CardTitle>
+        {renderInstalled()}
+      </Card>
+
+      <Card>
+        <HeadingText>Marketplace</HeadingText>
+        {renderMarketplace()}
+      </Card>
+      <Card>
+        <InstallCustom/>
+      </Card>
     </Container>
   );
 }

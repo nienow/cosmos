@@ -1,7 +1,15 @@
 import {Editor} from '../definitions';
 import {create} from 'zustand';
+import {BUILT_IN_EDITORS} from '../editor-list';
 
-const installedEditors = JSON.parse(localStorage.getItem('cosmos.installed') || '[]');
+const storageString = localStorage.getItem('cosmos.installed');
+let installedEditors;
+if (storageString) {
+  installedEditors = JSON.parse(storageString);
+} else {
+  installedEditors = BUILT_IN_EDITORS;
+  localStorage.setItem('cosmos.installed', JSON.stringify(installedEditors));
+}
 
 const sortedInstalledEditors = () => {
   return installedEditors.slice().sort((a, b) => a.name > b.name ? 1 : -1);
