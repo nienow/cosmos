@@ -2,6 +2,22 @@ import {Editor} from '../definitions';
 import {create} from 'zustand';
 import {BUILT_IN_EDITORS} from '../editor-list';
 
+const sortedInstalledEditors = (): Editor[] => {
+  return installedEditors.slice().sort((a, b) => a.name > b.name ? 1 : -1);
+};
+
+const saveToStorage = () => {
+  const editorsToSave = installedEditors.map(({id, name, url, desc, custom}) => {
+    if (custom) {
+      return {id, name, url, desc, custom};
+    } else {
+      return {id, name, url};
+    }
+  });
+  localStorage.setItem('cosmos.installed', JSON.stringify(editorsToSave));
+};
+
+// initialize from storage
 const storageString = localStorage.getItem('cosmos.installed');
 let installedEditors;
 if (storageString) {
@@ -15,23 +31,8 @@ if (storageString) {
   });
 } else {
   installedEditors = BUILT_IN_EDITORS.filter(editor => editor.preinstalled);
-  const reducedInfo = installedEditors.map(({id, name, url}) => ({id, name, url}));
-  localStorage.setItem('cosmos.installed', JSON.stringify(reducedInfo));
+  saveToStorage();
 }
-
-const sortedInstalledEditors = () => {
-  return installedEditors.slice().sort((a, b) => a.name > b.name ? 1 : -1);
-};
-
-const saveToStorage = () => {
-  installedEditors.map(({id, name, url, desc, custom}) => {
-    if (custom) {
-      return {id, name, url, desc, custom};
-    } else {
-      return {id, name, url};
-    }
-  });
-};
 
 interface InstalledState {
   installedEditors: Editor[];
@@ -47,7 +48,7 @@ export const useInstalled = create<InstalledState>(set => ({
     } else {
       installedEditors.push(editor);
       saveToStorage();
-      set(() => (sortedInstalledEditors()));
+      set(() => ({installedEditors: sortedInstalledEditors()}));
     }
   },
   uninstallEditor: (editor: Editor) => {
@@ -55,7 +56,7 @@ export const useInstalled = create<InstalledState>(set => ({
     if (index >= 0) {
       installedEditors.splice(index, 1);
       saveToStorage();
-      set(() => (sortedInstalledEditors()));
+      set(() => ({installedEditors: sortedInstalledEditors()}));
     }
   }
 }));
