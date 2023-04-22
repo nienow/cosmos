@@ -4,7 +4,7 @@ import {ListCell, ListRow, ListTitle, TableList} from "./common/EditorList";
 import {ActionButton} from "./common/ActionButton";
 import {useDialog} from "../providers/DialogProvider";
 import ManageEditors from "./ManageEditors";
-import {CardTitle} from "./common/Card";
+import {Card, CardTitle} from "./common/Card";
 import {useInstalled} from "../hooks/useInstalled";
 import {PLAIN_EDITOR} from "../editor-list";
 
@@ -38,7 +38,7 @@ const AvailableEditors = ({chooseEditor}) => {
   };
 
   return (
-    <>
+    <Card>
       <CardTitle>Choose an editor <ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></CardTitle>
       <TableList>
         {
@@ -51,7 +51,7 @@ const AvailableEditors = ({chooseEditor}) => {
           })
         }
       </TableList>
-    </>
+    </Card>
   );
 }
 

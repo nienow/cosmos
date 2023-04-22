@@ -4,7 +4,6 @@ import About from "./About";
 import AvailableEditors from "./AvailableEditors";
 import {frameMediator} from "../mediator";
 import {useOptions} from "../hooks/useOptions";
-import {Card} from "./common/Card";
 
 const Container = styled('div')`
   background-color: var(--sn-stylekit-contrast-background-color);
@@ -23,13 +22,8 @@ const EntryScreen = () => {
 
   return (
     <Container>
-      <Card>
-        <AvailableEditors chooseEditor={chooseEditor}/>
-      </Card>
-      <Card>
-        <About/>
-      </Card>
-
+      <AvailableEditors chooseEditor={chooseEditor}/>
+      <About/>
     </Container>
   );
 }

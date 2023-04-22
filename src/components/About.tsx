@@ -1,13 +1,10 @@
 import React from 'react';
-import {styled} from "goober";
 import {HeadingText} from "./common/Text";
-
-const Container = styled('div')`
-`;
+import {Card} from "./common/Card";
 
 const About = ({}) => {
   return (
-    <Container>
+    <Card>
       <HeadingText>About</HeadingText>
       <p>Github repo is <a target="_blank"
                            href="https://github.com/nienow/cosmos">https://github.com/nienow/cosmos</a></p>
@@ -17,7 +14,7 @@ const About = ({}) => {
         Extensions Article.</a></p>
       <p>Contact me on <a target="_blank" href="https://discordapp.com/users/806661811143049216">Discord</a> to offer suggestions or new
         extensions to include. </p>
-    </Container>
+    </Card>
   );
 }
 
