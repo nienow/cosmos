@@ -6,7 +6,18 @@ import {MarkdownShortcuts} from "./quill-markdown";
 import {useLocked} from "../hooks/useLocked";
 
 const Container = styled('div')`
+  position: relative;
   height: 100%;
+`;
+
+const Container2 = styled('div')`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
 `;
 
 const QuillEditor = ({editor, initialText, save}) => {
@@ -45,7 +56,9 @@ const QuillEditor = ({editor, initialText, save}) => {
 
   return (
     <Container>
-      <div id={'quill-' + editor.key}></div>
+      <Container2>
+        <div id={'quill-' + editor.key}></div>
+      </Container2>
     </Container>
   );
 };

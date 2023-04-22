@@ -5,9 +5,10 @@
   font-size: var(--sn-stylekit-font-size-editor);
   font-family: var(--sn-stylekit-editor-font-family);
   background-color: var(--sn-stylekit-editor-background-color);
-  height: 100%;
+  flex: 1 1 auto;
   margin: 0px;
   position: relative;
+  overflow-y: auto;
 }
 
 .ql-container.ql-disabled .ql-tooltip {
@@ -1046,6 +1047,7 @@
 }
 
 .ql-toolbar.ql-snow {
+  flex: 0 0 auto;
   border-bottom: 1px solid var(--sn-stylekit-border-color);
   box-sizing: border-box;
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
