@@ -1,12 +1,12 @@
 {
-  "identifier": "my-editor",
-  "name": "My Editor",
+  "identifier": "randombits.cosmos",
+  "name": "Cosmos",
   "content_type": "SN|Component",
   "area": "editor-editor",
   "version": "0.1.0",
-  "description": "A custom editor",
-  "url": "https://nienow.github.io/sn-extension-template/",
-  "download_url": "https://nienow.github.io/sn-extension-template/latest.zip",
-  "latest_url": "https://nienow.github.io/sn-extension-template/package.json",
+  "description": "Install editors from the marketplace. Split a note into multiple areas. Each area can use a different editor.",
+  "url": "https://nienow.github.io/cosmos/",
+  "download_url": "https://nienow.github.io/cosmos/latest.zip",
+  "latest_url": "https://nienow.github.io/cosmos/package.json",
   "thumbnail_url": ""
 }
