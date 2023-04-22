@@ -6,6 +6,7 @@ import {useDialog} from "../providers/DialogProvider";
 import ManageEditors from "./ManageEditors";
 import {CardTitle} from "./common/Card";
 import {useInstalled} from "../hooks/useInstalled";
+import {PLAIN_EDITOR} from "../editor-list";
 
 export const ClickableEditorCard = styled(ListRow)`
   cursor: pointer;
@@ -29,7 +30,7 @@ const EditorCat = ({editor}) => {
 };
 
 const AvailableEditors = ({chooseEditor}) => {
-  const {availableEditors} = useInstalled();
+  const {installedEditors} = useInstalled();
   const {custom} = useDialog();
 
   const openManageEditors = () => {
@@ -41,7 +42,7 @@ const AvailableEditors = ({chooseEditor}) => {
       <CardTitle>Choose an editor <ManageEditorButtons onClick={openManageEditors}>Manage Editors</ManageEditorButtons></CardTitle>
       <TableList>
         {
-          availableEditors().map(editor => {
+          [PLAIN_EDITOR, ...installedEditors].map(editor => {
             return <ClickableEditorCard key={editor.id} onClick={() => chooseEditor(editor)}>
               <ListTitle>{editor.name}</ListTitle>
               <ListCell><EditorCat editor={editor}/></ListCell>

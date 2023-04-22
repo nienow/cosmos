@@ -14,3 +14,8 @@ export const ActionButton = styled('button')`
     background-color: var(--sn-stylekit-secondary-background-color);
   }
 `;
+
+export const ActionLink = styled('a')`
+  padding: 0 5px;
+  color: inherit !important;
+`;

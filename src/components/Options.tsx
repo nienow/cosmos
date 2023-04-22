@@ -6,7 +6,7 @@ import {useTitle} from "../hooks/useTitle";
 import {useDialog} from "../providers/DialogProvider";
 import {useLocked} from "../hooks/useLocked";
 import {useOptions} from "../hooks/useOptions";
-import {ActionButton} from "./common/ActionButton";
+import {ActionLink} from "./common/ActionButton";
 import About from "./About";
 
 const HeaderContainer = styled('div')`
@@ -64,7 +64,7 @@ const Options = () => {
       <NumberControl increase={increaseColumns} decrease={decreaseColumns} display={columns + " column(s)"}/>
       <NumberControl increase={addRow} decrease={checkLastRow} display={rows + ' row(s)'}></NumberControl>
       <ToggleButton label="Always Show Title" initialValue={showTitle} onToggle={toggleTitle}/>
-      <ActionButton onClick={showAbout}>About</ActionButton>
+      <ActionLink href="#" onClick={showAbout}>About</ActionLink>
     </HeaderContainer>
   }
 };

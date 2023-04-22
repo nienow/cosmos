@@ -41,8 +41,7 @@ const ManageEditors = ({}) => {
   };
 
   const install = (editor: Editor) => {
-    const {id, name, url} = editor;
-    installEditor({id, name, url});
+    installEditor(editor);
   };
 
   const availableEditors = BUILT_IN_EDITORS.filter(editor => {

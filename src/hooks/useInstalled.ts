@@ -1,57 +1,61 @@
 import {Editor} from '../definitions';
 import {create} from 'zustand';
-import {BUILT_IN_EDITORS, PLAIN_EDITOR} from '../editor-list';
+import {BUILT_IN_EDITORS} from '../editor-list';
 
 const storageString = localStorage.getItem('cosmos.installed');
 let installedEditors;
 if (storageString) {
-  installedEditors = JSON.parse(storageString);
+  const reducedInfo = JSON.parse(storageString);
+  installedEditors = reducedInfo.map(item => {
+    if (item.custom) {
+      return item;
+    } else {
+      return BUILT_IN_EDITORS.find(editor => editor.id === item.id) || item;
+    }
+  });
 } else {
-  installedEditors = BUILT_IN_EDITORS.filter(editor => editor.preinstalled)
-    .map(({id, name, desc, url}) => ({id, name, url}));
-  localStorage.setItem('cosmos.installed', JSON.stringify(installedEditors));
+  installedEditors = BUILT_IN_EDITORS.filter(editor => editor.preinstalled);
+  const reducedInfo = installedEditors.map(({id, name, url}) => ({id, name, url}));
+  localStorage.setItem('cosmos.installed', JSON.stringify(reducedInfo));
 }
 
-// const sortedInstalledEditors = () => {
-//   return [
-//     PLAIN_EDITOR,
-//     ...installedEditors.sort((a, b) => a.name > b.name ? 1 : -1)
-//   ];
-// };
+const sortedInstalledEditors = () => {
+  return installedEditors.slice().sort((a, b) => a.name > b.name ? 1 : -1);
+};
+
+const saveToStorage = () => {
+  installedEditors.map(({id, name, url, desc, custom}) => {
+    if (custom) {
+      return {id, name, url, desc, custom};
+    } else {
+      return {id, name, url};
+    }
+  });
+};
 
 interface InstalledState {
   installedEditors: Editor[];
-  availableEditors: () => Editor[];
   installEditor: (editor: Editor) => void;
   uninstallEditor: (editor: Editor) => void;
 }
 
 export const useInstalled = create<InstalledState>(set => ({
-  installedEditors,
-  availableEditors: () => {
-    const fullEditorData = installedEditors.map(({id}) => {
-      return BUILT_IN_EDITORS.find(editor => editor.id === id);
-    });
-    return [
-      PLAIN_EDITOR,
-      ...fullEditorData.sort((a, b) => a.name > b.name ? 1 : -1)
-    ];
-  },
+  installedEditors: sortedInstalledEditors(),
   installEditor: (editor: Editor) => {
     if (installedEditors.find(item => item.id === editor.id)) {
       alert('This editor has already been installed');
     } else {
       installedEditors.push(editor);
-      localStorage.setItem('cosmos.installed', JSON.stringify(installedEditors));
-      set(() => ({...installedEditors}));
+      saveToStorage();
+      set(() => (sortedInstalledEditors()));
     }
   },
   uninstallEditor: (editor: Editor) => {
     const index = installedEditors.findIndex(item => item.id === editor.id);
     if (index >= 0) {
       installedEditors.splice(index, 1);
-      localStorage.setItem('cosmos.installed', JSON.stringify(installedEditors));
-      set(() => ({...installedEditors}));
+      saveToStorage();
+      set(() => (sortedInstalledEditors()));
     }
   }
 }));
