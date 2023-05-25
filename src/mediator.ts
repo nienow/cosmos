@@ -3,7 +3,7 @@ import {ThemeManager} from './theme-manager';
 import {PLAIN_EDITOR} from './editor-list';
 import {useTitle} from './hooks/useTitle';
 import {useLocked} from './hooks/useLocked';
-import {swapArrayIndexes} from './utils';
+import {isValidJsonString, swapArrayIndexes} from './utils';
 
 class FrameMediator {
   private registrationEvent;
@@ -143,26 +143,27 @@ class FrameMediator {
   }
 
   private handleMessage(e: MessageEvent) {
-    const data = e.data;
+    const data = isValidJsonString(e.data) ? JSON.parse(e.data) : e.data;
+
     // console.log('mediator: ', data);
     if (data.action === 'component-registered') {
-      this.handleParentRegistration(e);
+      this.handleParentRegistration(e, data);
     } else if (data.action === 'stream-context-item') {
-      this.handleChildDataRequest(e);
+      this.handleChildDataRequest(e, data);
     } else if (data.action === 'save-items') {
-      this.handleChildSaveRequest(e);
+      this.handleChildSaveRequest(e, data);
     } else if (data.action === 'request-permissions') {
-      this.handleChildRequestPermissions(e);
+      this.handleChildRequestPermissions(e, data);
     } else if (data.action === 'reply') {
-      this.handleReply(e);
+      this.handleReply(data);
     } else if (data.action === 'themes') {
       this.handleParentThemeChange(data);
     }
   }
 
-  private handleReply(e: MessageEvent) {
-    if (e.data.original?.action === 'stream-context-item') {
-      this.item = e.data.data.item;
+  private handleReply(data: any) {
+    if (data.original?.action === 'stream-context-item') {
+      this.item = data.data.item;
       const locked = this.item.content.appData['org.standardnotes.sn']['locked'] || false;
       useLocked.setState({locked});
       if (this.meta) {
@@ -185,8 +186,7 @@ class FrameMediator {
     }
   }
 
-  private handleParentRegistration(e: MessageEvent) {
-    const data = e.data;
+  private handleParentRegistration(e: MessageEvent, data: any) {
     this.parentOrigin = e.origin;
     this.registrationEvent = data;
     this.sessionKey = data.sessionKey;
@@ -206,10 +206,10 @@ class FrameMediator {
     });
   }
 
-  private handleChildDataRequest(e: MessageEvent) {
+  private handleChildDataRequest(e: MessageEvent, data: any) {
     const child = this.getChild(e.source);
     if (child) {
-      child.handleChildDataRequest(e.data);
+      child.handleChildDataRequest(data);
     }
     if (this.themeManager.activeThemes.length > 0) {
       child.post({
@@ -221,14 +221,13 @@ class FrameMediator {
     }
   }
 
-  private handleChildSaveRequest(e: MessageEvent) {
+  private handleChildSaveRequest(e: MessageEvent, data: any) {
     const child = this.getChild(e.source);
     child.post({
       action: 'reply',
       data: {},
-      original: e.data
+      original: data
     });
-    const data = e.data;
     if (this.getSize() > 1) {
       const i = this.getChildIndexByEditor(child.editor);
       this.item.content.text[i] = data.data.items[0].content.text;
@@ -238,11 +237,11 @@ class FrameMediator {
     this.saveNote();
   }
 
-  private handleChildRequestPermissions(e: MessageEvent) {
+  private handleChildRequestPermissions(e: MessageEvent, data: any) {
     this.getChild(e.source)?.post({
       action: 'reply',
       data: {},
-      original: e.data
+      original: data
     });
   }
 
