@@ -8,6 +8,11 @@ import {DialogProvider} from "./providers/DialogProvider";
 
 setup(React.createElement);
 
+window.addEventListener('error', (e) => {
+  console.log(e);
+  document.getElementById('errors').innerText += '\n' + e.message;
+});
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <DialogProvider>
