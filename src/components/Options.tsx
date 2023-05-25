@@ -12,7 +12,8 @@ import About from "./About";
 const HeaderContainer = styled('div')`
   display: flex;
   align-items: center;
-  height: 35px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
 `
 
 const Options = () => {

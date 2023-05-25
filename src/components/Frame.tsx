@@ -28,6 +28,7 @@ const FrameTitleWrapper = styled('div')`
 `;
 
 const FrameTitle = styled('input')`
+  width: 100%;
   flex: 1 1 auto;
   border: none;
   outline: none;
@@ -120,8 +121,6 @@ const RenderTitle = ({index, editor}) => {
     return <FrameTitleWrapper>
       <FrameTitle disabled={locked} value={title || editor.name} onChange={updateTitle}/>
       {renderButtons()}
-      {/*<OptionPopover index={index}/>*/}
-      {/*<FrameTitleOptions onClick={openMenu}><DotsIcon/></FrameTitleOptions>*/}
     </FrameTitleWrapper>
   }
 };

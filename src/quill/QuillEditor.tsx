@@ -30,7 +30,7 @@ const QuillEditor = ({editor, initialText, save}) => {
         readOnly: locked,
         modules: {
           toolbar: [
-            [{'header': '1'}, {'header': '2'}, 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code', 'link', {'list': 'ordered'}, {'list': 'bullet'}, 'clean'],
+            [{'header': '1'}, {'header': '2'}, 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code', 'link', {'list': 'ordered'}, {'list': 'bullet'}, {'color': []}, {'background': []}, 'clean'],
           ],
           markdown: {}
         },

@@ -7,6 +7,10 @@ export const Card = styled('div')`
   background-color: var(--sn-stylekit-background-color);
 `;
 
+export const OverflowingCard = styled(Card)`
+  overflow-x: auto;
+`;
+
 export const CardTitle = styled('div')`
   margin: 10px 0;
   color: var(--sn-stylekit-info-color);

@@ -18,6 +18,7 @@ export const BUILT_IN_EDITORS: Editor[] = [
   },
   {
     id: 'randombits.quill',
+    url: 'https://nienow.github.io/sn-quill/',
     name: 'Quill',
     cat: 'Rich Text',
     desc: 'Allows markdown shortcuts. Uses the Quill library.',

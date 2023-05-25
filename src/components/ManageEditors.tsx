@@ -7,7 +7,7 @@ import {useInstalled} from "../hooks/useInstalled";
 import {BUILT_IN_EDITORS} from "../editor-list";
 import InstallCustom from "./InstallCustom";
 import {HeadingText} from "./common/Text";
-import {Card, CardTitle} from "./common/Card";
+import {Card, CardTitle, OverflowingCard} from "./common/Card";
 
 const Container = styled('div')`
 `;
@@ -89,15 +89,15 @@ const ManageEditors = ({}) => {
 
   return (
     <Container>
-      <Card>
+      <OverflowingCard>
         <CardTitle>Installed Editors</CardTitle>
         {renderInstalled()}
-      </Card>
+      </OverflowingCard>
 
-      <Card>
+      <OverflowingCard>
         <HeadingText>Marketplace</HeadingText>
         {renderMarketplace()}
-      </Card>
+      </OverflowingCard>
       <Card>
         <InstallCustom/>
       </Card>
