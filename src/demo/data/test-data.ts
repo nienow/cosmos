@@ -18,10 +18,10 @@ export class TestData {
 
   public getMetadata(): RandomBitsMeta {
     const meta: RandomBitsMeta = {
-      showTitle: this.options.title || false
+      showTitle: this.options.title || false,
     };
-    meta.editors = this.editor.map(editorId => {
-      return {...this.getFullEditorData(editorId)};
+    meta.editors = this.editor.map((editorId, i) => {
+      return {...this.getFullEditorData(editorId), title: this.titles[i]};
     });
     meta.columns = this.options.columns;
     return meta;

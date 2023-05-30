@@ -4,15 +4,15 @@
 * Each area can use a different editor
 * An editor extension marketplace for installing new editors
 
+## Demo
+
+Documentation & Demo at https://randombits.dev/standard-notes/cosmos
+
 ## Installation File
 
 https://nienow.github.io/cosmos/ext.json
 
 Instructions for installing extensions: https://randombits.dev/standard-notes/installing-extensions
-
-## Demo
-
-Documentation & Demo at https://randombits.dev/standard-notes/cosmos
 
 ## Adding your extension
 
