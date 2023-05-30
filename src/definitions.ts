@@ -1,5 +1,4 @@
 export const RANDOMBITS_DOMAIN = 'dev.randombits';
-export const EDITOR_KEY = 'editor';
 
 export interface Editor {
   id: string;
@@ -19,5 +18,4 @@ export interface RandomBitsMeta {
   columns?: number;
   editors?: Editor[];
   showTitle?: boolean;
-  // titles?: string[];
 }

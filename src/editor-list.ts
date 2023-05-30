@@ -83,10 +83,3 @@ export const BUILT_IN_EDITORS: Editor[] = [
 ].sort((a: Editor, b: Editor) => {
   return a.name > b.name ? 1 : -1;
 });
-
-//   .sort((a: Editor, b: Editor) => {
-//   if (a.cat === b.cat) {
-//     return a.name > b.name ? 1 : -1;
-//   }
-//   return a.cat > b.cat ? 1 : -1;
-// });

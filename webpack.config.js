@@ -10,8 +10,7 @@ module.exports = (env, argv) => ({
   devtool: 'source-map',
   entry: {
     main: 'index.tsx',
-    demo: 'demo/demo.tsx',
-    lucky: 'luckysheet/luckysheet.ts'
+    demo: 'demo/demo.tsx'
   },
   output: {
     filename: "[name].[contenthash].js",
@@ -87,11 +86,6 @@ module.exports = (env, argv) => ({
       filename: "demo.html",
       template: "./src/index.html",
       chunks: ["demo"]
-    }),
-    new HtmlWebpackPlugin({
-      filename: "luckysheet.html",
-      template: "./src/luckysheet/luckysheet.html",
-      chunks: ["lucky"]
     }),
     new CopyPlugin({
       patterns: [
