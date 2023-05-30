@@ -4,9 +4,9 @@
 * Each area can use a different editor
 * An editor extension marketplace for installing new editors
 
-## Demo
+## Documentation & Demo
 
-Documentation & Demo at https://randombits.dev/standard-notes/cosmos
+https://randombits.dev/standard-notes/cosmos
 
 ## Installation File
 
