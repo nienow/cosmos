@@ -79,6 +79,14 @@ export const BUILT_IN_EDITORS: Editor[] = [
     desc: 'Uses the TLDraw library.',
     github: 'https://github.com/antonheitz/sn-whiteboard',
     clears: true
+  },
+  {
+    id: 'mermaid',
+    url: 'https://nienow.github.io/sn-mermaid/',
+    name: 'Mermaid',
+    cat: 'Drawing',
+    desc: 'Diagrams and Charts with the Mermaid library',
+    github: 'https://github.com/nienow/sn-mermaid'
   }
 ].sort((a: Editor, b: Editor) => {
   return a.name > b.name ? 1 : -1;
