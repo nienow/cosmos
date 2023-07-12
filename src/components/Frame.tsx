@@ -89,7 +89,7 @@ const RenderTitle = ({index, editor}) => {
   const {showTitle} = useTitle();
   const {locked} = useLocked();
   const {showOptions} = useOptions();
-  const [title, setTitle] = useState(editor.title);
+  const [title, setTitle] = useState(typeof editor.title === 'undefined' ? editor.name : editor.title);
   const updateTitle = (e) => {
     setTitle(e.target.value);
     frameMediator.updateTitle(index, e.target.value as string);
@@ -116,7 +116,7 @@ const RenderTitle = ({index, editor}) => {
 
   if (showTitle || showOptions) {
     return <FrameTitleWrapper>
-      <FrameTitle disabled={locked} value={title || editor.name} onChange={updateTitle}/>
+      <FrameTitle disabled={locked} value={title} onChange={updateTitle}/>
       {renderButtons()}
     </FrameTitleWrapper>
   }

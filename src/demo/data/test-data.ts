@@ -9,7 +9,7 @@ export class TestData {
   constructor(public name: string, private options: { columns?: number, title?: boolean, locked?: boolean } = {}) {
   }
 
-  public section(editorId: string, text: string, title = '') {
+  public section(editorId: string, text: string, title: string) {
     this.editor.push(editorId);
     this.data.push(text);
     this.titles.push(title);
