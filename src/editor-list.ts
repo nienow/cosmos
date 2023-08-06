@@ -87,6 +87,14 @@ export const BUILT_IN_EDITORS: Editor[] = [
     cat: 'Drawing',
     desc: 'Diagrams and Charts with the Mermaid library',
     github: 'https://github.com/nienow/sn-mermaid'
+  },
+  {
+    id: 'code-playground',
+    url: 'https://nienow.github.io/sn-playground/',
+    name: 'Code Playground',
+    cat: 'Code',
+    desc: 'HTML, JS, and CSS code playground, with live preview',
+    github: 'https://github.com/nienow/sn-playground'
   }
 ].sort((a: Editor, b: Editor) => {
   return a.name > b.name ? 1 : -1;
