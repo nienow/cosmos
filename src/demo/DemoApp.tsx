@@ -98,7 +98,8 @@ const DemoApp = () => {
             htmlFor="isDark"> Dark Theme</label></div>
           <div id="last-saved"></div>
         </ContentHeader>
-        <ChildFrame key={selected} ref={iframeRef} src="index.html" onLoad={onFrameLoad}/>
+        <ChildFrame key={selected} ref={iframeRef} src="index.html" onLoad={onFrameLoad}
+                    sandbox="allow-scripts allow-top-navigation-by-user-activation allow-popups allow-modals allow-forms allow-downloads"/>
       </Content>
     </Container>
   );

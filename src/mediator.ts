@@ -4,10 +4,10 @@ import {PLAIN_EDITOR} from './editor-list';
 import {useTitle} from './hooks/useTitle';
 import {useLocked} from './hooks/useLocked';
 import {isValidJsonString, swapArrayIndexes} from './utils';
+import {useInstalled} from './hooks/useInstalled';
 
 class FrameMediator {
   private registrationEvent;
-  private parentOrigin: string;
   private children: { [key: string]: ChildMediator } = {};
   private sessionKey;
   private item;
@@ -84,6 +84,20 @@ class FrameMediator {
     this.meta.editors[index] = {...editor};
     this.saveNote();
     this.editorCallbackFn(this.meta);
+  }
+
+  public setInstalled(data: any) {
+    window.parent.postMessage({
+      action: 'set-component-data',
+      data: {
+        componentData: {
+          installed: data
+        }
+      },
+      messageId: crypto.randomUUID(),
+      sessionKey: this.sessionKey,
+      api: 'component'
+    }, '*');
   }
 
   public updateTitle(i: number, title: string) {
@@ -187,8 +201,8 @@ class FrameMediator {
   }
 
   private handleParentRegistration(e: MessageEvent, data: any) {
-    this.parentOrigin = e.origin;
     this.registrationEvent = data;
+    useInstalled.getState().initInstalled(data.componentData?.installed);
     this.sessionKey = data.sessionKey;
     window.parent.postMessage({
       action: 'stream-context-item',
@@ -196,7 +210,7 @@ class FrameMediator {
       messageId: crypto.randomUUID(),
       sessionKey: this.sessionKey,
       api: 'component'
-    }, this.parentOrigin);
+    }, '*');
   }
 
   private handleParentThemeChange(data: any) {
@@ -255,7 +269,7 @@ class FrameMediator {
       messageId: crypto.randomUUID(),
       sessionKey: this.sessionKey,
       api: 'component'
-    }, this.parentOrigin);
+    }, '*');
   }
 
   private getChild(childWindow) {

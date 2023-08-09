@@ -3,6 +3,8 @@ import sampleStreamResponse from './stream-response.json';
 import {RANDOMBITS_DOMAIN} from '../definitions';
 import {TestData} from './data/test-data';
 
+let componentData = {};
+
 export class MockStandardNotes {
   private childWindow;
   private streamEvent;
@@ -15,7 +17,8 @@ export class MockStandardNotes {
 
   public onReady(childWindow) {
     this.childWindow = childWindow;
-    childWindow.postMessage(registeredData);
+    registeredData.componentData = componentData;
+    childWindow.postMessage(registeredData, '*');
   }
 
   public toggleLock(isLocked: boolean) {
@@ -64,6 +67,8 @@ export class MockStandardNotes {
         data: {},
         original: data
       }, '*');
+    } else if (data.action === 'set-component-data') {
+      componentData = data.data.componentData;
     }
   }
 

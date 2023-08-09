@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@preact/compat": "^17.1.2",
-    "@standardnotes/component-relay": "^2.2.2",
-    "@standardnotes/models": "^1.43.11",
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.12",
     "preact": "^10.13.1",
