@@ -10,7 +10,7 @@ export const PLAIN_EDITOR: Editor = {
 export const BUILT_IN_EDITORS: Editor[] = [
   {
     id: 'org.standardnotes.standard-sheets',
-    url: '/sheets.html',
+    url: 'https://nienow.github.io/cosmos/sheets.html',
     name: 'Spreadsheet',
     cat: 'Table',
     desc: 'An excel-like editor. Uses the Kendo library.',
