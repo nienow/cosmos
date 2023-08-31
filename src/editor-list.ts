@@ -10,7 +10,7 @@ export const PLAIN_EDITOR: Editor = {
 export const BUILT_IN_EDITORS: Editor[] = [
   {
     id: 'org.standardnotes.standard-sheets',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.standard-sheets/dist/index.html',
+    url: '/sheets.html',
     name: 'Spreadsheet',
     cat: 'Table',
     desc: 'An excel-like editor. Uses the Kendo library.',
