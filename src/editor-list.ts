@@ -25,43 +25,6 @@ export const BUILT_IN_EDITORS: Editor[] = [
     preinstalled: true
   },
   {
-    id: 'org.standardnotes.bold-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.bold-editor/dist/index.html',
-    name: 'Redactor',
-    cat: 'Rich Text',
-    desc: 'Uses the Redactor library.',
-  },
-  {
-    id: 'org.standardnotes.plus-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.plus-editor/dist/index.html',
-    name: 'Summernote',
-    cat: 'Rich Text',
-    desc: 'Uses the summernote library.',
-  },
-  {
-    id: 'org.standardnotes.advanced-markdown-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.advanced-markdown-editor/dist/index.html',
-    name: 'EasyMDE',
-    cat: 'Markdown',
-    desc: 'Uses the EasyMDE library.',
-    preinstalled: true
-  },
-  {
-    id: 'org.standardnotes.simple-markdown-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.simple-markdown-editor/dist/index.html',
-    name: 'MarkdownIt',
-    cat: 'Markdown',
-    desc: 'Editor/viewer split. Uses the markdown-it library.',
-    preinstalled: false
-  },
-  {
-    id: 'org.standardnotes.minimal-markdown-editor',
-    url: 'https://app.standardnotes.com/components/assets/org.standardnotes.minimal-markdown-editor/index.html',
-    name: 'Minimal Markdown',
-    cat: 'Markdown',
-    desc: 'The simplest markdown editor. Uses the CodeMirror library.'
-  },
-  {
     id: 'randombits.excalidraw',
     url: 'https://nienow.github.io/sn-excalidraw/',
     name: 'Excalidraw',
