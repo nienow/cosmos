@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@preact/compat':
     specifier: ^17.1.2
@@ -68,13 +72,13 @@ devDependencies:
     version: 3.3.2(webpack@5.76.2)
   ts-loader:
     specifier: ^9.4.2
-    version: 9.4.2(typescript@4.9.5)(webpack@5.76.2)
+    version: 9.4.2(typescript@5.2.2)(webpack@5.76.2)
   ts-node:
     specifier: ^10.9.1
-    version: 10.9.1(@types/node@18.15.5)(typescript@4.9.5)
+    version: 10.9.1(@types/node@18.15.5)(typescript@5.2.2)
   typescript:
-    specifier: ^4.9.5
-    version: 4.9.5
+    specifier: ^5.2.2
+    version: 5.2.2
   url-loader:
     specifier: ^4.1.1
     version: 4.1.1(webpack@5.76.2)
@@ -5110,7 +5114,7 @@ packages:
     engines: {node: '>=0.6'}
     dev: true
 
-  /ts-loader@9.4.2(typescript@4.9.5)(webpack@5.76.2):
+  /ts-loader@9.4.2(typescript@5.2.2)(webpack@5.76.2):
     resolution: {integrity: sha512-OmlC4WVmFv5I0PpaxYb+qGeGOdm5giHU7HwDDUjw59emP2UYMHy9fFSDcYgSNoH8sXcj4hGCSEhlDZ9ULeDraA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -5121,11 +5125,11 @@ packages:
       enhanced-resolve: 5.12.0
       micromatch: 4.0.5
       semver: 7.3.8
-      typescript: 4.9.5
+      typescript: 5.2.2
       webpack: 5.76.2(webpack-cli@5.0.1)
     dev: true
 
-  /ts-node@10.9.1(@types/node@18.15.5)(typescript@4.9.5):
+  /ts-node@10.9.1(@types/node@18.15.5)(typescript@5.2.2):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -5151,7 +5155,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.9.5
+      typescript: 5.2.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -5167,9 +5171,9 @@ packages:
       mime-types: 2.1.35
     dev: true
 
-  /typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
+  /typescript@5.2.2:
+    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+    engines: {node: '>=14.17'}
     hasBin: true
     dev: true
 
