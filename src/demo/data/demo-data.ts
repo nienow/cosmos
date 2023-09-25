@@ -29,7 +29,7 @@ const COMPLEX = new TestData('Complex', {columns: 2})
   .section('plain', 'Plain')
   .section('randombits.quill', 'Quill')
   .section('org.standardnotes.standard-sheets', '')
-  .section('org.standardnotes.advanced-markdown-editor', 'Markdown');
+  .section('randombits.excalidraw', '');
 
 export const TEST_DATA = [
   DATA_NEW,
