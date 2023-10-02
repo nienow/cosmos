@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@preact/compat':
     specifier: ^17.1.2
@@ -14,8 +18,8 @@ dependencies:
     specifier: ^10.17.1
     version: 10.17.1
   zustand:
-    specifier: ^4.4.1
-    version: 4.4.1(@types/react@18.2.22)(react@18.2.0)
+    specifier: ^4.4.2
+    version: 4.4.2(@types/react@18.2.22)(react@18.2.0)
 
 devDependencies:
   '@babel/core':
@@ -5639,8 +5643,8 @@ packages:
       yazl: 2.5.1
     dev: true
 
-  /zustand@4.4.1(@types/react@18.2.22)(react@18.2.0):
-    resolution: {integrity: sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==}
+  /zustand@4.4.2(@types/react@18.2.22)(react@18.2.0):
+    resolution: {integrity: sha512-qF3/vZHCrjPUX5DvPE3DPDZlh+FiAWRKlP9PI7SlW1MCk8q4vUCDqyWsbF8K41ne0Yx8eeeb0m1cypn1LqUMYQ==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
       '@types/react': '>=16.8'
@@ -5658,7 +5662,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
