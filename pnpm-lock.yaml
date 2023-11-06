@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@preact/compat':
     specifier: ^17.1.2
-    version: 17.1.2(preact@10.18.1)
+    version: 17.1.2(preact@10.18.2)
   '@standardnotes/stylekit':
     specifier: 5.29.3
     version: 5.29.3(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
@@ -15,8 +15,8 @@ dependencies:
     specifier: ^2.1.13
     version: 2.1.13(csstype@3.1.2)
   preact:
-    specifier: ^10.18.1
-    version: 10.18.1
+    specifier: ^10.18.2
+    version: 10.18.2
   zustand:
     specifier: ^4.4.4
     version: 4.4.4(@types/react@18.2.31)(react@18.2.0)
@@ -1423,12 +1423,12 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@preact/compat@17.1.2(preact@10.18.1):
+  /@preact/compat@17.1.2(preact@10.18.2):
     resolution: {integrity: sha512-7pOZN9lMDDRQ+6aWvjwTp483KR8/zOpfS83wmOo3zfuLKdngS8/5RLbsFWzFZMGdYlotAhX980hJ75bjOHTwWg==}
     peerDependencies:
       preact: '*'
     dependencies:
-      preact: 10.18.1
+      preact: 10.18.2
     dev: false
 
   /@reach/auto-id@0.17.0(react-dom@18.2.0)(react@18.2.0):
@@ -4390,8 +4390,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preact@10.18.1:
-    resolution: {integrity: sha512-mKUD7RRkQQM6s7Rkmi7IFkoEHjuFqRQUaXamO61E6Nn7vqF/bo7EZCmSyrUnp2UWHw0O7XjZ2eeXis+m7tf4lg==}
+  /preact@10.18.2:
+    resolution: {integrity: sha512-X/K43vocUHDg0XhWVmTTMbec4LT/iBMh+csCEqJk+pJqegaXsvjdqN80ZZ3L+93azWCnWCZ+WGwYb8SplxeNjA==}
     dev: false
 
   /pretty-error@4.0.0:

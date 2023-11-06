@@ -10,7 +10,7 @@
     "@preact/compat": "^17.1.2",
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.13",
-    "preact": "^10.18.1",
+    "preact": "^10.18.2",
     "zustand": "^4.4.4"
   },
   "devDependencies": {
