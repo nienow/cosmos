@@ -18,7 +18,7 @@ If you don't know how to install extensions, see the [Guide to Installing Extens
 
 ## How it works
 
-<img src="https://randombits.dev/images/sn/cosmos-instr.png" class="full-img"/>
+<img src="https://randombits.dev/images/sn/cosmos-instr.webp" class="full-img"/>
 
 The **columns** and **rows** controls allows you to change the number of areas in the note.
 
