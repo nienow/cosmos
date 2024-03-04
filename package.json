@@ -11,16 +11,16 @@
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.14",
     "preact": "^10.19.6",
-    "zustand": "^4.5.1"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.9",
+    "@babel/core": "^7.24.0",
     "@babel/plugin-transform-react-jsx": "^7.23.4",
-    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-env": "^7.24.0",
     "@babel/preset-typescript": "^7.23.3",
-    "@types/node": "^20.11.20",
+    "@types/node": "^20.11.24",
     "@types/quill": "^1.3.10",
-    "@types/react": "^18.2.59",
+    "@types/react": "^18.2.62",
     "@types/react-dom": "^18.2.19",
     "babel-loader": "^9.1.3",
     "copy-webpack-plugin": "^12.0.2",
