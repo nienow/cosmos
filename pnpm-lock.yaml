@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@preact/compat':
-        specifier: ^17.1.2
-        version: 17.1.2(preact@10.24.2)
+        specifier: ^18.3.1
+        version: 18.3.1(preact@10.24.2)
       '@standardnotes/stylekit':
         specifier: 5.29.3
         version: 5.29.3(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)
@@ -769,8 +769,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@preact/compat@17.1.2':
-    resolution: {integrity: sha512-7pOZN9lMDDRQ+6aWvjwTp483KR8/zOpfS83wmOo3zfuLKdngS8/5RLbsFWzFZMGdYlotAhX980hJ75bjOHTwWg==}
+  '@preact/compat@18.3.1':
+    resolution: {integrity: sha512-Kog4PSRxtT4COtOXjsuQPV1vMXpUzREQfv+6Dmcy9/rMk0HOPK0HTE9fspFjAmY8R80T/T8gtgmZ68u5bOSngw==}
     peerDependencies:
       preact: '*'
 
@@ -3984,7 +3984,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@preact/compat@17.1.2(preact@10.24.2)':
+  '@preact/compat@18.3.1(preact@10.24.2)':
     dependencies:
       preact: 10.24.2
 
