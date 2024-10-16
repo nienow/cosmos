@@ -7,11 +7,11 @@
     "preview": "live-server --cors dist/"
   },
   "dependencies": {
-    "@preact/compat": "^17.1.2",
+    "@preact/compat": "^18.3.1",
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.16",
     "preact": "^10.24.3",
-    "zustand": "^4.5.5"
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.8",
