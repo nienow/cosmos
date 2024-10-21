@@ -52,17 +52,17 @@ importers:
         specifier: ^7.1.2
         version: 7.1.2(webpack@5.95.0(webpack-cli@5.1.4))
       html-webpack-plugin:
-        specifier: ^5.6.0
-        version: 5.6.0(webpack@5.95.0(webpack-cli@5.1.4))
+        specifier: ^5.6.2
+        version: 5.6.2(webpack@5.95.0(webpack-cli@5.1.4))
       live-server:
         specifier: ^1.2.2
         version: 1.2.2
       sass:
-        specifier: ^1.79.5
-        version: 1.79.5
+        specifier: ^1.80.3
+        version: 1.80.3
       sass-loader:
         specifier: ^16.0.2
-        version: 16.0.2(sass@1.79.5)(webpack@5.95.0(webpack-cli@5.1.4))
+        version: 16.0.2(sass@1.80.3)(webpack@5.95.0(webpack-cli@5.1.4))
       style-loader:
         specifier: ^4.0.0
         version: 4.0.0(webpack@5.95.0(webpack-cli@5.1.4))
@@ -88,8 +88,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0(webpack-cli@5.1.4)(webpack@5.95.0)
       zip-webpack-plugin:
-        specifier: ^4.0.1
-        version: 4.0.1(webpack-sources@3.2.3)(webpack@5.95.0(webpack-cli@5.1.4))
+        specifier: ^4.0.2
+        version: 4.0.2(webpack-sources@3.2.3)(webpack@5.95.0(webpack-cli@5.1.4))
 
 packages:
 
@@ -1804,8 +1804,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  html-webpack-plugin@5.6.0:
-    resolution: {integrity: sha512-iwaY4wzbe48AfKLZ/Cc8k0L+FKG6oSNRaZ8x5A/T/IVDGyXcbHncM9TdDa93wn0FsSm82FhTKW7f3vS61thXAw==}
+  html-webpack-plugin@5.6.2:
+    resolution: {integrity: sha512-q7xp/FO9RGBVoTKNItkdX1jKLscLFkgn/dLVFNYbHVbfHLBk6DYW5nsQ8kCzIWcgKP/kUBocetjvav6lD8YfCQ==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
       '@rspack/core': 0.x || 1.x
@@ -2577,8 +2577,8 @@ packages:
       webpack:
         optional: true
 
-  sass@1.79.5:
-    resolution: {integrity: sha512-W1h5kp6bdhqFh2tk3DsI771MoEJjvrSY/2ihJRJS4pjIyfJCw0nTsxqhnrUzaLMOJjFchj8rOvraI/YUVjtx5g==}
+  sass@1.80.3:
+    resolution: {integrity: sha512-ptDWyVmDMVielpz/oWy3YP3nfs7LpJTHIJZboMVs8GEC9eUmtZTZhMHlTW98wY4aEorDfjN38+Wr/XjskFWcfA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -2793,6 +2793,11 @@ packages:
 
   terser@5.35.0:
     resolution: {integrity: sha512-TmYbQnzVfrx3RQsPoItoPplymixIAtp2R2xlpyVBYmFmvI34IzLhCLj8SimRb/kZXlq4t1gA+vbcTqLQ3+5Q5g==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  terser@5.36.0:
+    resolution: {integrity: sha512-IYV9eNMuFAV4THUspIRXkLakHnV6XO7FEdtKjf/mDyrnqUg9LnlOn6/RwRvM9SZjR4GUq8Nk8zj67FzVARr74w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3080,8 +3085,8 @@ packages:
     resolution: {integrity: sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==}
     engines: {node: '>=12.20'}
 
-  zip-webpack-plugin@4.0.1:
-    resolution: {integrity: sha512-G041Q4qUaog44Ynit6gs4o+o3JIv0WWfOLvc8Q3IxvPfuqd2KBHhpJWAXUB9Cm1JcWHTIOp9vS3oGMWa1p1Ehw==}
+  zip-webpack-plugin@4.0.2:
+    resolution: {integrity: sha512-t7GEF8q8l2zcTtrMes5j6/RpkBgIw8ARZmB5jWNksLua1mNa0bVaIVXOU8cFPXnbcFsHjgrLEyRMvLT1HcUiEA==}
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
       webpack-sources: '*'
@@ -5114,9 +5119,9 @@ snapshots:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.35.0
+      terser: 5.36.0
 
-  html-webpack-plugin@5.6.0(webpack@5.95.0(webpack-cli@5.1.4)):
+  html-webpack-plugin@5.6.2(webpack@5.95.0(webpack-cli@5.1.4)):
     dependencies:
       '@types/html-minifier-terser': 6.1.0
       html-minifier-terser: 6.1.0
@@ -5837,14 +5842,14 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sass-loader@16.0.2(sass@1.79.5)(webpack@5.95.0(webpack-cli@5.1.4)):
+  sass-loader@16.0.2(sass@1.80.3)(webpack@5.95.0(webpack-cli@5.1.4)):
     dependencies:
       neo-async: 2.6.2
     optionalDependencies:
-      sass: 1.79.5
+      sass: 1.80.3
       webpack: 5.95.0(webpack-cli@5.1.4)
 
-  sass@1.79.5:
+  sass@1.80.3:
     dependencies:
       '@parcel/watcher': 2.4.1
       chokidar: 4.0.1
@@ -6118,6 +6123,13 @@ snapshots:
       webpack: 5.95.0(webpack-cli@5.1.4)
 
   terser@5.35.0:
+    dependencies:
+      '@jridgewell/source-map': 0.3.6
+      acorn: 8.13.0
+      commander: 2.20.3
+      source-map-support: 0.5.21
+
+  terser@5.36.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
       acorn: 8.13.0
@@ -6416,7 +6428,7 @@ snapshots:
 
   yocto-queue@1.1.1: {}
 
-  zip-webpack-plugin@4.0.1(webpack-sources@3.2.3)(webpack@5.95.0(webpack-cli@5.1.4)):
+  zip-webpack-plugin@4.0.2(webpack-sources@3.2.3)(webpack@5.95.0(webpack-cli@5.1.4)):
     dependencies:
       webpack: 5.95.0(webpack-cli@5.1.4)
       webpack-sources: 3.2.3
