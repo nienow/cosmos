@@ -10,7 +10,7 @@
     "@preact/compat": "^18.3.1",
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.16",
-    "preact": "^10.25.1",
+    "preact": "^10.25.2",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
     "live-server": "^1.2.2",
-    "sass": "^1.82.0",
+    "sass": "^1.83.0",
     "sass-loader": "^16.0.4",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
@@ -34,7 +34,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0",
+    "webpack-dev-server": "^5.2.0",
     "zip-webpack-plugin": "^4.0.2"
   }
 }
