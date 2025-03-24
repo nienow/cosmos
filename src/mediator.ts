@@ -200,7 +200,7 @@ class FrameMediator {
     }
   }
 
-  private handleParentRegistration(e: MessageEvent, data: any) {
+  private handleParentRegistration(_: MessageEvent, data: any) {
     this.registrationEvent = data;
     useInstalled.getState().initInstalled(data.componentData?.installed);
     this.sessionKey = data.sessionKey;

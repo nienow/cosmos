@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 import {useOptions} from "../hooks/useOptions";
 import {useLocked} from "../hooks/useLocked";

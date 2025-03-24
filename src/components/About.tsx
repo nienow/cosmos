@@ -1,4 +1,3 @@
-import React from 'react';
 import {HeadingText} from "./common/Text";
 import {Card} from "./common/Card";
 
@@ -16,6 +15,6 @@ const About = ({}) => {
         extensions to include. </p>
     </Card>
   );
-}
+};
 
-export default About
+export default About;

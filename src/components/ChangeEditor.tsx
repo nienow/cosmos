@@ -1,10 +1,9 @@
-import React from 'react';
 import AvailableEditors from "./AvailableEditors";
 
 const ChangeEditor = ({chooseEditor}) => {
   return (
     <AvailableEditors chooseEditor={chooseEditor}/>
   );
-}
+};
 
-export default ChangeEditor
+export default ChangeEditor;

@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 import {frameMediator} from "../mediator";
 import {useRearrange} from "../hooks/useRearrange";
@@ -45,6 +44,6 @@ const ArrangeOverlay = ({index}: Props) => {
       </Overlay>
     );
   }
-}
+};
 
-export default ArrangeOverlay
+export default ArrangeOverlay;

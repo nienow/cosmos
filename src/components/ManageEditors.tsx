@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 import {ListCell, ListRow, ListTitle, TableList} from "./common/EditorList";
 import {Editor} from "../definitions";
@@ -103,6 +102,6 @@ const ManageEditors = ({}) => {
       </Card>
     </Container>
   );
-}
+};
 
-export default ManageEditors
+export default ManageEditors;

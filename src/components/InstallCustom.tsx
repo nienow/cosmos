@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {styled} from "goober";
 import {useInstalled} from "../hooks/useInstalled";
 import {useDialog} from "../providers/DialogProvider";
@@ -24,7 +24,7 @@ const InstallCustom = () => {
           desc: data.description,
           url: data.url,
           custom: true
-        }
+        };
         if (installedEditors.find(item => item.id === obj.id)) {
           alert('This custom editor has already been added');
         } else {
@@ -49,6 +49,6 @@ const InstallCustom = () => {
       <ActionButton onClick={onAdd}>Install</ActionButton>
     </>
   );
-}
+};
 
-export default InstallCustom
+export default InstallCustom;

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {RandomBitsMeta} from "./definitions";
 import {styled} from "goober";
 import {frameMediator} from "./mediator";
@@ -47,7 +47,7 @@ const App = () => {
             {
               editors.map((editor, index) => {
                 editor.key = editor.key || crypto.randomUUID();
-                return <Frame key={editor.key} index={index} editor={editor}/>
+                return <Frame key={editor.key} index={index} editor={editor}/>;
               })
             }
           </GridLayout>
@@ -55,7 +55,7 @@ const App = () => {
           <CornerButton/>
         </>;
       } else {
-        return <EntryScreen/>
+        return <EntryScreen/>;
       }
     }
   };
@@ -65,6 +65,6 @@ const App = () => {
       {renderContent()}
     </Container>
   );
-}
+};
 
-export default App
+export default App;

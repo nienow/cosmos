@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 
 const ControlContainer = styled('div')`
@@ -7,11 +6,11 @@ const ControlContainer = styled('div')`
   display: flex;
   align-items: center;
   margin: 3px 5px;
-`
+`;
 
 const ControlLabel = styled('div')`
   padding: 0 10px;
-`
+`;
 
 const ControlButton = styled('button')`
   color: var(--sn-stylekit-secondary-foreground-color);
@@ -28,7 +27,7 @@ const ControlButton = styled('button')`
   &:last-child {
     border-left: 1px solid var(--sn-stylekit-border-color);
   }
-`
+`;
 
 interface Params {
   increase: () => void;
@@ -44,6 +43,6 @@ const NumberControl = ({increase, decrease, display}: Params) => {
       <ControlButton onClick={increase}>+</ControlButton>
     </ControlContainer>
   );
-}
+};
 
-export default NumberControl
+export default NumberControl;

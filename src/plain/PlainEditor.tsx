@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {styled} from "goober";
 import {useLocked} from "../hooks/useLocked";
 
@@ -36,4 +36,4 @@ const PlainEditor = ({initialText, save}: Props) => {
   );
 };
 
-export default PlainEditor
+export default PlainEditor;

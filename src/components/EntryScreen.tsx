@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 import About from "./About";
 import AvailableEditors from "./AvailableEditors";
@@ -26,6 +25,6 @@ const EntryScreen = () => {
       <About/>
     </Container>
   );
-}
+};
 
-export default EntryScreen
+export default EntryScreen;

@@ -1,4 +1,3 @@
-import React from 'react';
 import {styled} from "goober";
 import {ListCell, ListRow, ListTitle, TableList} from "./common/EditorList";
 import {ActionButton} from "./common/ActionButton";
@@ -53,6 +52,6 @@ const AvailableEditors = ({chooseEditor}) => {
       </TableList>
     </OverflowingCard>
   );
-}
+};
 
-export default AvailableEditors
+export default AvailableEditors;

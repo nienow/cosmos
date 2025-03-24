@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext, useState} from 'react';
+import {createContext, ReactNode, useContext, useState} from 'react';
 import {createPortal} from "react-dom";
 import {styled} from "goober";
 
@@ -9,7 +9,7 @@ const DialogBackground = styled('div')`
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
-`
+`;
 
 const DialogContainer = styled('div')`
   margin-left: auto;
@@ -18,7 +18,7 @@ const DialogContainer = styled('div')`
   width: 300px;
   background-color: var(--sn-stylekit-background-color);
   padding: 20px 50px;
-`
+`;
 
 const DialogButton = styled('button')`
   padding: 5px 10px;
@@ -29,12 +29,12 @@ const DialogButton = styled('button')`
   &:not(:first-child) {
     margin-left: 10px;
   }
-`
+`;
 
 const DialogActions = styled('div')`
   display: flex;
   margin-top: 20px;
-`
+`;
 
 const CustomDialog = styled('div')`
   background-color: var(--sn-stylekit-contrast-background-color);
@@ -71,7 +71,7 @@ const SimpleDialog = ({children, open}) => {
       document.body
     );
   }
-}
+};
 
 interface IDialogContext {
   confirm: (text: string, action: () => void) => void;
@@ -99,13 +99,13 @@ export const DialogProvider = ({children}) => {
         <DialogActions>
           <DialogButton onClick={() => {
             action();
-            closeDialog()
+            closeDialog();
           }}>OK
           </DialogButton>
           <DialogButton onClick={closeDialog}>Cancel</DialogButton>
         </DialogActions>
       </DialogContainer>
-    )
+    );
 
     setContents(confirmContents);
   };
@@ -119,7 +119,7 @@ export const DialogProvider = ({children}) => {
           </DialogButton>
         </DialogActions>
       </DialogContainer>
-    )
+    );
 
     setContents(confirmContents);
   };
@@ -133,25 +133,25 @@ export const DialogProvider = ({children}) => {
         </CustomDialogActions>
         <CustomDialogContent>{content}</CustomDialogContent>
       </CustomDialog>
-    )
+    );
     setCustomContents([...customContents, {id, el}]);
     return () => {
       closeCustom(id);
     };
-  }
+  };
 
   const closeDialog = () => {
     setContents(null);
-  }
+  };
 
   const closeCustom = (id) => {
 
     setCustomContents((customContents) => {
       const index = customContents.findIndex(item => item.id === id);
       customContents.splice(index, 1);
-      return [...customContents]
+      return [...customContents];
     });
-  }
+  };
 
   return (
     <DialogContext.Provider value={{confirm, alert, custom}}>
@@ -161,7 +161,7 @@ export const DialogProvider = ({children}) => {
             <DialogBackground>{content.el}</DialogBackground>,
             document.body,
             String(content.id)
-          )
+          );
         })
       }
       {/*<SimpleDialog open={customContents.length > 0}>{customContents}</SimpleDialog>*/}

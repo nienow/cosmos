@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {styled} from "goober";
 import {useLocked} from "../../hooks/useLocked";
 
@@ -75,6 +75,6 @@ const ToggleButton = ({label, initialValue, onToggle}: Params) => {
     {value ? <CheckedSvg/> : <UncheckedSvg/>}
     {label}
   </ToggleButtonContainer>;
-}
+};
 
-export default ToggleButton
+export default ToggleButton;
