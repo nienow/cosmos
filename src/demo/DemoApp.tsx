@@ -99,10 +99,10 @@ const DemoApp = () => {
           <div id="last-saved"></div>
         </ContentHeader>
         <ChildFrame key={selected} ref={iframeRef} src="index.html" onLoad={onFrameLoad}
-                    sandbox="allow-scripts allow-top-navigation-by-user-activation allow-popups allow-modals allow-forms allow-downloads"/>
+                    sandbox="allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-popups allow-modals allow-forms allow-downloads"/>
       </Content>
     </Container>
   );
-}
+};
 
-export default DemoApp
+export default DemoApp;
