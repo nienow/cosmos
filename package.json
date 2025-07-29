@@ -10,7 +10,7 @@
     "@preact/compat": "^18.3.1",
     "@standardnotes/stylekit": "5.29.3",
     "goober": "^2.1.16",
-    "preact": "^10.26.9",
+    "preact": "^10.27.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "url-loader": "^4.1.1",
-    "webpack": "^5.99.9",
+    "webpack": "^5.101.0",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2",
     "zip-webpack-plugin": "^4.0.3"
