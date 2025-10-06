@@ -9,7 +9,7 @@
   "dependencies": {
     "@preact/compat": "^18.3.1",
     "@standardnotes/stylekit": "5.29.3",
-    "goober": "^2.1.16",
+    "goober": "^2.1.18",
     "preact": "^10.27.2",
     "zustand": "^5.0.8"
   },
@@ -18,8 +18,8 @@
     "@babel/plugin-transform-react-jsx": "^7.27.1",
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-typescript": "^7.27.1",
-    "@types/react": "^19.1.15",
-    "@types/react-dom": "^19.1.9",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "babel-loader": "^9.2.1",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
@@ -30,7 +30,7 @@
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.102.0",
     "webpack-cli": "^6.0.1",
